@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "yyLib", "yyLib\yyLib.csproj", "{D8448315-12E3-49BA-A337-0FB68776C5A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "yyLib", "yyLib\yyLib.csproj", "{D8448315-12E3-49BA-A337-0FB68776C5A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "yyLibConsoleTester", "yyLibConsoleTester\yyLibConsoleTester.csproj", "{493C9A75-C8FD-409A-8BD2-D46604F2E834}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "yyLibConsole", "yyLibConsole\yyLibConsole.csproj", "{493C9A75-C8FD-409A-8BD2-D46604F2E834}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
