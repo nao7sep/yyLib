@@ -16,7 +16,7 @@ namespace yyLib
         public yyUserSecretsModel Parse (string? str)
         {
             if (string.IsNullOrWhiteSpace (str))
-                throw new yyArgumentException ($"@{nameof (str)} is invalid.");
+                throw new yyArgumentException ($"'{nameof (str)}' is invalid.");
 
             var xResponse = (yyUserSecretsModel?) JsonSerializer.Deserialize (str, typeof (yyUserSecretsModel), JsonSerializerOptions);
 
