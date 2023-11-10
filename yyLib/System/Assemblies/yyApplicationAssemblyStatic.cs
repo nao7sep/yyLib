@@ -11,5 +11,9 @@ namespace yyLib
         private static Lazy <string?> _location = new Lazy <string?> (() => Assembly?.Location);
 
         public static string? Location { get => _location.Value; }
+
+        private static Lazy <string?> _directoryPath = new Lazy <string?> (() => Path.GetDirectoryName (Location));
+
+        public static string? DirectoryPath { get => _directoryPath.Value; }
     }
 }
