@@ -18,6 +18,7 @@ namespace yyLib
             }
 
             // If no file is found, it's not an error.
+            // If one of the files exists and is empty, it'd be the same result.
             return new ();
         }
     }
