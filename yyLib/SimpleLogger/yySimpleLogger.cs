@@ -4,12 +4,22 @@ namespace yyLib
 {
     public class yySimpleLogger
     {
-        // todo: Default properties for the paths.
-        // todo: Comment on DefaultEncoding; it's considered more like Environment.NewLine.
+        private static readonly Lazy <string> _defaultTextWriterFilePath = new (() => yyApplicationDirectory.MapPath ("Logs.txt"));
+
+        public static string DefaultTextWriterFilePath => _defaultTextWriterFilePath.Value;
+
+        private static readonly Lazy <string> _defaultJsonWriterDirectoryPath = new (() => yyApplicationDirectory.MapPath ("Logs"));
+
+        public static string DefaultJsonWriterDirectoryPath => _defaultJsonWriterDirectoryPath.Value;
 
         private static readonly Lazy <yySimpleLogger> _default = new (() =>
-            new yySimpleLogger (yyApplicationDirectory.MapPath ("Logs.txt"), yyApplicationDirectory.MapPath ("Logs")));
+            new yySimpleLogger (DefaultTextWriterFilePath, DefaultJsonWriterDirectoryPath));
+        // Encoding isnt specified because it's more like Environment.NewLine.
+        // Meaning, not many people would need to customize it.
 
+        /// <summary>
+        /// NOT thread-safe.
+        /// </summary>
         public static yySimpleLogger Default => _default.Value;
 
         public yySimpleLogTextWriter? TextWriter { get; private set; }

@@ -11,9 +11,7 @@
         public static string MapPath (string relativePath)
         {
             if (string.IsNullOrWhiteSpace (relativePath) || System.IO.Path.IsPathFullyQualified (relativePath))
-                throw new yyArgumentException (yyMessage.Create ($"'{nameof (relativePath)}' is invalid: {relativePath}"));
-            // todo: Make null and "" visible.
-            // todo: Search for "yyMessage.Create".
+                throw new yyArgumentException (yyMessage.Create ($"'{nameof (relativePath)}' is invalid: {relativePath.GetVisibleString ()}"));
 
             return System.IO.Path.Join (Path, relativePath);
         }

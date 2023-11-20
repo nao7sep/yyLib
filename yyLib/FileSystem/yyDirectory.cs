@@ -15,7 +15,7 @@
         /// Creates parent directory if it doesnt exist.
         /// Can take paths like "C:\"; nothing will happen.
         /// </summary>
-        public static void CreateParent (string path) // todo: Test all kinds.
+        public static void CreateParent (string path)
         {
             // Straightforward implementation:
 
@@ -23,9 +23,7 @@
             // No point to specify null as 'path' and call this method.
 
             if (path == null || Path.IsPathFullyQualified (path) == false)
-                throw new yyArgumentException (yyMessage.Create ($"'{nameof (path)}' is invalid."));
-            // todo: Output path.
-            // todo: Search for all "yyMessage.Create".
+                throw new yyArgumentException (yyMessage.Create ($"'{nameof (path)}' is invalid: {path.GetVisibleString ()}"));
 
             string? xParentDirectoryPath = Path.GetDirectoryName (path);
 
@@ -39,8 +37,7 @@
             // After Path.IsPathFullyQualified, probably redundant.
 
             if (xParentDirectoryPath == string.Empty)
-                throw new yyArgumentException (yyMessage.Create ($"'{nameof (path)}' is invalid."));
-            // todo: Output path.
+                throw new yyArgumentException (yyMessage.Create ($"'{nameof (path)}' is invalid: {path.GetVisibleString ()}"));
 
             if (Directory.Exists (xParentDirectoryPath) == false)
                 Directory.CreateDirectory (xParentDirectoryPath);

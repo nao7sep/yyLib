@@ -2,24 +2,17 @@
 
 namespace yyLib
 {
-    // todo: Could be a static class.
-    public class yyUserSecretsParser
+    public static class yyUserSecretsParser
     {
-        public JsonSerializerOptions DeserializationOptions { get; private set; }
-
-        public yyUserSecretsParser (JsonSerializerOptions? deserializationOptions = null) =>
-            DeserializationOptions = deserializationOptions ?? yyJson.DefaultDeserializationOptions;
-
-        public yyUserSecretsModel Parse (string? str)
+        public static yyUserSecretsModel Parse (string? str)
         {
             if (string.IsNullOrWhiteSpace (str))
-                throw new yyArgumentException (yyMessage.Create ($"'{nameof (str)}' is invalid."));
-            // todo: Display the content.
+                throw new yyArgumentException (yyMessage.Create ($"'{nameof (str)}' is invalid: {str.GetVisibleString ()}"));
 
-            var xResponse = (yyUserSecretsModel?) JsonSerializer.Deserialize (str, typeof (yyUserSecretsModel), DeserializationOptions);
+            var xResponse = (yyUserSecretsModel?) JsonSerializer.Deserialize (str, typeof (yyUserSecretsModel), yyJson.DefaultDeserializationOptions);
 
             if (xResponse == null)
-                throw new yyFormatException (yyMessage.Create ("Failed to deserialize JSON."));
+                throw new yyFormatException (yyMessage.Create ($"Failed to deserialize JSON: {str.GetVisibleString ()}"));
 
             return xResponse;
         }

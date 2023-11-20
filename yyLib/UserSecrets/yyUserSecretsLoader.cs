@@ -2,29 +2,22 @@
 
 namespace yyLib
 {
-    // todo: Could be a static class.
-
-    public class yyUserSecretsLoader
+    public static class yyUserSecretsLoader
     {
-        public yyUserSecretsParser Parser { get; } = new ();
-
-        // todo: Rewrite the summary.
-        // todo: There may be yyUserSecretsModel.Default instead.
-        // todo: Take encoding?
-
         /// <summary>
         /// 'filePaths' are tried in order.
         /// First file found is loaded.
-        /// If it fails, an exception is thrown.
+        /// If loading the first one fails, an exception is thrown.
         /// </summary>
-        public yyUserSecretsModel Load (string []? filePaths = null)
+        public static yyUserSecretsModel Load (string [] filePaths, Encoding? encoding = null)
         {
-            foreach (string xFilePath in filePaths ?? yyUserSecrets.DefaultFilePaths)
+            foreach (string xFilePath in filePaths)
             {
                 if (File.Exists (xFilePath))
-                    return Parser.Parse (File.ReadAllText (xFilePath, Encoding.UTF8));
+                    return yyUserSecretsParser.Parse (File.ReadAllText (xFilePath, encoding ?? Encoding.UTF8));
             }
 
+            // If no file is found, it's not an error.
             return new ();
         }
     }
