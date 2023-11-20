@@ -4,16 +4,16 @@ namespace yyLib
 {
     public static class yyApplicationAssembly
     {
-        private static Lazy <Assembly?> _assembly = new Lazy <Assembly?> (() => Assembly.GetEntryAssembly ());
+        private static readonly Lazy <Assembly?> _assembly = new (() => Assembly.GetEntryAssembly ());
 
-        public static Assembly? Assembly { get => _assembly.Value; }
+        public static Assembly? Assembly => _assembly.Value;
 
-        private static Lazy <string?> _location = new Lazy <string?> (() => Assembly?.Location);
+        private static readonly Lazy <string?> _location = new (() => Assembly?.Location);
 
-        public static string? Location { get => _location.Value; }
+        public static string? Location => _location.Value;
 
-        private static Lazy <string?> _directoryPath = new Lazy <string?> (() => Path.GetDirectoryName (Location));
+        private static readonly Lazy <string?> _directoryPath = new (() => Path.GetDirectoryName (Location));
 
-        public static string? DirectoryPath { get => _directoryPath.Value; }
+        public static string? DirectoryPath => _directoryPath.Value;
     }
 }

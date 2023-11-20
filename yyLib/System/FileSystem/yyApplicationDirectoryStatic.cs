@@ -4,19 +4,14 @@
 
     public static class yyApplicationDirectory
     {
-        public static Lazy <string> _path { get; } = new (() =>
-        {
-            // Most reasonable for now.
-            // There may be more code upon working on web development.
-            return yyLibraryAssembly.DirectoryPath;
-        });
+        public static Lazy <string> _path { get; } = new (() => AppContext.BaseDirectory);
 
         public static string Path => _path.Value;
 
         public static string MapPath (string relativePath)
         {
             if (string.IsNullOrWhiteSpace (relativePath) || System.IO.Path.IsPathFullyQualified (relativePath))
-                throw new yyArgumentException ($"'{nameof (relativePath)}' is invalid: \"{relativePath}\"");
+                throw new yyArgumentException ($"'{nameof (relativePath)}' is invalid: {relativePath}");
 
             return System.IO.Path.Join (Path, relativePath);
         }
