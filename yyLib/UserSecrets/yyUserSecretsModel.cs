@@ -2,7 +2,7 @@
 
 namespace yyLib
 {
-    public partial class yyUserSecretsModel
+    public class yyUserSecretsModel
     {
         [JsonPropertyName ("openai")]
         public yyUserSecretsOpenAiModel? OpenAi { get; set; }

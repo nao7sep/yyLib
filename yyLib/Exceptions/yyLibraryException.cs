@@ -2,11 +2,11 @@
 {
     public class yyLibraryException: Exception
     {
-        public yyLibraryException (string message): base (message)
+        public yyLibraryException (yyMessage message): base (message.Content)
         {
         }
 
-        public yyLibraryException (string message, Exception innerException): base (message, innerException)
+        public yyLibraryException (yyMessage message, Exception innerException): base (message.Content, innerException)
         {
         }
     }

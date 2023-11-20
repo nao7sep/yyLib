@@ -1,4 +1,6 @@
-﻿namespace yyLibConsole
+﻿using yyLib;
+
+namespace yyLibConsole
 {
     internal class Program
     {
@@ -6,6 +8,15 @@
         static void Main (string [] args)
 #pragma warning restore IDE0060
         {
+            try
+            {
+            }
+
+            catch (Exception xException)
+            {
+                yySimpleLogger.Default.WriteException (xException);
+                Console.WriteLine (xException);
+            }
         }
     }
 }

@@ -4,14 +4,16 @@
 
     public static class yyApplicationDirectory
     {
-        public static Lazy <string> _path { get; } = new (() => AppContext.BaseDirectory);
+        public static readonly Lazy <string> _path = new (() => AppContext.BaseDirectory);
 
         public static string Path => _path.Value;
 
         public static string MapPath (string relativePath)
         {
             if (string.IsNullOrWhiteSpace (relativePath) || System.IO.Path.IsPathFullyQualified (relativePath))
-                throw new yyArgumentException ($"'{nameof (relativePath)}' is invalid: {relativePath}");
+                throw new yyArgumentException (yyMessage.Create ($"'{nameof (relativePath)}' is invalid: {relativePath}"));
+            // todo: Make null and "" visible.
+            // todo: Search for "yyMessage.Create".
 
             return System.IO.Path.Join (Path, relativePath);
         }
