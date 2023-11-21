@@ -22,14 +22,14 @@
         // Also, like Markdown, there should be a few languages where invisible space chars at line ends mean something; we cant just TrimEnd each line.
         // So, TrimEmptyLines and TrimWhiteSpaceLines safely eliminate unneeded lines before and after the visible ones.
 
-        private static IList <string> TrimLines (string? str, yyStringType type)
+        private static List <string> TrimLines (string? str, yyStringType type)
         {
             if (string.IsNullOrEmpty (str))
-                return new List <string> ();
+                return [];
 
-            List <string> xLines = new ();
+            List <string> xLines = [];
             bool xFirstVisibleLineDetected = false;
-            List <string> xPending = new ();
+            List <string> xPending = [];
 
             foreach (string xLine in EnumerateLines (str))
             {

@@ -1,8 +1,12 @@
-﻿using System.Text;
+﻿using System.Collections;
+using System.Text;
 
 namespace yyLib
 {
-    public class yySimpleLogger
+    // Writes given logs (as key-value pairs) to a text file and/or a number of JSON files.
+    // 'RecentLogs' keeps in memory only the logs that have been written during the current session.
+
+    public class yySimpleLogger: IEnumerable <yySimpleLog>
     {
         private static readonly Lazy <string> _defaultTextWriterFilePath = new (() => yyApplicationDirectory.MapPath ("Logs.txt"));
 
@@ -21,6 +25,30 @@ namespace yyLib
         /// NOT thread-safe.
         /// </summary>
         public static yySimpleLogger Default => _default.Value;
+
+        public List <yySimpleLog> RecentLogs { get; } = [];
+
+        public int Count => RecentLogs.Count;
+
+        public yySimpleLog this [int index]
+        {
+            get => RecentLogs [index];
+            set => RecentLogs [index] = value;
+        }
+
+        public bool Contains (yySimpleLog log) => RecentLogs.Contains (log);
+
+        public void Add (yySimpleLog log) => RecentLogs.Add (log);
+
+        public IEnumerator <yySimpleLog> GetEnumerator () => RecentLogs.GetEnumerator ();
+
+        IEnumerator IEnumerable.GetEnumerator () => GetEnumerator ();
+
+        public void CopyTo (yySimpleLog [] array, int arrayIndex) => RecentLogs.CopyTo (array, arrayIndex);
+
+        public bool Remove (yySimpleLog log) => RecentLogs.Remove (log);
+
+        public void Clear () => RecentLogs.Clear ();
 
         public yySimpleLogTextWriter? TextWriter { get; private set; }
 
@@ -47,6 +75,13 @@ namespace yyLib
         public void Write (string key, string value)
         {
             DateTime xCreationUtc = DateTime.UtcNow;
+
+            RecentLogs.Add (new ()
+            {
+                CreationUtc = xCreationUtc,
+                Key = key,
+                Value = value
+            });
 
             TextWriter?.Write (xCreationUtc, key, value);
             JsonWriter?.Write (xCreationUtc, key, value);

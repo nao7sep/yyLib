@@ -3,17 +3,11 @@ using System.Text.Json;
 
 namespace yyLib
 {
-    public class yySimpleLogJsonWriter
+    public class yySimpleLogJsonWriter (string directoryPath, Encoding? encoding = null)
     {
-        public string DirectoryPath { get; private set; }
+        public string DirectoryPath { get; private set; } = directoryPath;
 
-        public Encoding Encoding { get; private set; }
-
-        public yySimpleLogJsonWriter (string directoryPath, Encoding? encoding = null)
-        {
-            DirectoryPath = directoryPath;
-            Encoding = encoding ?? Encoding.UTF8;
-        }
+        public Encoding Encoding { get; private set; } = encoding ?? Encoding.UTF8;
 
         public void Write (DateTime creationUtc, string key, string value)
         {

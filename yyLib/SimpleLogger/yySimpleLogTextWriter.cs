@@ -2,17 +2,11 @@
 
 namespace yyLib
 {
-    public class yySimpleLogTextWriter
+    public class yySimpleLogTextWriter (string filePath, Encoding? encoding = null)
     {
-        public string FilePath { get; private set; }
+        public string FilePath { get; private set; } = filePath;
 
-        public Encoding Encoding { get; private set; }
-
-        public yySimpleLogTextWriter (string filePath, Encoding? encoding = null)
-        {
-            FilePath = filePath;
-            Encoding = encoding ?? Encoding.UTF8;
-        }
+        public Encoding Encoding { get; private set; } = encoding ?? Encoding.UTF8;
 
         public void Write (DateTime creationUtc, string key, string value)
         {

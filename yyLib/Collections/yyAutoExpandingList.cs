@@ -4,7 +4,7 @@ namespace yyLib
 {
     public class yyAutoExpandingList <T>: IEnumerable <T> where T: new ()
     {
-        public List <T> Items { get; } = new ();
+        public List <T> Items { get; } = [];
 
         public int Count => Items.Count;
 
