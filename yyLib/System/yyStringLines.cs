@@ -61,8 +61,8 @@
             return xLines;
         }
 
-        public static IList <string> TrimEmptyLines (string? str) => TrimLines (str, yyStringType.Empty);
+        public static List <string> TrimEmptyLines (string? str) => TrimLines (str, yyStringType.Empty);
 
-        public static IList <string> TrimWhiteSpaceLines (string? str) => TrimLines (str, yyStringType.WhiteSpace);
+        public static List <string> TrimWhiteSpaceLines (string? str) => TrimLines (str, yyStringType.WhiteSpace);
     }
 }
