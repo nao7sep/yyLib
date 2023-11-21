@@ -2,7 +2,7 @@
 {
     public static class yyString
     {
-        public static string? GetVisibleString (this string? str)
+        public static string GetVisibleString (this string? str)
         {
             if (str == null)
                 return "(Null)";
