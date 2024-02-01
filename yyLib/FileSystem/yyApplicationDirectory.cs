@@ -4,7 +4,7 @@
 
     public static class yyApplicationDirectory
     {
-        public static readonly Lazy <string> _path = new (() => AppContext.BaseDirectory);
+        private static readonly Lazy <string> _path = new (() => AppContext.BaseDirectory);
 
         public static string Path => _path.Value;
 

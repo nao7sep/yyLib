@@ -1,0 +1,16 @@
+﻿[Delete]
+Lib
+
+[Copy]
+yyLib\bin\Release\net8.0 > Lib
+
+[Delete]
+Lib/yyLib.pdb
+
+[Exclude]
+.git
+.vs
+yyLib/bin
+yyLib/obj
+yyLibConsole/bin
+yyLibConsole/obj

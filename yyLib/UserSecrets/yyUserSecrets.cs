@@ -9,10 +9,10 @@
             // By default, the following file paths are tried in order.
             // If any file exists, yyUserSecretsLoader.Load attempts to deserialize it and tries no more.
 
-            Path.Join (Environment.GetFolderPath (Environment.SpecialFolder.UserProfile), DefaultFileName),
-            Path.Join (Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), DefaultFileName),
-            Path.Join (Environment.GetFolderPath (Environment.SpecialFolder.LocalApplicationData), DefaultFileName),
-            Path.Join (Environment.GetFolderPath (Environment.SpecialFolder.CommonApplicationData), DefaultFileName),
+            Path.Join (yySpecialDirectories.UserProfile, DefaultFileName),
+            Path.Join (yySpecialDirectories.ApplicationData, DefaultFileName),
+            Path.Join (yySpecialDirectories.LocalApplicationData, DefaultFileName),
+            Path.Join (yySpecialDirectories.CommonApplicationData, DefaultFileName),
             yyApplicationDirectory.MapPath (DefaultFileName)
         });
 

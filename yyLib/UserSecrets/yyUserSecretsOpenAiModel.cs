@@ -6,5 +6,11 @@ namespace yyLib
     {
         [JsonPropertyName ("api_key")]
         public string? ApiKey { get; set; }
+
+        [JsonPropertyName ("chat_endpoint")]
+        public string? ChatEndpoint { get; set; }
+
+        [JsonPropertyName ("chat_model")]
+        public string? ChatModel { get; set; }
     }
 }
