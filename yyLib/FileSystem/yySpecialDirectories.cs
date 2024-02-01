@@ -2,6 +2,7 @@
 {
     public static class yySpecialDirectories
     {
+        // Environment.SpecialFolder Enum (System) | Microsoft Learn
         // https://docs.microsoft.com/en-us/dotnet/api/system.environment.specialfolder
 
         private static readonly Lazy <string> _desktop = new (() => Environment.GetFolderPath (Environment.SpecialFolder.DesktopDirectory)); // The one that gets the physical path.
