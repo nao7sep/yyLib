@@ -2,7 +2,7 @@
 Lib
 
 [Copy]
-yyLib\bin\Release\net8.0 > Lib
+yyLib/bin/Release/net8.0 > Lib
 
 [Delete]
 Lib/yyLib.pdb
