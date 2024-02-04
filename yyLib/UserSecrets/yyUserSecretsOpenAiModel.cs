@@ -12,5 +12,8 @@ namespace yyLib
 
         [JsonPropertyName ("chat_model")]
         public string? ChatModel { get; set; }
+
+        [JsonPropertyName ("images_endpoint")]
+        public string? ImagesEndpoint { get; set; }
     }
 }
