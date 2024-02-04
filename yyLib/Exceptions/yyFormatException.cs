@@ -2,11 +2,11 @@
 {
     public class yyFormatException: yyLibraryException
     {
-        public yyFormatException (yyMessage message): base (message)
+        public yyFormatException (string message): base (message)
         {
         }
 
-        public yyFormatException (yyMessage message, Exception innerException): base (message, innerException)
+        public yyFormatException (string message, Exception innerException): base (message, innerException)
         {
         }
     }

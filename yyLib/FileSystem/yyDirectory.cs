@@ -23,7 +23,7 @@
             // No point to specify null as 'path' and call this method.
 
             if (path == null || Path.IsPathFullyQualified (path) == false)
-                throw new yyArgumentException (yyMessage.Create ($"'{nameof (path)}' is invalid: {path.GetVisibleString ()}"));
+                throw new yyArgumentException ($"'{nameof (path)}' is invalid: {path.GetVisibleString ()}");
 
             string? xParentDirectoryPath = Path.GetDirectoryName (path);
 
@@ -37,7 +37,7 @@
             // After Path.IsPathFullyQualified, probably redundant.
 
             if (xParentDirectoryPath == string.Empty)
-                throw new yyArgumentException (yyMessage.Create ($"'{nameof (path)}' is invalid: {path.GetVisibleString ()}"));
+                throw new yyArgumentException ($"'{nameof (path)}' is invalid: {path.GetVisibleString ()}");
 
             if (Directory.Exists (xParentDirectoryPath) == false)
                 Directory.CreateDirectory (xParentDirectoryPath);

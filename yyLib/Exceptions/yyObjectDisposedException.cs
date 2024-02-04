@@ -2,11 +2,11 @@
 {
     public class yyObjectDisposedException: yyLibraryException
     {
-        public yyObjectDisposedException (yyMessage message): base (message)
+        public yyObjectDisposedException (string message): base (message)
         {
         }
 
-        public yyObjectDisposedException (yyMessage message, Exception innerException): base (message, innerException)
+        public yyObjectDisposedException (string message, Exception innerException): base (message, innerException)
         {
         }
     }

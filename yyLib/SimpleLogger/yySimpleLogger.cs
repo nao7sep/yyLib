@@ -60,7 +60,7 @@ namespace yyLib
             // If either is an empty string, an exception should be thrown somewhere.
 
             if (textWriterFilePath == null && jsonWriterDirectoryPath == null)
-                throw new yyArgumentException (yyMessage.Create ($"Either '{nameof (textWriterFilePath)}' or '{nameof (jsonWriterDirectoryPath)}' must be specified."));
+                throw new yyArgumentException ($"Either '{nameof (textWriterFilePath)}' or '{nameof (jsonWriterDirectoryPath)}' must be specified.");
 
             if (textWriterFilePath != null)
                 TextWriter = new (textWriterFilePath, encoding ?? Encoding.UTF8);

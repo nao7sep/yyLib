@@ -2,11 +2,11 @@
 {
     internal class yyInvalidOperationException: yyLibraryException
     {
-        public yyInvalidOperationException (yyMessage message): base (message)
+        public yyInvalidOperationException (string message): base (message)
         {
         }
 
-        public yyInvalidOperationException (yyMessage message, Exception innerException): base (message, innerException)
+        public yyInvalidOperationException (string message, Exception innerException): base (message, innerException)
         {
         }
     }

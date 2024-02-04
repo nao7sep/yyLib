@@ -2,11 +2,11 @@
 {
     public class yyApplicationException: ApplicationException
     {
-        public yyApplicationException (yyMessage message): base (message.Content)
+        public yyApplicationException (string message): base (message)
         {
         }
 
-        public yyApplicationException (yyMessage message, Exception innerException): base (message.Content, innerException)
+        public yyApplicationException (string message, Exception innerException): base (message, innerException)
         {
         }
     }

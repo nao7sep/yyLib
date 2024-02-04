@@ -2,11 +2,11 @@
 {
     public class yyNotImplementedException: yyLibraryException
     {
-        public yyNotImplementedException (yyMessage message): base (message)
+        public yyNotImplementedException (string message): base (message)
         {
         }
 
-        public yyNotImplementedException (yyMessage message, Exception innerException): base (message, innerException)
+        public yyNotImplementedException (string message, Exception innerException): base (message, innerException)
         {
         }
     }

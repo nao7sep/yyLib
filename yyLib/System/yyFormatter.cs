@@ -4,6 +4,8 @@ namespace yyLib
 {
     public static class yyFormatter
     {
+        // The method name doesnt need to contain "DateTime" as it's obvious from the parameter type.
+
         /// <summary>
         /// We get something like: 2023-11-20T19:40:59.1664591Z (UTC) or 2023-11-21T04:40:59.1664591+09:00 (local time).
         /// </summary>
@@ -31,7 +33,7 @@ namespace yyLib
             if (utc.Kind == DateTimeKind.Utc)
                 return utc.ToString ("yyyyMMdd'T'HHmmss'-'fffffffK", CultureInfo.InvariantCulture);
 
-            else throw new yyArgumentException (yyMessage.Create ($"'{nameof (utc)}' is not an UTC time: {utc.ToRoundtripString ()}"));
+            else throw new yyArgumentException ($"'{nameof (utc)}' is not an UTC time: {utc.ToRoundtripString ()}");
         }
     }
 }
