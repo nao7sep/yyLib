@@ -16,7 +16,7 @@ namespace yyLib
                 xBuilder.AppendLine ("----");
 
             xBuilder.AppendLine ($"Time: {creationUtc.ToRoundtripString ()}");
-            xBuilder.AppendLine ($"{key}: {value.TrimWhiteSpaceLines ()}"); // Auto trimmed.
+            xBuilder.AppendLine ($"{key}: {value.TrimLines ()}"); // Auto trimmed.
 
             yyDirectory.CreateParent (FilePath);
             File.AppendAllText (FilePath, xBuilder.ToString (), Encoding);

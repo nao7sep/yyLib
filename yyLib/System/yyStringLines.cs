@@ -22,25 +22,28 @@
         // Also, like Markdown, there should be a few languages where invisible space chars at line ends mean something; we cant just TrimEnd each line.
         // So, TrimEmptyLines and TrimWhiteSpaceLines safely eliminate unneeded lines before and after the visible ones.
 
-        private static List <string> TrimLines (string? str, yyStringType type)
+        // Added comment: This is a multiline version of Trim just as the name suggests, meaning internal redundant empty lines are preserved.
+        // The type parameter specifies what type of lines are considered "unnecessary" and must be "trimmed" from the beginning and the end of the string.
+
+        public static List <string> TrimLines (string? str, yyStringType type)
         {
             if (string.IsNullOrEmpty (str))
                 return [];
 
             List <string> xLines = [];
-            bool xFirstVisibleLineDetected = false;
+            bool xIsFirstVisibleLineDetected = false;
             List <string> xPending = [];
 
             foreach (string xLine in EnumerateLines (str))
             {
-                if (xFirstVisibleLineDetected == false)
+                if (xIsFirstVisibleLineDetected == false)
                 {
                     if ((type == yyStringType.Empty && string.IsNullOrEmpty (xLine)) ||
                             (type == yyStringType.WhiteSpace && string.IsNullOrWhiteSpace (xLine)))
                         continue;
 
                     xLines.Add (xLine);
-                    xFirstVisibleLineDetected = true;
+                    xIsFirstVisibleLineDetected = true;
                 }
 
                 else
@@ -60,9 +63,5 @@
 
             return xLines;
         }
-
-        public static List <string> TrimEmptyLines (string? str) => TrimLines (str, yyStringType.Empty);
-
-        public static List <string> TrimWhiteSpaceLines (string? str) => TrimLines (str, yyStringType.WhiteSpace);
     }
 }
