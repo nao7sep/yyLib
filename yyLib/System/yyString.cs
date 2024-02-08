@@ -96,7 +96,7 @@
         // The only possible consensus, I think, is that strings MAY lose redundant invisible lines at the beginning, inside and at the end.
 
         /// <summary>
-        /// Splits the string into an enumeration of paragraphs, each of which is a List of lines, by omitting specified type of lines that are considered "empty," and then reconstructs the entire string.
+        /// Splits the string into an enumeration of paragraphs, each of which is a List of lines, by omitting the specified type of lines that are considered "empty," and then reconstructs the entire string.
         /// </summary>
         public static string? Optimize (this string? str, yyStringType type = yyStringType.WhiteSpace, string? newLine = null)
         {
