@@ -11,3 +11,6 @@ using System.Diagnostics.CodeAnalysis;
 
 // Naming rule violation
 [assembly: SuppressMessage ("Style", "IDE1006")]
+
+[assembly: SuppressMessage ("Style", "IDE0028")]
+[assembly: SuppressMessage ("Style", "IDE0300")]
