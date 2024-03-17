@@ -2,7 +2,7 @@
 {
     public static class yyUserSecrets
     {
-        public static string DefaultFileName { get; } = ".yyUserSecrets";
+        public static string DefaultFileName { get; } = ".yyUserSecrets.json";
 
         private static readonly Lazy <string []> _defaultFilePaths = new (() => new []
         {
