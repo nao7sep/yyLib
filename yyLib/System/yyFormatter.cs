@@ -30,8 +30,12 @@ namespace yyLib
             // https://learn.microsoft.com/en-us/dotnet/standard/base-types/standard-date-and-time-format-strings#Roundtrip
             // https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings#KSpecifier
 
+            // Added: 2024-04-22
+            // With a millisecond-level part attached, the core part should still be consistent with the ISO 8601 format.
+            // I moved the UTC timezone indicator and deleted the then-redundant hyphen that separated the core part and the rest.
+
             if (utc.Kind == DateTimeKind.Utc)
-                return utc.ToString ("yyyyMMdd'T'HHmmss'-'fffffffK", CultureInfo.InvariantCulture);
+                return utc.ToString ("yyyyMMdd'T'HHmmssKfffffff", CultureInfo.InvariantCulture);
 
             else throw new yyArgumentException ($"'{nameof (utc)}' is not an UTC time: {utc.ToRoundtripString ()}");
         }
