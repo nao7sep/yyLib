@@ -1,6 +1,6 @@
 ﻿namespace yyLib
 {
-    public class yyInvalidDataException: yyLibraryException
+    public class yyInvalidDataException: yyGeneralException
     {
         public yyInvalidDataException (string message): base (message)
         {

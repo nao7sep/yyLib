@@ -1,6 +1,6 @@
 ﻿namespace yyLib
 {
-    public class yyFormatException: yyLibraryException
+    public class yyFormatException: yyGeneralException
     {
         public yyFormatException (string message): base (message)
         {

@@ -20,7 +20,7 @@ namespace yyLib
                 Key = key,
                 Value = value
             };
-            
+
             string xFileContents = JsonSerializer.Serialize (xLog, yyJson.DefaultSerializationOptions);
 
             yyDirectory.Create (DirectoryPath);

@@ -1,6 +1,6 @@
 ﻿namespace yyLib
 {
-    public class yyObjectDisposedException: yyLibraryException
+    public class yyObjectDisposedException: yyGeneralException
     {
         public yyObjectDisposedException (string message): base (message)
         {

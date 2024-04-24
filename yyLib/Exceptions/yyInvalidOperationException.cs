@@ -1,6 +1,6 @@
 ﻿namespace yyLib
 {
-    internal class yyInvalidOperationException: yyLibraryException
+    internal class yyInvalidOperationException: yyGeneralException
     {
         public yyInvalidOperationException (string message): base (message)
         {

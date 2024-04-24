@@ -9,7 +9,7 @@ namespace yyLib
         /// First file found is loaded.
         /// If loading the first one fails, an exception is thrown.
         /// </summary>
-        public static yyUserSecretsModel Load (string [] filePaths, Encoding? encoding = null)
+        public static yyUserSecrets Load (string [] filePaths, Encoding? encoding = null)
         {
             foreach (string xFilePath in filePaths)
             {

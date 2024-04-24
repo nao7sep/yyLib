@@ -1,6 +1,6 @@
 ﻿namespace yyLib
 {
-    public class yyArgumentException: yyLibraryException
+    public class yyArgumentException: yyGeneralException
     {
         public yyArgumentException (string message): base (message)
         {

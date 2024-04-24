@@ -4,12 +4,12 @@ namespace yyLib
 {
     public static class yyUserSecretsParser
     {
-        public static yyUserSecretsModel Parse (string? str)
+        public static yyUserSecrets Parse (string? str)
         {
             if (string.IsNullOrWhiteSpace (str))
                 throw new yyArgumentException ($"'{nameof (str)}' is invalid: {str.GetVisibleString ()}");
 
-            var xResponse = (yyUserSecretsModel?) JsonSerializer.Deserialize (str, typeof (yyUserSecretsModel), yyJson.DefaultDeserializationOptions);
+            var xResponse = (yyUserSecrets?) JsonSerializer.Deserialize (str, typeof (yyUserSecrets), yyJson.DefaultDeserializationOptions);
 
             if (xResponse == null)
                 throw new yyFormatException ($"Failed to deserialize JSON: {str.GetVisibleString ()}");
