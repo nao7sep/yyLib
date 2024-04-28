@@ -21,5 +21,8 @@ namespace yyLib
 
         [JsonPropertyName ("images_endpoint")]
         public string? ImagesEndpoint { get; set; }
+
+        [JsonPropertyName ("timeout")]
+        public int? Timeout { get; set; }
     }
 }
