@@ -8,11 +8,11 @@ namespace yyLib
 
     public class yySimpleLogger: IEnumerable <yySimpleLog>
     {
-        private static readonly Lazy <string> _defaultTextWriterFilePath = new (() => yyApplicationDirectory.MapPath ("Logs.txt"));
+        private static readonly Lazy <string> _defaultTextWriterFilePath = new (() => yyAppDirectory.MapPath ("Logs.txt"));
 
         public static string DefaultTextWriterFilePath => _defaultTextWriterFilePath.Value;
 
-        private static readonly Lazy <string> _defaultJsonWriterDirectoryPath = new (() => yyApplicationDirectory.MapPath ("Logs"));
+        private static readonly Lazy <string> _defaultJsonWriterDirectoryPath = new (() => yyAppDirectory.MapPath ("Logs"));
 
         public static string DefaultJsonWriterDirectoryPath => _defaultJsonWriterDirectoryPath.Value;
 

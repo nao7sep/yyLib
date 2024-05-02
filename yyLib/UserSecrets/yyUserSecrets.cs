@@ -12,10 +12,10 @@ namespace yyLib
             // If any file exists, yyUserSecretsLoader.Load attempts to deserialize it and tries no more.
 
             Path.Join (yySpecialDirectories.UserProfile, DefaultFileName),
-            Path.Join (yySpecialDirectories.ApplicationData, DefaultFileName),
-            Path.Join (yySpecialDirectories.LocalApplicationData, DefaultFileName),
-            Path.Join (yySpecialDirectories.CommonApplicationData, DefaultFileName),
-            yyApplicationDirectory.MapPath (DefaultFileName)
+            Path.Join (yySpecialDirectories.AppData, DefaultFileName),
+            Path.Join (yySpecialDirectories.LocalAppData, DefaultFileName),
+            Path.Join (yySpecialDirectories.CommonAppData, DefaultFileName),
+            yyAppDirectory.MapPath (DefaultFileName)
         });
 
         public static string [] DefaultFilePaths => _defaultFilePaths.Value;

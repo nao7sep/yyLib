@@ -28,21 +28,21 @@
 
         // -----------------------------------------------------------------------------
 
-        private static readonly Lazy <string> _applicationData = new (() => Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData));
+        private static readonly Lazy <string> _appData = new (() => Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData));
 
         /// <summary>
         /// Store user-specific settings and data that should persist across multiple networked machines here.
         /// </summary>
-        public static string ApplicationData => _applicationData.Value;
+        public static string AppData => _appData.Value;
 
-        private static readonly Lazy <string> _localApplicationData = new (() => Environment.GetFolderPath (Environment.SpecialFolder.LocalApplicationData));
+        private static readonly Lazy <string> _localAppData = new (() => Environment.GetFolderPath (Environment.SpecialFolder.LocalApplicationData));
 
         /// <summary>
         /// Ideal for storing large or machine-specific user data that doesn't need to be shared across machines.
         /// </summary>
-        public static string LocalApplicationData => _localApplicationData.Value;
+        public static string LocalAppData => _localAppData.Value;
 
-        private static readonly Lazy <string> _commonApplicationData = new (() => Environment.GetFolderPath (Environment.SpecialFolder.CommonApplicationData));
+        private static readonly Lazy <string> _commonAppData = new (() => Environment.GetFolderPath (Environment.SpecialFolder.CommonApplicationData));
 
         // There's no enum value to get "LocalLow".
         // It's less frequently used and is not implemented for now.
@@ -53,9 +53,9 @@
         //     such as Internet Explorer when it operates in Protected Mode or other applications that run in a low integrity level.
 
         /// <summary>
-        /// Use for application-specific data that is common to all users and does not change frequently.
+        /// Use for app-specific data that is common to all users and does not change frequently.
         /// </summary>
-        public static string CommonApplicationData => _commonApplicationData.Value;
+        public static string CommonAppData => _commonAppData.Value;
 
         // There seems to be no "common" version of "ApplicationData".
         // Shared info that is roamed across machines anyway doesnt make much sense.

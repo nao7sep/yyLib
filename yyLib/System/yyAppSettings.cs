@@ -11,14 +11,14 @@ namespace yyLib
         {
             ConfigurationBuilder xBuilder = new ();
 
-            xBuilder.SetBasePath (yyApplicationDirectory.Path);
+            xBuilder.SetBasePath (yyAppDirectory.Path);
 
-            // appsettings.json: The default configuration file used by the application.
+            // appsettings.json: The default configuration file used by the app.
             // Contains settings that are common across all environments.
 
             xBuilder.AddJsonFile ("appsettings.json", optional: true, reloadOnChange: true);
 #if DEBUG
-            // appsettings.Development.json: Used when the application is running in a development environment.
+            // appsettings.Development.json: Used when the app is running in a development environment.
             // This file contains development-specific settings (like detailed logging settings, local database connection strings, etc.) that override or supplement the base appsettings.json.
 
             xBuilder.AddJsonFile ("appsettings.Development.json", optional: true, reloadOnChange: true);
@@ -29,7 +29,7 @@ namespace yyLib
             xBuilder.AddJsonFile ("appsettings.Staging.json", optional: true, reloadOnChange: true);
 #endif
             // appsettings.Production.json: Contains configurations specific to the production environment.
-            // These settings override the base appsettings.json when the application is running in production.
+            // These settings override the base appsettings.json when the app is running in production.
             // This may include production-level settings such as database connection strings, API keys, logging levels, and other settings optimized for performance and security.
 
             xBuilder.AddJsonFile ("appsettings.Production.json", optional: true, reloadOnChange: true);
