@@ -83,6 +83,9 @@ namespace yyLib
                 Value = value
             });
 
+            // Doesnt throw an exception when no writer is specified.
+            // Someday, we might need to add a writer that writes to a database or the OS event log.
+
             TextWriter?.Write (xCreationUtc, key, value);
             JsonWriter?.Write (xCreationUtc, key, value);
         }
