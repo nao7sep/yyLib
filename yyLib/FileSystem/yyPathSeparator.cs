@@ -2,8 +2,8 @@
 {
     public static class yyPathSeparator
     {
-        public static char Windows => '\\';
+        public static char Nt => '\\';
 
-        public static char Unix => '/';
+        public static char Posix => '/';
     }
 }

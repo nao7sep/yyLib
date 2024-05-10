@@ -2,20 +2,37 @@
 {
     public static class yyPath
     {
-        public static readonly char [] _separators = [yyPathSeparator.Windows, yyPathSeparator.Unix];
+        private static readonly char [] _separators = [yyPathSeparator.Nt, yyPathSeparator.Posix];
 
         public static char [] Separators => _separators;
 
+        private static readonly Lazy <char> _defaultSeparator = new (() =>
+        {
+            if (yyEnvironment.IsNt)
+                return yyPathSeparator.Nt;
+
+            else if (yyEnvironment.IsPosix)
+                return yyPathSeparator.Posix;
+
+            else throw new yyNotSupportedException ("Unsupported operating system.");
+        });
+
+        public static char DefaultSeparator => _defaultSeparator.Value;
+
         public static char GetAlternativeSeparator (char separator)
         {
-            if (separator == yyPathSeparator.Windows)
-                return yyPathSeparator.Unix;
+            if (separator == yyPathSeparator.Nt)
+                return yyPathSeparator.Posix;
 
-            else if (separator == yyPathSeparator.Unix)
-                return yyPathSeparator.Windows;
+            else if (separator == yyPathSeparator.Posix)
+                return yyPathSeparator.Nt;
 
             else throw new ArgumentException ("Invalid separator.");
         }
+
+        private static readonly Lazy <char> _alternativeSeparator = new (() => GetAlternativeSeparator (DefaultSeparator));
+
+        public static char AlternativeSeparator => _alternativeSeparator.Value;
 
         public static string NormalizeSeparators (string path, char separator) =>
             path.Replace (GetAlternativeSeparator (separator), separator);
