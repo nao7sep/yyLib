@@ -1,6 +1,6 @@
 ﻿namespace yyLib
 {
-    // A simple class to represent the app directory rather than the app itself.
+    // A simple class that represents the app directory rather than the app itself.
 
     public static class yyAppDirectory
     {
