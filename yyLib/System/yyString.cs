@@ -22,6 +22,9 @@
             if (str == string.Empty)
                 return "(Empty)";
 
+            // White space characters are not supported as they may contain new lines,
+            // which are kind of visible as they affect how things are displayed.
+
             return str;
         }
 
@@ -38,7 +41,7 @@
             if (string.IsNullOrEmpty (str))
                 return $"{linePrefix}{str.GetVisibleString ()}{lineSuffix}";
 
-            // If 2 or more lines are returned, we dont need each empty-looking string to be "(Empty)".
+            // If 2 or more lines are returned, we dont need each obviously-empty string to be "(Empty)".
 
             return string.Join (newLine ?? Environment.NewLine, yyStringLines.EnumerateLines (str).Select (x => $"{linePrefix}{x}{lineSuffix}"));
         }
@@ -56,7 +59,6 @@
             if (string.IsNullOrEmpty (str))
                 return [];
 
-            // Could be faster, but it's not a bottleneck.
             return yyStringLines.EnumerateLines (str).ToList ();
         }
 

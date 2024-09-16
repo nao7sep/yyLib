@@ -18,7 +18,7 @@ namespace yyLib
         public static DateTime ParseRoundtripDateTimeString (string str) =>
             DateTime.ParseExact (str, "O", CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
 
-        // Contains enough info to roundtrip, but we wont need Parse for this.
+        // Contains enough info to roundtrip, but we wont need Parse for this string format.
         // As time zone indicators' signs in file names may cause unexpected behavior, local time is not supported.
 
         /// <summary>
