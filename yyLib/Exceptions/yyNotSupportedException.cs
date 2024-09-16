@@ -1,6 +1,6 @@
 ﻿namespace yyLib
 {
-    public class yyNotSupportedException: yyGeneralException
+    public class yyNotSupportedException: yyException
     {
         public yyNotSupportedException (string message): base (message)
         {
