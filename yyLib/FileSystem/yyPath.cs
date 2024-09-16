@@ -2,17 +2,17 @@
 {
     public static class yyPath
     {
-        private static readonly char [] _separators = [yyPathSeparator.Nt, yyPathSeparator.Posix];
+        private static readonly char [] _separators = [yyPathSeparators.Nt, yyPathSeparators.Posix];
 
         public static char [] Separators => _separators;
 
         private static readonly Lazy <char> _defaultSeparator = new (() =>
         {
             if (yyEnvironment.IsNt)
-                return yyPathSeparator.Nt;
+                return yyPathSeparators.Nt;
 
             else if (yyEnvironment.IsPosix)
-                return yyPathSeparator.Posix;
+                return yyPathSeparators.Posix;
 
             else throw new yyNotSupportedException ("Unsupported operating system.");
         });
@@ -21,11 +21,11 @@
 
         public static char GetAlternativeSeparator (char separator)
         {
-            if (separator == yyPathSeparator.Nt)
-                return yyPathSeparator.Posix;
+            if (separator == yyPathSeparators.Nt)
+                return yyPathSeparators.Posix;
 
-            else if (separator == yyPathSeparator.Posix)
-                return yyPathSeparator.Nt;
+            else if (separator == yyPathSeparators.Posix)
+                return yyPathSeparators.Nt;
 
             else throw new ArgumentException ("Invalid separator.");
         }

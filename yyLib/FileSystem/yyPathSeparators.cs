@@ -1,6 +1,6 @@
 ﻿namespace yyLib
 {
-    public static class yyPathSeparator
+    public static class yyPathSeparators
     {
         public static char Nt => '\\';
 

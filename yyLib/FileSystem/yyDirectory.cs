@@ -20,7 +20,7 @@
             // Straightforward implementation:
 
             // Path.GetDirectoryName returns null if 'path' is null or it's a root directory.
-            // No point to specify null as 'path' and call this method.
+            // No point in specifying null as 'path' and call this method.
 
             if (path == null || Path.IsPathFullyQualified (path) == false)
                 throw new yyArgumentException ($"'{nameof (path)}' is invalid: {path.GetVisibleString ()}");
