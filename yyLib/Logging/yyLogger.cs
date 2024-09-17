@@ -3,100 +3,98 @@ using System.Text;
 
 namespace yyLib
 {
-    // Writes given logs (as key-value pairs) to a text file and/or a number of JSON files.
-    // 'RecentLogs' keeps in memory only the logs that have been written during the current session.
+    // Writes log entries as key-value pairs to a text file and/or a number of JSON files.
+    // 'RecentEntries' contains only the entries that have been written during the current session.
 
-    public class yySimpleLogger: IEnumerable <yySimpleLog>
+    // By default, log entries are written only to JSON files as the JSON mode is almost thread-safe (but not completely).
+    // We can change WritesToTextFile/WritesToJsonFiles anytime as there's no caching involved.
+
+    public class yyLogger: IEnumerable <yyLogEntry>
     {
-        private static readonly Lazy <string> _defaultTextWriterFilePath = new (() => yyAppDirectory.MapPath ("Logs.txt"));
+        public List <yyLogEntry> RecentEntries { get; } = [];
 
-        public static string DefaultTextWriterFilePath => _defaultTextWriterFilePath.Value;
+        public int RecentEntryCount => RecentEntries.Count;
 
-        private static readonly Lazy <string> _defaultJsonWriterDirectoryPath = new (() => yyAppDirectory.MapPath ("Logs"));
-
-        public static string DefaultJsonWriterDirectoryPath => _defaultJsonWriterDirectoryPath.Value;
-
-        private static readonly Lazy <yySimpleLogger> _default = new (() =>
-            new yySimpleLogger (DefaultTextWriterFilePath, DefaultJsonWriterDirectoryPath));
-        // Encoding isnt specified because it's more like Environment.NewLine.
-        // Meaning, not many people would need to customize it.
-
-        /// <summary>
-        /// NOT thread-safe.
-        /// </summary>
-        public static yySimpleLogger Default => _default.Value;
-
-        public List <yySimpleLog> RecentLogs { get; } = [];
-
-        public int Count => RecentLogs.Count;
-
-        public yySimpleLog this [int index]
+        public yyLogEntry this [int index]
         {
-            get => RecentLogs [index];
-            set => RecentLogs [index] = value;
+            get => RecentEntries [index];
+            set => RecentEntries [index] = value;
         }
 
-        public bool Contains (yySimpleLog log) => RecentLogs.Contains (log);
+        public bool Contains (yyLogEntry log) => RecentEntries.Contains (log);
 
-        public void Add (yySimpleLog log) => RecentLogs.Add (log);
+        public void Add (yyLogEntry log) => RecentEntries.Add (log);
 
-        public IEnumerator <yySimpleLog> GetEnumerator () => RecentLogs.GetEnumerator ();
+        public IEnumerator <yyLogEntry> GetEnumerator () => RecentEntries.GetEnumerator ();
 
         IEnumerator IEnumerable.GetEnumerator () => GetEnumerator ();
 
-        public void CopyTo (yySimpleLog [] array, int arrayIndex) => RecentLogs.CopyTo (array, arrayIndex);
+        public void CopyTo (yyLogEntry [] array, int arrayIndex) => RecentEntries.CopyTo (array, arrayIndex);
 
-        public bool Remove (yySimpleLog log) => RecentLogs.Remove (log);
+        public bool Remove (yyLogEntry log) => RecentEntries.Remove (log);
 
-        public void Clear () => RecentLogs.Clear ();
+        public void Clear () => RecentEntries.Clear ();
 
-        public yySimpleLogTextWriter? TextWriter { get; private set; }
+        public bool WritesToTextFile { get; set; }
 
-        public yySimpleLogJsonWriter? JsonWriter { get; private set; }
+        public yyTextLogWriter? TextLogWriter { get; init; }
 
-        public yySimpleLogger (string? textWriterFilePath = null, string? jsonWriterDirectoryPath = null, Encoding? encoding = null)
+        public bool WritesToJsonFiles { get; set; }
+
+        public yyJsonLogWriter? JsonLogWriter { get; init; }
+
+        public yyLogger (bool writesToTextFile = false, string? textLogWriterFilePath = null, bool writesToJsonFiles = true, string? jsonLogWriterDirectoryPath = null, Encoding? encoding = null)
         {
-            // Only null is accepted as a valid value to specify that the value shouldnt be used.
-            // If either is an empty string, an exception should be thrown somewhere.
+            // The boolean values indicating whether to write in each mode and the actual paths to write to are decoupled.
+            // The former must have the right values only upon writing each log entry.
+            // The latter are init properties and therefore must be initialized in the constructor.
 
-            if (textWriterFilePath == null && jsonWriterDirectoryPath == null)
-                throw new yyArgumentException ($"Either '{nameof (textWriterFilePath)}' or '{nameof (jsonWriterDirectoryPath)}' must be specified.");
+            if (textLogWriterFilePath == null && jsonLogWriterDirectoryPath == null)
+                throw new yyArgumentException ($"Either '{nameof (textLogWriterFilePath)}' or '{nameof (jsonLogWriterDirectoryPath)}' must be specified.");
 
-            if (textWriterFilePath != null)
-                TextWriter = new (textWriterFilePath, encoding ?? Encoding.UTF8);
+            WritesToTextFile = writesToTextFile;
 
-            if (jsonWriterDirectoryPath != null)
-                JsonWriter = new (jsonWriterDirectoryPath, encoding ?? Encoding.UTF8);
+            if (textLogWriterFilePath != null)
+                TextLogWriter = new (textLogWriterFilePath, encoding ?? Encoding.UTF8);
+
+            WritesToJsonFiles = writesToJsonFiles;
+
+            if (jsonLogWriterDirectoryPath != null)
+                JsonLogWriter = new (jsonLogWriterDirectoryPath, encoding ?? Encoding.UTF8);
         }
 
         /// <summary>
-        /// Use TryWrite instead.
+        /// Use TryWrite unless you need to handle exceptions.
         /// </summary>
         public void Write (string key, string value)
         {
-            DateTime xCreationUtc = DateTime.UtcNow;
+            DateTime xCreatedAtUtc = DateTime.UtcNow;
 
-            RecentLogs.Add (new ()
+            RecentEntries.Add (new ()
             {
-                CreationUtc = xCreationUtc,
+                CreatedAtUtc = xCreatedAtUtc,
                 Key = key,
                 Value = value
             });
 
-            // Doesnt throw an exception when no writer is specified.
-            // Someday, we might need to add a writer that writes to a database or the OS event log.
+            // Doesnt throw an exception when the log entry is not written to anywhere for 2 reasons:
+            // 1) We might eventually need to add a writer that writes to a database or the OS event log.
+            // 2) Loggers shouldnt throw exceptions and the recommended TryWrite methods will ignore any exceptions.
 
-            TextWriter?.Write (xCreationUtc, key, value);
-            JsonWriter?.Write (xCreationUtc, key, value);
+            if (WritesToTextFile)
+                TextLogWriter?.Write (xCreatedAtUtc, key, value);
+
+            if (WritesToJsonFiles)
+                JsonLogWriter?.Write (xCreatedAtUtc, key, value);
         }
 
         /// <summary>
-        /// Use TryWriteMessage instead.
+        /// Use TryWriteMessage unless you need to handle exceptions.
         /// </summary>
         public void WriteMessage (string message) => Write ("Message", message);
 
         /// <summary>
-        /// Use TryWriteException instead.
+        /// Use TryWriteException unless you need to handle exceptions.
         /// </summary>
         public void WriteException (Exception exception) => Write ("Exception", exception.ToString ());
 
@@ -120,5 +118,27 @@ namespace yyLib
         public bool TryWriteMessage (string message) => TryWrite ("Message", message);
 
         public bool TryWriteException (Exception exception) => TryWrite ("Exception", exception.ToString ());
+
+        // -----------------------------------------------------------------------------
+        //     Static Members
+        // -----------------------------------------------------------------------------
+
+        private static readonly Lazy <string> _defaultTextLogWriterFilePath = new (() => yyAppDirectory.MapPath ("Logs.txt"));
+
+        public static string DefaultTextLogWriterFilePath => _defaultTextLogWriterFilePath.Value;
+
+        private static readonly Lazy <string> _defaultJsonLogWriterDirectoryPath = new (() => yyAppDirectory.MapPath ("Logs"));
+
+        public static string DefaultJsonLogWriterDirectoryPath => _defaultJsonLogWriterDirectoryPath.Value;
+
+        private static readonly Lazy <yyLogger> _default = new (() =>
+            new yyLogger (writesToTextFile: false, DefaultTextLogWriterFilePath,
+                          writesToJsonFiles: true, DefaultJsonLogWriterDirectoryPath));
+
+        /// <summary>
+        /// NOT thread-safe.
+        /// </summary>
+        public static yyLogger Default => _default.Value;
+
     }
 }

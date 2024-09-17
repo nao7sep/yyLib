@@ -2,10 +2,10 @@
 
 namespace yyLib
 {
-    public class yySimpleLog
+    public class yyLogEntry
     {
-        [JsonPropertyName ("creation_utc")]
-        public DateTime? CreationUtc { get; set; }
+        [JsonPropertyName ("created_at_utc")]
+        public DateTime? CreatedAtUtc { get; set; }
 
         [JsonPropertyName ("key")]
         public string? Key { get; set; }

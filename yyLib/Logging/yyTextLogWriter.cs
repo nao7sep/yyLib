@@ -2,20 +2,20 @@
 
 namespace yyLib
 {
-    public class yySimpleLogTextWriter (string filePath, Encoding? encoding = null)
+    public class yyTextLogWriter (string filePath, Encoding? encoding = null)
     {
-        public string FilePath { get; private set; } = filePath;
+        public string FilePath { get; init; } = filePath;
 
-        public Encoding Encoding { get; private set; } = encoding ?? Encoding.UTF8;
+        public Encoding Encoding { get; init; } = encoding ?? Encoding.UTF8;
 
-        public void Write (DateTime creationUtc, string key, string value)
+        public void Write (DateTime createdAtUtc, string key, string value)
         {
             StringBuilder xBuilder = new ();
 
             if (File.Exists (FilePath))
                 xBuilder.AppendLine ("----");
 
-            xBuilder.AppendLine ($"Time: {creationUtc.ToRoundtripString ()}");
+            xBuilder.AppendLine ($"UTC: {createdAtUtc.ToRoundtripString ()}");
             xBuilder.AppendLine ($"{key}: {value.TrimRedundantLines ()}"); // Auto trimmed.
 
             yyDirectory.CreateParent (FilePath);
