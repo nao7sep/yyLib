@@ -20,8 +20,8 @@ namespace yyMailLib
         [JsonPropertyName ("current_relative_file_path")]
         public string? CurrentRelativeFilePath { get; set; }
 
-        [JsonPropertyName ("creation_utc")]
-        public DateTime? CreationUtc { get; set; }
+        [JsonPropertyName ("created_at_utc")]
+        public DateTime? CreatedAtUtc { get; set; }
 
         [JsonPropertyName ("modification_utc")]
         public DateTime? ModificationUtc { get; set; }
@@ -47,7 +47,7 @@ namespace yyMailLib
             // The source code suggests that there are fallback mechanisms in place for Linux:
             // https://source.dot.net/#System.Private.CoreLib/src/libraries/System.Private.CoreLib/src/System/IO/FileStatus.Unix.cs,2b4046d793b2bb3a
 
-            CreationUtc = xFile.CreationTimeUtc;
+            CreatedAtUtc = xFile.CreationTimeUtc;
             ModificationUtc = xFile.LastWriteTimeUtc;
             ReadUtc = xFile.LastAccessTimeUtc;
             ContentLength = xFile.Length;

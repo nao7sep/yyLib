@@ -3,37 +3,37 @@ using System.Text;
 
 namespace yyLib
 {
-    // Writes log entries as key-value pairs to a text file and/or a number of JSON files.
-    // 'RecentEntries' contains only the entries that have been written during the current session.
+    // Writes logs as key-value pairs to a text file and/or a number of JSON files.
+    // 'RecentLogs' contains only the logs that have been written during the current session.
 
-    // By default, log entries are written only to JSON files as the JSON mode is almost thread-safe (but not completely).
+    // By default, logs are written only to JSON files as the JSON mode is almost thread-safe (but not completely).
     // We can change WritesToTextFile/WritesToJsonFiles anytime as there's no caching involved.
 
-    public class yyLogger: IEnumerable <yyLogEntry>
+    public class yyLogger: IEnumerable <yyLog>
     {
-        public List <yyLogEntry> RecentEntries { get; } = [];
+        public List <yyLog> RecentLogs { get; } = [];
 
-        public int RecentEntryCount => RecentEntries.Count;
+        public int RecentLogCount => RecentLogs.Count;
 
-        public yyLogEntry this [int index]
+        public yyLog this [int index]
         {
-            get => RecentEntries [index];
-            set => RecentEntries [index] = value;
+            get => RecentLogs [index];
+            set => RecentLogs [index] = value;
         }
 
-        public bool Contains (yyLogEntry log) => RecentEntries.Contains (log);
+        public bool Contains (yyLog log) => RecentLogs.Contains (log);
 
-        public void Add (yyLogEntry log) => RecentEntries.Add (log);
+        public void Add (yyLog log) => RecentLogs.Add (log);
 
-        public IEnumerator <yyLogEntry> GetEnumerator () => RecentEntries.GetEnumerator ();
+        public IEnumerator <yyLog> GetEnumerator () => RecentLogs.GetEnumerator ();
 
         IEnumerator IEnumerable.GetEnumerator () => GetEnumerator ();
 
-        public void CopyTo (yyLogEntry [] array, int arrayIndex) => RecentEntries.CopyTo (array, arrayIndex);
+        public void CopyTo (yyLog [] array, int arrayIndex) => RecentLogs.CopyTo (array, arrayIndex);
 
-        public bool Remove (yyLogEntry log) => RecentEntries.Remove (log);
+        public bool Remove (yyLog log) => RecentLogs.Remove (log);
 
-        public void Clear () => RecentEntries.Clear ();
+        public void Clear () => RecentLogs.Clear ();
 
         public bool WritesToTextFile { get; set; }
 
@@ -46,7 +46,7 @@ namespace yyLib
         public yyLogger (bool writesToTextFile = false, string? textLogWriterFilePath = null, bool writesToJsonFiles = true, string? jsonLogWriterDirectoryPath = null, Encoding? encoding = null)
         {
             // The boolean values indicating whether to write in each mode and the actual paths to write to are decoupled.
-            // The former must have the right values only upon writing each log entry.
+            // The former must have the right values only upon writing each log.
             // The latter are init properties and therefore must be initialized in the constructor.
 
             if (textLogWriterFilePath == null && jsonLogWriterDirectoryPath == null)
@@ -70,14 +70,14 @@ namespace yyLib
         {
             DateTime xCreatedAtUtc = DateTime.UtcNow;
 
-            RecentEntries.Add (new ()
+            RecentLogs.Add (new ()
             {
                 CreatedAtUtc = xCreatedAtUtc,
                 Key = key,
                 Value = value
             });
 
-            // Doesnt throw an exception when the log entry is not written to anywhere for 2 reasons:
+            // Doesnt throw an exception when the log is not written to anywhere for 2 reasons:
             // 1) We might eventually need to add a writer that writes to a database or the OS event log.
             // 2) Loggers shouldnt throw exceptions and the recommended TryWrite methods will ignore any exceptions.
 

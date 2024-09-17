@@ -39,7 +39,7 @@ namespace yyGptLib
 
             catch (Exception xException)
             {
-                yySimpleLogger.Default.TryWriteException (xException);
+                yyLogger.Default.TryWriteException (xException);
                 return (false, xJson, new List <string> (), xException);
             }
         }
@@ -104,7 +104,7 @@ namespace yyGptLib
 
             catch (Exception xException)
             {
-                yySimpleLogger.Default.TryWriteException (xException);
+                yyLogger.Default.TryWriteException (xException);
                 // Regardless of where the exception is thrown, this should work just fine.
                 return (false, xLine ?? xJson, default, null, xException);
             }

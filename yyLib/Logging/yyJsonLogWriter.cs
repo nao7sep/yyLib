@@ -14,14 +14,14 @@ namespace yyLib
             string xFileName = $"Log-{createdAtUtc.ToRoundtripFileNameString ()}.json",
                 xFilePath = Path.Join (DirectoryPath, xFileName); // Should be unique enough.
 
-            yyLogEntry xEntry = new ()
+            yyLog xLog = new ()
             {
                 CreatedAtUtc = createdAtUtc,
                 Key = key,
                 Value = value
             };
 
-            string xFileContents = JsonSerializer.Serialize (xEntry, yyJson.DefaultSerializationOptions);
+            string xFileContents = JsonSerializer.Serialize (xLog, yyJson.DefaultSerializationOptions);
 
             yyDirectory.Create (DirectoryPath);
             File.WriteAllText (xFilePath, xFileContents, Encoding);

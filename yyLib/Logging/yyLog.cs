@@ -2,7 +2,7 @@
 
 namespace yyLib
 {
-    public class yyLogEntry
+    public class yyLog
     {
         [JsonPropertyName ("created_at_utc")]
         public DateTime? CreatedAtUtc { get; set; }
