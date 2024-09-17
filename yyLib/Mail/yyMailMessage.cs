@@ -10,25 +10,25 @@ namespace yyLib
 
         // Regarding encoding settings, ChatGPT says:
 
-            // In MimeKit, there's generally no need to explicitly set UTF-8 encoding for standard email components
-            // like the subject line, body, or address headers. MimeKit is engineered to automatically handle these encodings.
+        //     In MimeKit, there's generally no need to explicitly set UTF-8 encoding for standard email components
+        //     like the subject line, body, or address headers. MimeKit is engineered to automatically handle these encodings.
 
-            // For the subject line and headers, MimeKit encodes them using 'encoded-word' syntax (RFC 2047)
-            // if they contain non-ASCII characters. This encoding is done in either 'B' encoding (akin to Base64)
-            // or 'Q' encoding (similar to Quoted-Printable), chosen based on efficiency for the given text.
+        //     For the subject line and headers, MimeKit encodes them using 'encoded-word' syntax (RFC 2047)
+        //     if they contain non-ASCII characters. This encoding is done in either 'B' encoding (akin to Base64)
+        //     or 'Q' encoding (similar to Quoted-Printable), chosen based on efficiency for the given text.
 
-            // When creating a TextPart for the email body and assigning text to it, MimeKit defaults to UTF-8 encoding
-            // if the text includes non-ASCII characters. This applies to both plain text and HTML content.
-            // Therefore, there's no need to manually specify UTF-8 encoding for these parts.
+        //     When creating a TextPart for the email body and assigning text to it, MimeKit defaults to UTF-8 encoding
+        //     if the text includes non-ASCII characters. This applies to both plain text and HTML content.
+        //     Therefore, there's no need to manually specify UTF-8 encoding for these parts.
 
-            // Address fields, such as 'From', 'To', and 'Cc', are also automatically handled by MimeKit.
-            // If the display name in these fields has non-ASCII characters, MimeKit encodes them appropriately.
+        //     Address fields, such as 'From', 'To', and 'Cc', are also automatically handled by MimeKit.
+        //     If the display name in these fields has non-ASCII characters, MimeKit encodes them appropriately.
 
-            // For attachments and other binary parts of the email, the encoding is more about how the binary data
-            // is transferred (like Base64) rather than character encoding (UTF-8).
+        //     For attachments and other binary parts of the email, the encoding is more about how the binary data
+        //     is transferred (like Base64) rather than character encoding (UTF-8).
 
-            // Overall, MimeKit's default behavior efficiently manages necessary encodings, including UTF-8 where appropriate,
-            // reducing the need for manual settings or interventions in the encoding process.
+        //     Overall, MimeKit's default behavior efficiently manages necessary encodings, including UTF-8 where appropriate,
+        //     reducing the need for manual settings or interventions in the encoding process.
 
         [JsonPropertyName ("attachments")]
         public IList <yyMailMessageAttachment>? Attachments { get; set; }
