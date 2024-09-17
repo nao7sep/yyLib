@@ -37,18 +37,18 @@
 
             catch (Exception xException)
             {
-                yyLogger.Default.TryWriteException (xException);
+                // yyLogger.Default.TryWriteException (xException);
                 return (false, xJsonString, new List <string> (), xException);
             }
         }
 
         // If IsSuccess is true,
-            // if PartialMessage isnt null, use it and continue reading.
-            // if PartialMessage is null, discard it and stop reading.
+        //     if PartialMessage isnt null, use it and continue reading.
+        //     if PartialMessage is null, discard it and stop reading.
 
         // If IsSuccess is false,
-            // if PartialMessage isnt null, it should be an error message returned from the server.
-            // if PartialMessage is null, an Exception instance should be available.
+        //     if PartialMessage isnt null, it should be an error message returned from the server.
+        //     if PartialMessage is null, an Exception instance should be available.
 
         // Added RawContent.
 
@@ -102,7 +102,7 @@
 
             catch (Exception xException)
             {
-                yyLogger.Default.TryWriteException (xException);
+                // yyLogger.Default.TryWriteException (xException);
                 // Regardless of where the exception is thrown, this should work just fine.
                 return (false, xLine ?? xJsonString, default, null, xException);
             }
@@ -111,7 +111,7 @@
         public void Dispose ()
         {
             Client.Dispose (); // Could be called a number of times.
-            GC.SuppressFinalize (this);
+            // GC.SuppressFinalize (this); Cant remember why I've decided to call this.
         }
     }
 }

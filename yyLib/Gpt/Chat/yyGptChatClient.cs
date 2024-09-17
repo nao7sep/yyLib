@@ -101,7 +101,9 @@ namespace yyLib
             ResponseStreamReader?.Dispose ();
             ResponseStreamReader = null;
 
-            GC.SuppressFinalize (this);
+            // I cant remember why I've decided to call this.
+            // Let's comment it out and see if it breaks anything.
+            // GC.SuppressFinalize (this);
         }
     }
 }
