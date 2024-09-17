@@ -1,8 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using yyLib;
 
-namespace yyGptLib
+namespace yyLib
 {
     public class yyGptChatMessageRoleJsonConverter: JsonConverter <yyGptChatMessageRole>
     {

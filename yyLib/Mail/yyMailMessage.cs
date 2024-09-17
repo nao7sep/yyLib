@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using MimeKit;
 
-namespace yyMailLib
+namespace yyLib
 {
     public class yyMailMessage
     {

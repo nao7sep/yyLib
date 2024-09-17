@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using MailKit.Security;
 
-namespace yyMailLib
+namespace yyLib
 {
     public class yyMailConnectionInfo
     {

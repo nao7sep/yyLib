@@ -4,9 +4,7 @@ namespace yyLibConsole
 {
     internal class Program
     {
-#pragma warning disable IDE0060 // Remove unused parameter
         static void Main (string [] args)
-#pragma warning restore IDE0060
         {
             try
             {
@@ -14,8 +12,15 @@ namespace yyLibConsole
 
             catch (Exception xException)
             {
-                yySimpleLogger.Default.TryWriteException (xException);
+                yyLogger.Default.TryWriteException (xException);
                 Console.WriteLine (xException.ToString ());
+            }
+
+            finally
+            {
+                Console.Write ("Press any key to exit: ");
+                Console.ReadKey (true);
+                Console.WriteLine ();
             }
         }
     }

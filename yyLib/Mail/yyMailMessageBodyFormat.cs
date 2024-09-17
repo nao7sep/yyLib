@@ -1,4 +1,4 @@
-﻿namespace yyMailLib
+﻿namespace yyLib
 {
     public enum yyMailMessageBodyFormat
     {

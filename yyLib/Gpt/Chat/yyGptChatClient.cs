@@ -1,9 +1,8 @@
 ﻿using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using yyLib;
 
-namespace yyGptLib
+namespace yyLib
 {
     public class yyGptChatClient: IDisposable
     {

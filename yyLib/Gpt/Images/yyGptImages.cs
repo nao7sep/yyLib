@@ -1,6 +1,4 @@
-﻿using yyLib;
-
-namespace yyGptLib
+﻿namespace yyLib
 {
     public static class yyGptImages
     {

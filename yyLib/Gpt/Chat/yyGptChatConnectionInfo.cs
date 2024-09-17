@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace yyGptLib
+namespace yyLib
 {
     public class yyGptChatConnectionInfo
     {

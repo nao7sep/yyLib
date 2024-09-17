@@ -1,6 +1,6 @@
 ﻿using MailKit;
 
-namespace yyMailLib
+namespace yyLib
 {
     public static class yyMailConnectionInfoHelper
     {

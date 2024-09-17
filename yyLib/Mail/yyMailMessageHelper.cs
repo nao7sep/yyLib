@@ -1,6 +1,6 @@
 ﻿using MimeKit;
 
-namespace yyMailLib
+namespace yyLib
 {
     public static class yyMailMessageHelper
     {

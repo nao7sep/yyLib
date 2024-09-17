@@ -1,7 +1,6 @@
 ﻿using System.Text.Json;
-using yyLib;
 
-namespace yyGptLib
+namespace yyLib
 {
     public static class yyGptChatResponseParser
     {

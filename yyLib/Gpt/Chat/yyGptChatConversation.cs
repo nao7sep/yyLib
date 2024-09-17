@@ -1,6 +1,4 @@
-﻿using yyLib;
-
-namespace yyGptLib
+﻿namespace yyLib
 {
     public class yyGptChatConversation (yyGptChatConnectionInfo connectionInfo): IDisposable
     {
