@@ -10,6 +10,7 @@
             if (string.IsNullOrEmpty (str))
                 yield break;
 
+            // This instance should be disposed even if EnumerateLines is used in a foreach loop and the loop is exited early.
             using StringReader xReader = new (str);
             string? xLine;
 
@@ -22,10 +23,17 @@
         // Also, like Markdown, there should be a few languages where invisible space chars at line ends mean something; we cant just TrimEnd each line.
         // So, TrimEmptyLines and TrimWhiteSpaceLines safely eliminate unneeded lines before and after the visible ones.
 
-        // Added comment: This is a multiline version of Trim just as the name suggests, meaning internal redundant empty lines are preserved.
+        // Additional comment: This is a multiline version of Trim just as the name suggests, meaning internal redundant empty lines are preserved.
         // The type parameter specifies what type of lines are considered "unnecessary" and must be "trimmed" from the beginning and the end of the string.
 
-        public static List <string> TrimLines (string? str, yyStringType type)
+        // Additional comments again: The method has been renamed from TrimLines to TrimRedundantLines.
+        // This method omits considered-empty lines from the beginning and the end of the string.
+        // "TrimLines" may sound like it trims EACH line, but it actually trims the whole string considering it as a sequence of lines.
+
+        /// <summary>
+        /// Trims considered-empty lines from the beginning and the end of the string.
+        /// </summary>
+        public static List <string> TrimRedundantLines (string? str, yyStringType type)
         {
             if (string.IsNullOrEmpty (str))
                 return [];

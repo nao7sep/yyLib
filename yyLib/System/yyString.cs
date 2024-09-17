@@ -62,12 +62,15 @@
             return yyStringLines.EnumerateLines (str).ToList ();
         }
 
-        public static string? TrimLines (this string? str, yyStringType type = yyStringType.WhiteSpace, string? newLine = null)
+        /// <summary>
+        /// Trims considered-empty lines from the beginning and the end of the string.
+        /// </summary>
+        public static string? TrimRedundantLines (this string? str, yyStringType type = yyStringType.WhiteSpace, string? newLine = null)
         {
             if (string.IsNullOrEmpty (str))
                 return str;
 
-            return string.Join (newLine ?? Environment.NewLine, yyStringLines.TrimLines (str, type));
+            return string.Join (newLine ?? Environment.NewLine, yyStringLines.TrimRedundantLines (str, type));
         }
 
         public static string [] ToParagraphArray (this string? str, yyStringType emptyLineType = yyStringType.WhiteSpace, string? newLine = null)
@@ -97,6 +100,10 @@
         // People have very different preferences regarding white space.
         // The only possible consensus, I think, is that strings MAY lose redundant invisible lines at the beginning, inside and at the end.
 
+        // Additional comment: I've chosen to name this method in a casual way.
+        // It doesnt do any more than determining whether each line deserves to remain or not and replacing each sequence of one or more considered-empty lines into a single empty line.
+        // A casual and easy-to-remember name would be suitable for a method that does something a little good without causing any trouble and therefore would be called frequently.
+
         /// <summary>
         /// Splits the string into an enumeration of paragraphs, each of which is a List of lines, by omitting the specified type of lines that are considered "empty," and then reconstructs the entire string.
         /// </summary>
@@ -105,7 +112,8 @@
             if (string.IsNullOrEmpty (str))
                 return str;
 
-            return string.Join (newLine ?? Environment.NewLine, yyStringParagraphs.EnumerateParagraphs (str, type).Select (x => string.Join (newLine ?? Environment.NewLine, x)));
+            string xNewLines = newLine != null ? newLine + newLine : Environment.NewLine + Environment.NewLine;
+            return string.Join (xNewLines, yyStringParagraphs.EnumerateParagraphs (str, type).Select (x => string.Join (newLine ?? Environment.NewLine, x)));
         }
     }
 }
