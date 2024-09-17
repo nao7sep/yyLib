@@ -14,11 +14,6 @@ namespace yyGptLib
 
         // The properties are sorted in the order of the API reference.
 
-        /// <summary>
-        /// Returned by yyGptChatResponseParser.ParseChunk when "data: [DONE]" is detected.
-        /// </summary>
-        public static yyGptChatResponse Empty { get; } = new yyGptChatResponse ();
-
         [JsonPropertyName ("id")]
         public string? Id { get; set; }
 
@@ -42,5 +37,14 @@ namespace yyGptLib
 
         [JsonPropertyName ("error")]
         public yyGptResponseError? Error { get; set; }
+
+        // -----------------------------------------------------------------------------
+        //     Static Members
+        // -----------------------------------------------------------------------------
+
+        /// <summary>
+        /// Returned by yyGptChatResponseParser.ParseChunk when "data: [DONE]" is detected.
+        /// </summary>
+        public static yyGptChatResponse Empty { get; } = new yyGptChatResponse ();
     }
 }

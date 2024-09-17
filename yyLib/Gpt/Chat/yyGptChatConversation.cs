@@ -24,23 +24,23 @@ namespace yyGptLib
         /// </summary>
         public async Task <(bool IsSuccess, string? RawContent, IList <string> Messages, Exception? Exception)> TryReadAndParseAsync (CancellationToken? cancellationToken = null)
         {
-            string? xJson = null;
+            string? xJsonString = null;
 
             try
             {
-                xJson = await Client.ReadToEndAsync (cancellationToken);
-                var xResponse = yyGptChatResponseParser.Parse (xJson);
+                xJsonString = await Client.ReadToEndAsync (cancellationToken);
+                var xResponse = yyGptChatResponseParser.Parse (xJsonString);
 
                 if (Client.ResponseMessage!.IsSuccessStatusCode)
-                    return (true, xJson, xResponse.Choices!.Select (x => x.Message!.Content!).ToList (), null);
+                    return (true, xJsonString, xResponse.Choices!.Select (x => x.Message!.Content!).ToList (), null);
 
-                else return (false, xJson, new [] { xResponse.Error!.Message! }, null);
+                else return (false, xJsonString, new [] { xResponse.Error!.Message! }, null);
             }
 
             catch (Exception xException)
             {
                 yyLogger.Default.TryWriteException (xException);
-                return (false, xJson, new List <string> (), xException);
+                return (false, xJsonString, new List <string> (), xException);
             }
         }
 
@@ -60,7 +60,7 @@ namespace yyGptLib
         public async Task <(bool IsSuccess, string? RawContent, int Index, string? PartialMessage, Exception? Exception)> TryReadAndParseChunkAsync (CancellationToken? cancellationToken = null)
         {
             string? xLine = null,
-                xJson = null;
+                xJsonString = null;
 
             try
             {
@@ -95,10 +95,10 @@ namespace yyGptLib
 
                 else
                 {
-                    xJson = await Client.ReadToEndAsync (cancellationToken);
-                    var xResponse = yyGptChatResponseParser.Parse (xJson);
+                    xJsonString = await Client.ReadToEndAsync (cancellationToken);
+                    var xResponse = yyGptChatResponseParser.Parse (xJsonString);
 
-                    return (false, xJson, default, xResponse.Error!.Message, null);
+                    return (false, xJsonString, default, xResponse.Error!.Message, null);
                 }
             }
 
@@ -106,7 +106,7 @@ namespace yyGptLib
             {
                 yyLogger.Default.TryWriteException (xException);
                 // Regardless of where the exception is thrown, this should work just fine.
-                return (false, xLine ?? xJson, default, null, xException);
+                return (false, xLine ?? xJsonString, default, null, xException);
             }
         }
 

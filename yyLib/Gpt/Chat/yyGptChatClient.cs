@@ -43,9 +43,9 @@ namespace yyGptLib
             if (HttpClient == null)
                 throw new yyObjectDisposedException ($"'{nameof (HttpClient)}' is disposed.");
 
-            var xJson = JsonSerializer.Serialize (request, yyJson.DefaultSerializationOptions);
+            var xJsonString = JsonSerializer.Serialize (request, yyJson.DefaultSerializationOptions);
 
-            using (var xContent = new StringContent (xJson, Encoding.UTF8, "application/json"))
+            using (var xContent = new StringContent (xJsonString, Encoding.UTF8, "application/json"))
             using (var xMessage = new HttpRequestMessage (HttpMethod.Post, ConnectionInfo.Endpoint) { Content = xContent })
             {
                 var xResponse = await HttpClient.SendAsync (xMessage, HttpCompletionOption.ResponseHeadersRead, cancellationTokenForSendAsync ?? CancellationToken.None);

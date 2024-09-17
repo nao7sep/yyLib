@@ -28,13 +28,13 @@ namespace yyGptLib
 
             if (str.StartsWith ("data: {", StringComparison.OrdinalIgnoreCase))
             {
-                string xJson = str.Substring ("data: ".Length);
+                string xJsonString = str.Substring ("data: ".Length);
 
-                var xResponse = (yyGptChatResponse?) JsonSerializer.Deserialize (xJson,
+                var xResponse = (yyGptChatResponse?) JsonSerializer.Deserialize (xJsonString,
                     typeof (yyGptChatResponse), yyJson.DefaultDeserializationOptions);
 
                 if (xResponse == null)
-                    throw new yyFormatException ($"Failed to deserialize JSON: {xJson.GetVisibleString ()}");
+                    throw new yyFormatException ($"Failed to deserialize JSON: {xJsonString.GetVisibleString ()}");
 
                 return xResponse;
             }

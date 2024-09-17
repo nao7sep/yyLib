@@ -5,17 +5,17 @@ namespace yyGptLib
     public static class yyGpt
     {
         /// <summary>
-        /// Returns null if the .yyUserSecrets.json file doesnt exist or contains no API key.
+        /// Returns null if the .yyUserSecrets.json file doesnt exist or contain a corresponding value.
         /// </summary>
         public static string? DefaultApiKey { get; } = yyUserSecrets.Default.OpenAi?.ApiKey.WhiteSpaceToNull ();
 
         /// <summary>
-        /// Returns null if the .yyUserSecrets.json file doesnt exist or contains no API key.
+        /// Returns null if the .yyUserSecrets.json file doesnt exist or contain a corresponding value.
         /// </summary>
         public static string? DefaultOrganization { get; } = yyUserSecrets.Default.OpenAi?.Organization.WhiteSpaceToNull ();
 
         /// <summary>
-        /// Returns null if the .yyUserSecrets.json file doesnt exist or contains no API key.
+        /// Returns null if the .yyUserSecrets.json file doesnt exist or contain a corresponding value.
         /// </summary>
         public static string? DefaultProject { get; } = yyUserSecrets.Default.OpenAi?.Project.WhiteSpaceToNull ();
 
@@ -31,7 +31,7 @@ namespace yyGptLib
         // https://learn.microsoft.com/en-us/dotnet/api/system.net.http.httpclient.timeout
 
         /// <summary>
-        /// Returns null if the .yyUserSecrets.json file doesnt exist or contains no API key.
+        /// Returns null if the .yyUserSecrets.json file doesnt exist or contain a corresponding value.
         /// </summary>
         public static int? DefaultTimeout { get; } = yyUserSecrets.Default.OpenAi?.Timeout;
     }

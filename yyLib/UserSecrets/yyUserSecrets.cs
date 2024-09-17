@@ -4,6 +4,13 @@ namespace yyLib
 {
     public class yyUserSecrets
     {
+        [JsonPropertyName ("openai")]
+        public yyUserSecretsOpenAi? OpenAi { get; set; }
+
+        // -----------------------------------------------------------------------------
+        //     Static Members
+        // -----------------------------------------------------------------------------
+
         public static string DefaultFileName { get; } = ".yyUserSecrets.json";
 
         private static readonly Lazy <string []> _defaultFilePaths = new (() => new []
@@ -33,8 +40,5 @@ namespace yyLib
         // In yyLib, User Secrets are defined statically.
         // These are NOT user settings; they are more like special values that are guaranteed to be supported by the library.
         // Therefore, we wont casually add new values and, once added, everything must remain backward compatible.
-
-        [JsonPropertyName ("openai")]
-        public yyUserSecretsOpenAi? OpenAi { get; set; }
     }
 }
