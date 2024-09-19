@@ -2,7 +2,7 @@
 
 namespace yyLib
 {
-    public class yyTextLogWriter (string filePath, Encoding? encoding = null)
+    public class yyTextLogWriter (string filePath, Encoding? encoding = null): yyLogWriter
     {
         public string FilePath { get; init; } = filePath;
 

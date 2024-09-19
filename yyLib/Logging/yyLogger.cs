@@ -35,6 +35,8 @@ namespace yyLib
 
         public void Clear () => RecentLogs.Clear ();
 
+        // -----------------------------------------------------------------------------
+
         public bool WritesToTextFile { get; set; }
 
         public yyTextLogWriter? TextLogWriter { get; init; }
@@ -43,14 +45,21 @@ namespace yyLib
 
         public yyJsonLogWriter? JsonLogWriter { get; init; }
 
-        public yyLogger (bool writesToTextFile = false, string? textLogWriterFilePath = null, bool writesToJsonFiles = true, string? jsonLogWriterDirectoryPath = null, Encoding? encoding = null)
+        public bool WritesToSqliteDatabase { get; set; }
+
+        public yySqliteLogWriter? SqliteLogWriter { get; init; }
+
+        public yyLogger (bool writesToTextFile = false, string? textLogWriterFilePath = null,
+                         bool writesToJsonFiles = false, string? jsonLogWriterDirectoryPath = null,
+                         bool writesToSqliteDatabase = false, string? sqliteLogWriterConnectionString = null, string? sqliteLogWriterTableName = null,
+                         Encoding? encoding = null)
         {
             // The boolean values indicating whether to write in each mode and the actual paths to write to are decoupled.
             // The former must have the right values only upon writing each log.
             // The latter are init properties and therefore must be initialized in the constructor.
 
-            if (textLogWriterFilePath == null && jsonLogWriterDirectoryPath == null)
-                throw new yyArgumentException ($"Either '{nameof (textLogWriterFilePath)}' or '{nameof (jsonLogWriterDirectoryPath)}' must be specified.");
+            if (textLogWriterFilePath == null && jsonLogWriterDirectoryPath == null && (sqliteLogWriterConnectionString == null || sqliteLogWriterTableName == null))
+                throw new yyArgumentException ($"Either '{nameof (textLogWriterFilePath)}' or '{nameof (jsonLogWriterDirectoryPath)}' or '{nameof (sqliteLogWriterConnectionString)}' and '{nameof (sqliteLogWriterTableName)}' must be specified.");
 
             WritesToTextFile = writesToTextFile;
 
@@ -61,6 +70,11 @@ namespace yyLib
 
             if (jsonLogWriterDirectoryPath != null)
                 JsonLogWriter = new (jsonLogWriterDirectoryPath, encoding ?? Encoding.UTF8);
+
+            WritesToSqliteDatabase = writesToSqliteDatabase;
+
+            if (sqliteLogWriterConnectionString != null && sqliteLogWriterTableName != null)
+                SqliteLogWriter = new (sqliteLogWriterConnectionString, sqliteLogWriterTableName);
         }
 
         /// <summary>
@@ -78,7 +92,7 @@ namespace yyLib
             });
 
             // Doesnt throw an exception when the log is not written to anywhere for 2 reasons:
-            // 1) We might eventually need to add a writer that writes to a database or the OS event log.
+            // 1) We might eventually need to add a writer that writes to a database or the OS event log. => Just added one.
             // 2) Loggers shouldnt throw exceptions and the recommended TryWrite methods will ignore any exceptions.
 
             if (WritesToTextFile)
@@ -86,6 +100,9 @@ namespace yyLib
 
             if (WritesToJsonFiles)
                 JsonLogWriter?.Write (xCreatedAtUtc, key, value);
+
+            if (WritesToSqliteDatabase)
+                SqliteLogWriter?.Write (xCreatedAtUtc, key, value);
         }
 
         /// <summary>
@@ -131,14 +148,20 @@ namespace yyLib
 
         public static string DefaultJsonLogWriterDirectoryPath => _defaultJsonLogWriterDirectoryPath.Value;
 
+        private static readonly Lazy <string> _defaultSqliteLogWriterConnectionString = new (() => $"Data Source={yyAppDirectory.MapPath ("Logs.db")}");
+
+        public static string DefaultSqliteLogWriterConnectionString => _defaultSqliteLogWriterConnectionString.Value;
+
+        public static string DefaultSqliteLogWriterTableName { get; } = "Logs";
+
         private static readonly Lazy <yyLogger> _default = new (() =>
             new yyLogger (writesToTextFile: false, DefaultTextLogWriterFilePath,
-                          writesToJsonFiles: true, DefaultJsonLogWriterDirectoryPath));
+                          writesToJsonFiles: true, DefaultJsonLogWriterDirectoryPath,
+                          writesToSqliteDatabase: false, DefaultSqliteLogWriterConnectionString, DefaultSqliteLogWriterTableName));
 
         /// <summary>
         /// NOT thread-safe.
         /// </summary>
         public static yyLogger Default => _default.Value;
-
     }
 }
