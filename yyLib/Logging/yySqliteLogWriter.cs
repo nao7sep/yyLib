@@ -11,24 +11,33 @@ namespace yyLib
         public void Write (DateTime createdAtUtc, string key, string value)
         {
             using SQLiteConnection xConnection = new (ConnectionString);
-
             xConnection.Open ();
 
-            using (SQLiteCommand xCommand = new ($"CREATE TABLE IF NOT EXISTS {TableName} (CreatedAtUtc TEXT, Key TEXT, Value TEXT)", xConnection))
+            using SQLiteTransaction xTransaction = xConnection.BeginTransaction ();
+
+            try
             {
-                xCommand.ExecuteNonQuery ();
+                using (SQLiteCommand xCommand = new ($"CREATE TABLE IF NOT EXISTS {TableName} (CreatedAtUtc TEXT, Key TEXT, Value TEXT)", xConnection))
+                {
+                    xCommand.ExecuteNonQuery ();
+                }
+
+                using (SQLiteCommand xCommand = new ($"INSERT INTO {TableName} (CreatedAtUtc, Key, Value) VALUES (@CreatedAtUtc, @Key, @Value)", xConnection))
+                {
+                    xCommand.Parameters.AddWithValue ("@CreatedAtUtc", createdAtUtc.ToRoundtripString ());
+                    xCommand.Parameters.AddWithValue ("@Key", key);
+                    xCommand.Parameters.AddWithValue ("@Value", value);
+                    xCommand.ExecuteNonQuery ();
+                }
+
+                xTransaction.Commit ();
             }
 
-            using (SQLiteCommand xCommand = new ($"INSERT INTO {TableName} (CreatedAtUtc, Key, Value) VALUES (@CreatedAtUtc, @Key, @Value)", xConnection))
+            catch
             {
-                xCommand.Parameters.AddWithValue ("@CreatedAtUtc", createdAtUtc.ToRoundtripString ());
-                xCommand.Parameters.AddWithValue ("@Key", key);
-                xCommand.Parameters.AddWithValue ("@Value", value);
-
-                xCommand.ExecuteNonQuery ();
+                xTransaction.Rollback ();
+                throw;
             }
-
-            xConnection.Close ();
         }
     }
 }

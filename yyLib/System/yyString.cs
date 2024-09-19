@@ -100,7 +100,7 @@
         // People have very different preferences regarding white space.
         // The only possible consensus, I think, is that strings MAY lose redundant invisible lines at the beginning, inside and at the end.
 
-        // Additional comment: I've chosen to name this method in a casual way.
+        // Added comment: I've chosen to name this method in a casual way.
         // It doesnt do any more than determining whether each line deserves to remain or not and replacing each sequence of one or more considered-empty lines into a single empty line.
         // A casual and easy-to-remember name would be suitable for a method that does something a little good without causing any trouble and therefore would be called frequently.
 

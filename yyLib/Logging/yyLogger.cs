@@ -3,11 +3,12 @@ using System.Text;
 
 namespace yyLib
 {
-    // Writes logs as key-value pairs to a text file and/or a number of JSON files.
+    // Writes logs as key-value pairs to a text file and/or a number of JSON files. => And also to a SQLite database.
     // 'RecentLogs' contains only the logs that have been written during the current session.
 
     // By default, logs are written only to JSON files as the JSON mode is almost thread-safe (but not completely).
-    // We can change WritesToTextFile/WritesToJsonFiles anytime as there's no caching involved.
+    // We can change WritesToTextFile/WritesToJsonFiles anytime as there's no caching involved. => And also WritesToSqliteDatabase.
+    // Added comment: JSON is still the default mode as it's reliable and human-readable.
 
     public class yyLogger: IEnumerable <yyLog>
     {
@@ -50,7 +51,7 @@ namespace yyLib
         public yySqliteLogWriter? SqliteLogWriter { get; init; }
 
         public yyLogger (bool writesToTextFile = false, string? textLogWriterFilePath = null,
-                         bool writesToJsonFiles = false, string? jsonLogWriterDirectoryPath = null,
+                         bool writesToJsonFiles = false, string? jsonLogWriterDirectoryPath = null, // writesToJsonFiles used to default to true.
                          bool writesToSqliteDatabase = false, string? sqliteLogWriterConnectionString = null, string? sqliteLogWriterTableName = null,
                          Encoding? encoding = null)
         {

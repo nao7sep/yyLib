@@ -23,10 +23,10 @@
         // Also, like Markdown, there should be a few languages where invisible space chars at line ends mean something; we cant just TrimEnd each line.
         // So, TrimEmptyLines and TrimWhiteSpaceLines safely eliminate unneeded lines before and after the visible ones.
 
-        // Additional comment: This is a multiline version of Trim just as the name suggests, meaning internal redundant empty lines are preserved.
+        // Added comment: This is a multiline version of Trim just as the name suggests, meaning internal redundant empty lines are preserved.
         // The type parameter specifies what type of lines are considered "unnecessary" and must be "trimmed" from the beginning and the end of the string.
 
-        // Additional comments again: The method has been renamed from TrimLines to TrimRedundantLines.
+        // Added comment again: The method has been renamed from TrimLines to TrimRedundantLines.
         // This method omits considered-empty lines from the beginning and the end of the string.
         // "TrimLines" may sound like it trims EACH line, but it actually trims the whole string considering it as a sequence of lines.
 
