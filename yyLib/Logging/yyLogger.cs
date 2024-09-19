@@ -6,9 +6,9 @@ namespace yyLib
     // Writes logs as key-value pairs to a text file and/or a number of JSON files. => And also to a SQLite database.
     // 'RecentLogs' contains only the logs that have been written during the current session.
 
-    // By default, logs are written only to JSON files as the JSON mode is almost thread-safe (but not completely).
+    // By default, logs are written only to JSON files as the JSON mode is almost thread-safe (but not completely). => Added a lock to the text mode.
     // We can change WritesToTextFile/WritesToJsonFiles anytime as there's no caching involved. => And also WritesToSqliteDatabase.
-    // Added comment: JSON is still the default mode as it's reliable and human-readable.
+    // Added comment: JSON is still the default mode as it's reliable, entry-based and human-readable.
 
     public class yyLogger: IEnumerable <yyLog>
     {
@@ -149,7 +149,9 @@ namespace yyLib
 
         public static string DefaultJsonLogWriterDirectoryPath => _defaultJsonLogWriterDirectoryPath.Value;
 
-        private static readonly Lazy <string> _defaultSqliteLogWriterConnectionString = new (() => $"Data Source={yyAppDirectory.MapPath ("Logs.db")}");
+        // Backslashes should be handled well.
+        // If the path may contain spaces or semicolons, it should be enclosed in double quotes.
+        private static readonly Lazy <string> _defaultSqliteLogWriterConnectionString = new (() => $"Data Source=\"{yyAppDirectory.MapPath ("Logs.db")}\"");
 
         public static string DefaultSqliteLogWriterConnectionString => _defaultSqliteLogWriterConnectionString.Value;
 
@@ -160,9 +162,6 @@ namespace yyLib
                           writesToJsonFiles: true, DefaultJsonLogWriterDirectoryPath,
                           writesToSqliteDatabase: false, DefaultSqliteLogWriterConnectionString, DefaultSqliteLogWriterTableName));
 
-        /// <summary>
-        /// NOT thread-safe.
-        /// </summary>
         public static yyLogger Default => _default.Value;
     }
 }

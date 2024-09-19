@@ -11,8 +11,11 @@ namespace yyLib
 
         public void Write (DateTime createdAtUtc, string key, string value)
         {
+            // There's no point in locking here because the file name will be based on createdAtUtc.
+            // We can only hope that createdAtUtc will be unique enough to prevent conflicts.
+
             string xFileName = $"Log-{createdAtUtc.ToRoundtripFileNameString ()}.json",
-                xFilePath = Path.Join (DirectoryPath, xFileName); // Should be unique enough.
+                xFilePath = Path.Join (DirectoryPath, xFileName);
 
             yyLog xLog = new ()
             {
