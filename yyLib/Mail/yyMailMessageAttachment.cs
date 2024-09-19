@@ -23,11 +23,11 @@ namespace yyLib
         [JsonPropertyName ("created_at_utc")]
         public DateTime? CreatedAtUtc { get; set; }
 
-        [JsonPropertyName ("modification_utc")]
-        public DateTime? ModificationUtc { get; set; }
+        [JsonPropertyName ("modified_at_utc")]
+        public DateTime? ModifiedAtUtc { get; set; }
 
-        [JsonPropertyName ("read_utc")]
-        public DateTime? ReadUtc { get; set; }
+        [JsonPropertyName ("read_at_utc")]
+        public DateTime? ReadAtUtc { get; set; }
 
         [JsonPropertyName ("content_length")]
         public long? ContentLength { get; set; }
@@ -48,8 +48,8 @@ namespace yyLib
             // https://source.dot.net/#System.Private.CoreLib/src/libraries/System.Private.CoreLib/src/System/IO/FileStatus.Unix.cs,2b4046d793b2bb3a
 
             CreatedAtUtc = xFile.CreationTimeUtc;
-            ModificationUtc = xFile.LastWriteTimeUtc;
-            ReadUtc = xFile.LastAccessTimeUtc;
+            ModifiedAtUtc = xFile.LastWriteTimeUtc;
+            ReadAtUtc = xFile.LastAccessTimeUtc;
             ContentLength = xFile.Length;
         }
     }
