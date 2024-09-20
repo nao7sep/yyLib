@@ -4,11 +4,8 @@ namespace yyLib
 {
     public class yyMailMessageTranslation
     {
-        /// <summary>
-        /// When the translation was made. Not the time of object initialization.
-        /// </summary>
-        [JsonPropertyName ("utc")]
-        public DateTime? Utc { get; set; }
+        [JsonPropertyName ("translated_at_utc")]
+        public DateTime? TranslatedAtUtc { get; set; }
 
         [JsonPropertyName ("language")]
         public string? Language { get; set; }

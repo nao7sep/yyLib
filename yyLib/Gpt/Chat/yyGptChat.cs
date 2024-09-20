@@ -2,6 +2,11 @@
 {
     public static class yyGptChat
     {
+        // yyGptLib has been merged into yyLib.
+        // Example usage: https://github.com/nao7sep/yyGptLib/blob/main/yyGptLibConsole/Tester1.cs
+        //                https://github.com/nao7sep/yyGptLib/blob/main/yyGptLibConsole/Tester2.cs
+        //                https://github.com/nao7sep/yyGptLib/blob/main/yyGptLibConsole/Tester4.cs
+
         public static string DefaultEndpoint { get; } = yyUserSecrets.Default.OpenAi?.ChatEndpoint.WhiteSpaceToNull () ?? "https://api.openai.com/v1/chat/completions";
 
         // Must be updated periodically to the latest stable model.

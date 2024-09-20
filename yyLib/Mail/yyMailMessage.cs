@@ -30,6 +30,9 @@ namespace yyLib
         //     Overall, MimeKit's default behavior efficiently manages necessary encodings, including UTF-8 where appropriate,
         //     reducing the need for manual settings or interventions in the encoding process.
 
+        // Added comment: yyMailLib has been merged into yyLib.
+        // Example usage: https://github.com/nao7sep/yyMailLib/blob/main/yyMailLibConsole/Program.cs
+
         [JsonPropertyName ("attachments")]
         public IList <yyMailMessageAttachment>? Attachments { get; set; }
 
