@@ -68,5 +68,43 @@ namespace yyLib
                 return (JsonString: xJsonString, Messages: null, ErrorMessage: xResponse.Error!.Message);
             }
         }
+
+        public static async Task <(string JsonString, byte [][]? Bytes, string? ErrorMessage)> GenerateImagesAsync (yyGptImagesConnectionInfo connectionInfo, yyGptImagesRequest request)
+        {
+            using yyGptImagesClient xClient = new (connectionInfo);
+            var xSendingResult = await xClient.SendAsync (request);
+            string? xJsonString = await xClient.ReadToEndAsync ();
+            yyGptImagesResponse xResponse = yyGptImagesResponseParser.Parse (xJsonString);
+
+            if (xSendingResult.HttpResponseMessage.IsSuccessStatusCode)
+            {
+                // The files will be downloaded in a synchronous manner.
+                // As GenerateImagesAsync should have been called in an asynchronous manner,
+                // the synchronous download should not be a problem.
+
+                return (JsonString: xJsonString!, Bytes: xResponse.Data!.Select (x =>
+                {
+                    if (request.ResponseFormat!.Equals ("b64_json", StringComparison.OrdinalIgnoreCase))
+                        return Convert.FromBase64String (x.B64Json!);
+
+                    else if (request.ResponseFormat!.Equals ("url", StringComparison.OrdinalIgnoreCase))
+                    {
+                        using HttpClient xHttpClient = new ();
+                        var xResponseAlt = xHttpClient.GetAsync (x.Url).Result;
+
+                        // Just to make sure.
+                        xResponseAlt.EnsureSuccessStatusCode ();
+
+                        return xResponseAlt.Content.ReadAsByteArrayAsync ().Result;
+                    }
+
+                    else throw new yyArgumentException ("The response format is invalid.");
+                }).
+                ToArray (),
+                ErrorMessage: null);
+            }
+
+            else return (JsonString: xJsonString!, Bytes: null, ErrorMessage: xResponse.Error!.Message);
+        }
     }
 }
