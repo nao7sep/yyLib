@@ -80,7 +80,7 @@ namespace yyLib
             {
                 // The files will be downloaded in a synchronous manner.
                 // As GenerateImagesAsync should have been called in an asynchronous manner,
-                // the synchronous download should not be a problem.
+                // the synchronous download should not be a problem. => Tested.
 
                 return (JsonString: xJsonString!, Bytes: xResponse.Data!.Select (x =>
                 {
