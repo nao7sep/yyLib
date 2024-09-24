@@ -8,6 +8,11 @@ namespace yyLib
         {
             using yyGptChatClient xClient = new (connectionInfo);
             var xSendingResult = await xClient.SendAsync (request);
+
+            // We dont check IsSuccessStatusCode yet.
+            // Let's try retrieving the JSON string and parsing it first.
+            // If an error occurs, an exception will be thrown.
+
             string? xJsonString = await xClient.ReadToEndAsync ();
             yyGptChatResponse xResponse = yyGptChatResponseParser.Parse (xJsonString);
 
@@ -39,7 +44,14 @@ namespace yyLib
 
                 while (true)
                 {
+                    // Each line should look like "data: { ..." or "data: [DONE]".
                     string? xLine = await xClient.ReadLineAsync ();
+
+                    // If null is returned before "data: [DONE]", something is wrong.
+                    // It is highly unlikely that all the data is received and only the last line is missing.
+
+                    if (xLine == null)
+                        throw new yyFormatException ("The stream ended unexpectedly.");
 
                     if (string.IsNullOrWhiteSpace  (xLine))
                         continue; // Continues for "data: [DONE]".
@@ -73,16 +85,15 @@ namespace yyLib
         {
             using yyGptImagesClient xClient = new (connectionInfo);
             var xSendingResult = await xClient.SendAsync (request);
+
+            // Not checking IsSuccessStatusCode yet for the same reason as GenerateMessagesAsync.
+
             string? xJsonString = await xClient.ReadToEndAsync ();
             yyGptImagesResponse xResponse = yyGptImagesResponseParser.Parse (xJsonString);
 
             if (xSendingResult.HttpResponseMessage.IsSuccessStatusCode)
             {
-                // The files will be downloaded in a synchronous manner.
-                // As GenerateImagesAsync should have been called in an asynchronous manner,
-                // the synchronous download should not be a problem. => Tested.
-
-                return (JsonString: xJsonString!, Bytes: xResponse.Data!.Select (x =>
+                var xTasks = xResponse.Data!.Select (async x =>
                 {
                     if (request.ResponseFormat!.Equals ("b64_json", StringComparison.OrdinalIgnoreCase))
                         return Convert.FromBase64String (x.B64Json!);
@@ -90,18 +101,20 @@ namespace yyLib
                     else if (request.ResponseFormat!.Equals ("url", StringComparison.OrdinalIgnoreCase))
                     {
                         using HttpClient xHttpClient = new ();
-                        var xResponseAlt = xHttpClient.GetAsync (x.Url).Result;
+                        var xResponseAlt = await xHttpClient.GetAsync (x.Url);
 
                         // Just to make sure.
                         xResponseAlt.EnsureSuccessStatusCode ();
 
-                        return xResponseAlt.Content.ReadAsByteArrayAsync ().Result;
+                        return await xResponseAlt.Content.ReadAsByteArrayAsync ();
                     }
 
                     else throw new yyArgumentException ("The response format is invalid.");
-                }).
-                ToArray (),
-                ErrorMessage: null);
+                });
+
+                byte [][] xBytes = await Task.WhenAll (xTasks);
+
+                return (JsonString: xJsonString!, Bytes: xBytes, ErrorMessage: null);
             }
 
             else return (JsonString: xJsonString!, Bytes: null, ErrorMessage: xResponse.Error!.Message);
