@@ -2,26 +2,26 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace yyLibWeb.Pages;
-
-[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-[IgnoreAntiforgeryToken]
-public class ErrorModel : PageModel
+namespace yyLibWeb.Pages
 {
-    public string? RequestId { get; set; }
-
-    public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
-
-    private readonly ILogger<ErrorModel> _logger;
-
-    public ErrorModel(ILogger<ErrorModel> logger)
+    [IgnoreAntiforgeryToken]
+    [ResponseCache (Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public class ErrorModel: PageModel
     {
-        _logger = logger;
-    }
+        public string? RequestId { get; set; }
 
-    public void OnGet()
-    {
-        RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+        public bool HasRequestId => string.IsNullOrWhiteSpace (RequestId) == false;
+
+        private readonly ILogger <ErrorModel> _logger;
+
+        public ErrorModel (ILogger <ErrorModel> logger)
+        {
+            _logger = logger;
+        }
+
+        public void OnGet ()
+        {
+            RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+        }
     }
 }
-
