@@ -6,6 +6,7 @@
         <title>@ViewData["Title"] - yyLibWeb</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/yyLibWeb.styles.css" asp-append-version="true" />
     </head>
 
     <body>
@@ -13,11 +14,11 @@
             <nav class="navbar">
                 <a class="navbar-brand" asp-area="" asp-page="/Index">yyLibWeb</a>
 
-                <button class="navbar-toggler" type="button">
+                <button class="navbar-toggler" id="navbar-toggler" type="button">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="navbar-collapse">
+                <div class="navbar-collapse" id="navbar-collapse">
                     <ul class="navbar-nav">
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-page="/Index">Home</a>
@@ -38,6 +39,17 @@
         <footer class="footer">&copy; Yoshinao Inoguchi 2024</footer>
 
         <script src="~/js/site.js" asp-append-version="true"></script>
+
+        <script>
+            document.addEventListener ("DOMContentLoaded", function () {
+                var navbarToggler = document.getElementById ('navbar-toggler');
+                var navbarCollapse = document.getElementById ('navbar-collapse');
+
+                navbarToggler.addEventListener ('click', function () {
+                    navbarCollapse.classList.toggle ('show');
+                });
+            });
+        </script>
 
         @await RenderSectionAsync("Scripts", required: false)
     </body>
