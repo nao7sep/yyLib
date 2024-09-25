@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "yyLib", "yyLib\yyLib.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "yyLibConsole", "yyLibConsole\yyLibConsole.csproj", "{09C105DB-B5F0-4FE4-82ED-0E15243343F5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "yyLibWeb", "yyLibWeb\yyLibWeb.csproj", "{6F786007-4FBD-4ED7-A69F-A1A8722DBD26}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{09C105DB-B5F0-4FE4-82ED-0E15243343F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09C105DB-B5F0-4FE4-82ED-0E15243343F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09C105DB-B5F0-4FE4-82ED-0E15243343F5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6F786007-4FBD-4ED7-A69F-A1A8722DBD26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6F786007-4FBD-4ED7-A69F-A1A8722DBD26}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6F786007-4FBD-4ED7-A69F-A1A8722DBD26}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6F786007-4FBD-4ED7-A69F-A1A8722DBD26}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
