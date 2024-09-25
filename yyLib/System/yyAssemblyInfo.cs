@@ -43,7 +43,7 @@ namespace yyLib
         /// <summary>
         /// The assembly's display name. Refer to this rather than AssemblyName, that is the output file name.
         /// </summary>
-        public string? AssemblyTitle => _assemblyTitle.Value;
+        public string? AssemblyTitle => _assemblyTitle.Value ?? AssemblyName; // Intuitive fallback.
 
         private readonly Lazy <string?> _company;
 
