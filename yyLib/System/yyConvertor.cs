@@ -10,6 +10,10 @@
             return value.ToString ();
         }
 
+        // It is an option to double.TryParse the string to make sure it is not a string representation of an integral value, but it would affect performance.
+        // If the converted value is handled carefully, no security concerns should arise.
+        // https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/enums
+
         public static T StringToEnum <T> (string str, bool ignoreCase = true) where T: struct, Enum
         {
             if (Enum.TryParse <T> (str, ignoreCase: ignoreCase, out T xValue) == false)
