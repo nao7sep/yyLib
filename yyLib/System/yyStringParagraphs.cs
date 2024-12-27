@@ -2,7 +2,7 @@
 {
     public static class yyStringParagraphs
     {
-        public static IEnumerable <List <string>> EnumerateParagraphs (string? str, yyStringType emptyLineType)
+        public static IEnumerable <List <string>> EnumerateParagraphs (string? str, yyStringType emptyLineType = yyStringType.WhiteSpace)
         {
             if (string.IsNullOrEmpty (str))
                 yield break;

@@ -33,7 +33,7 @@
         /// <summary>
         /// Trims considered-empty lines from the beginning and the end of the string.
         /// </summary>
-        public static List <string> TrimRedundantLines (string? str, yyStringType type)
+        public static List <string> TrimRedundantLines (string? str, yyStringType type = yyStringType.WhiteSpace)
         {
             if (string.IsNullOrEmpty (str))
                 return [];
