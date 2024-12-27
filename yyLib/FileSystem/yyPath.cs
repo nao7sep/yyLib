@@ -66,5 +66,49 @@
 
             return Join (separator, basePath, relativePath);
         }
+
+        public static string GetAbsolutePath (string basePath, string relativePath) =>
+            GetAbsolutePath (basePath, relativePath, DefaultSeparator);
+
+        // https://github.com/dotnet/runtime/blob/2b60d82ef3e87876128b7f71922a1b72908b6fcf/src/libraries/System.Private.CoreLib/src/System/IO/Path.Windows.cs
+        // https://github.com/dotnet/runtime/blob/2b60d82ef3e87876128b7f71922a1b72908b6fcf/src/libraries/System.Private.CoreLib/src/System/IO/Path.Unix.cs
+
+        private static Lazy <char []> _invalidFileNameChars = new (() =>
+        {
+            List <char> xInvalidFileNameChars =
+            [
+                '\"', '<', '>', '|', '\0',
+                (char)1, (char)2, (char)3, (char)4, (char)5, (char)6, (char)7, (char)8, (char)9, (char)10,
+                (char)11, (char)12, (char)13, (char)14, (char)15, (char)16, (char)17, (char)18, (char)19, (char)20,
+                (char)21, (char)22, (char)23, (char)24, (char)25, (char)26, (char)27, (char)28, (char)29, (char)30,
+                (char)31, ':', '*', '?', '\\', '/'
+            ];
+
+            // Making sure.
+            // A few more might be added in the future.
+            xInvalidFileNameChars.AddRange (Path.GetInvalidFileNameChars ());
+
+            return xInvalidFileNameChars.Distinct ().ToArray ();
+        });
+
+        public static char [] InvalidFileNameChars => _invalidFileNameChars.Value;
+
+        private static Lazy <char []> _invalidPathChars = new (() =>
+        {
+            List <char> xInvalidPathChars =
+            [
+                '|', '\0',
+                (char)1, (char)2, (char)3, (char)4, (char)5, (char)6, (char)7, (char)8, (char)9, (char)10,
+                (char)11, (char)12, (char)13, (char)14, (char)15, (char)16, (char)17, (char)18, (char)19, (char)20,
+                (char)21, (char)22, (char)23, (char)24, (char)25, (char)26, (char)27, (char)28, (char)29, (char)30,
+                (char)31
+            ];
+
+            xInvalidPathChars.AddRange (Path.GetInvalidPathChars ());
+
+            return xInvalidPathChars.Distinct ().ToArray ();
+        });
+
+        public static char [] InvalidPathChars => _invalidPathChars.Value;
     }
 }
