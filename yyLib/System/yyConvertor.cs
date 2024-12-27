@@ -44,5 +44,24 @@
             enum_value = (T) value;
             return true;
         }
+
+        // https://learn.microsoft.com/en-us/dotnet/api/system.guid.tostring
+        // https://learn.microsoft.com/en-us/dotnet/api/system.guid.parse
+        // https://learn.microsoft.com/en-us/dotnet/api/system.guid.tryparse
+
+        /// <summary>
+        /// 32 digits separated by hyphens: 00000000-0000-0000-0000-000000000000
+        /// </summary>
+        public static string GuidToString (Guid guid) => guid.ToString ("D");
+
+        /// <summary>
+        /// Should parse all variations case-insensitively.
+        /// </summary>
+        public static Guid StringToGuid (string str) => Guid.Parse (str);
+
+        /// <summary>
+        /// Should parse all variations case-insensitively.
+        /// </summary>
+        public static bool TryStringToGuid (string str, out Guid guid) => Guid.TryParse (str, out guid);
     }
 }
