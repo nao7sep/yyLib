@@ -93,6 +93,20 @@
 
         public static char [] InvalidFileNameChars => _invalidFileNameChars.Value;
 
+        private static Lazy <HashSet <char>> _invalidFileNameCharsSet = new (() => new HashSet <char> (InvalidFileNameChars));
+
+        public static HashSet <char> InvalidFileNameCharsSet => _invalidFileNameCharsSet.Value;
+
+        // - is often used to connect words and therefore isnt used as the default replacement character.
+        public static string ReplaceAllInvalidFileNameChars (string fileName, char replacement = '_')
+        {
+            if (string.IsNullOrEmpty (fileName))
+                return fileName;
+
+            // Usage of a HashSet, especially a cached one, should make this a little faster.
+            return fileName.ReplaceAll (InvalidFileNameCharsSet, replacement);
+        }
+
         private static Lazy <char []> _invalidPathChars = new (() =>
         {
             List <char> xInvalidPathChars =
@@ -110,5 +124,17 @@
         });
 
         public static char [] InvalidPathChars => _invalidPathChars.Value;
+
+        private static Lazy <HashSet <char>> _invalidPathCharsSet = new (() => new HashSet <char> (InvalidPathChars));
+
+        public static HashSet <char> InvalidPathCharsSet => _invalidPathCharsSet.Value;
+
+        public static string ReplaceAllInvalidPathChars (string path, char replacement = '_')
+        {
+            if (string.IsNullOrEmpty (path))
+                return path;
+
+            return path.ReplaceAll (InvalidPathCharsSet, replacement);
+        }
     }
 }

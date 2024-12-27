@@ -1,4 +1,6 @@
-﻿namespace yyLib
+﻿using System.Text;
+
+namespace yyLib
 {
     public static class yyString
     {
@@ -114,6 +116,30 @@
 
             string xNewLines = newLine != null ? newLine + newLine : Environment.NewLine + Environment.NewLine;
             return string.Join (xNewLines, yyStringParagraphs.EnumerateParagraphs (str, type).Select (x => string.Join (newLine ?? Environment.NewLine, x)));
+        }
+
+        // Why "ReplaceAll" is the better name:
+        // 1. "ReplaceAll" clearly communicates that all occurrences of the specified characters
+        //    in the string will be replaced. There is no ambiguity in the scope of the operation.
+        // 2. Familiarity: "ReplaceAll" aligns with common terminology used in programming (e.g.,
+        //    ReplaceAll in text editors or similar functions in other languages), making it
+        //    intuitive for developers.
+        // 3. Avoids Confusion: Alternatives like "ReplaceAny" or "RemoveAny" might imply
+        //    selective or partial replacements, leading to misunderstandings about functionality.
+        // 4. Consistency: Using "All" emphasizes that the method operates comprehensively,
+        //    ensuring clarity and consistency with similar method naming conventions.
+
+        public static string ReplaceAll (this string str, IEnumerable <char> oldChars, char newChar)
+        {
+            if (string.IsNullOrEmpty (str))
+                return str;
+
+            StringBuilder xBuilder = new (str.Length);
+
+            foreach (char xChar in str)
+                xBuilder.Append (oldChars.Contains (xChar) ? newChar : xChar);
+
+            return xBuilder.ToString ();
         }
     }
 }
