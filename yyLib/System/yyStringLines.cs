@@ -31,18 +31,18 @@
         // "TrimLines" may sound like it trims EACH line, but it actually trims the whole string considering it as a sequence of lines.
 
         /// <summary>
-        /// Trims considered-empty lines from the beginning and the end of the string.
+        /// Trims considered-empty lines from the beginning and the end of enumerated lines of a string, preserving internal empty ones.
         /// </summary>
-        public static List <string> TrimRedundantLines (string? str, yyStringType type = yyStringType.WhiteSpace)
+        public static List <string> TrimRedundantLines (IEnumerable <string> lines, yyStringType type = yyStringType.WhiteSpace)
         {
-            if (string.IsNullOrEmpty (str))
-                return [];
+            // When there's something wrong with "lines", it wont be saved.
+            // Basically, only nullable-string-to-something conversions are saved.
 
             List <string> xLines = [];
             bool xIsFirstVisibleLineDetected = false;
             List <string> xPending = [];
 
-            foreach (string xLine in EnumerateLines (str))
+            foreach (string xLine in lines)
             {
                 if (xIsFirstVisibleLineDetected == false)
                 {
@@ -70,6 +70,17 @@
             }
 
             return xLines;
+        }
+
+        /// <summary>
+        /// Trims considered-empty lines from the beginning and the end of the string, preserving internal empty lines.
+        /// </summary>
+        public static List <string> TrimRedundantLines (string? str, yyStringType type = yyStringType.WhiteSpace)
+        {
+            if (string.IsNullOrEmpty (str))
+                return [];
+
+            return TrimRedundantLines (EnumerateLines (str), type);
         }
     }
 }
