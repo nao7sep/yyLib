@@ -34,14 +34,16 @@ namespace yyLib
         private readonly Lazy <string?> _assemblyName;
 
         /// <summary>
-        /// Used as the output file name. Refer to AssemblyTitle for the assembly's display name.
+        /// Used as the output file name.
+        /// Refer to AssemblyTitle for the assembly's display name.
         /// </summary>
         public string? AssemblyName => _assemblyName.Value;
 
         private readonly Lazy <string?> _assemblyTitle;
 
         /// <summary>
-        /// The assembly's display name. Refer to this rather than AssemblyName, that is the output file name.
+        /// The assembly's display name.
+        /// Refer to this rather than AssemblyName, that is the output file name.
         /// </summary>
         public string? AssemblyTitle => _assemblyTitle.Value ?? AssemblyName; // Intuitive fallback.
 
@@ -87,14 +89,16 @@ namespace yyLib
         private readonly Lazy <Version?> _version;
 
         /// <summary>
-        /// The NuGet package version. Refer to AssemblyVersion for the assembly's version.
+        /// The NuGet package version.
+        /// Refer to AssemblyVersion for the assembly's version.
         /// </summary>
         public Version? Version => _version.Value;
 
         private readonly Lazy <Version?> _assemblyVersion;
 
         /// <summary>
-        /// The assembly's version. Refer to this rather than Version, that is the NuGet package version.
+        /// The assembly's version.
+        /// Refer to this rather than Version, that is the NuGet package version.
         /// </summary>
         public Version? AssemblyVersion => _assemblyVersion.Value;
 

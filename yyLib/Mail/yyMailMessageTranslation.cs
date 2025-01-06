@@ -14,7 +14,8 @@ namespace yyLib
         public string? Text { get; set; }
 
         /// <summary>
-        /// Should contain name of translator, API endpoint, parameters, etc. Just enough info to (try to) replicate the process.
+        /// Should contain name of translator, API endpoint, parameters, etc.
+        /// Just enough info to (try to) replicate the process.
         /// </summary>
         [JsonPropertyName ("details")]
         public IDictionary <string, string>? Details { get; set; }

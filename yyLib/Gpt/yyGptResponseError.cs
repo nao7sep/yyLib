@@ -21,6 +21,11 @@ namespace yyLib
         // The order seems to vary (and some properties may be missing) depending on what has returned the error.
         // If a new property is found/implemented, we'll add it here.
 
+        // Added in January 2025:
+        // Considering the model class contained in OpenAI's official C# SDK released in June 2024,
+        // these still seem to be the only properties returned in the error response.
+        // https://github.com/openai/openai-dotnet/blob/main/src/Generated/Models/OpenAIError.cs
+
         [JsonPropertyName ("code")]
         public string? Code { get; set; }
 

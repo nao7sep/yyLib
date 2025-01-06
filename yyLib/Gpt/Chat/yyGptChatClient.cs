@@ -28,6 +28,7 @@ namespace yyLib
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue ("Bearer", ConnectionInfo.ApiKey);
 
             // https://platform.openai.com/docs/api-reference/organizations-and-projects-optional
+            // https://github.com/openai/openai-dotnet/blob/main/src/Custom/OpenAIClient.cs
 
             if (string.IsNullOrWhiteSpace (ConnectionInfo.Organization) == false)
                 HttpClient.DefaultRequestHeaders.Add ("OpenAI-Organization", ConnectionInfo.Organization);

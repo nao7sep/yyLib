@@ -6,6 +6,7 @@ namespace yyLib
     {
         // Everything except function-related things.
         // https://platform.openai.com/docs/api-reference/chat/create
+        // https://github.com/openai/openai-dotnet/blob/main/src/Custom/Chat/ChatCompletionOptions.cs
 
         // The properties are sorted in the order of the API reference.
 
