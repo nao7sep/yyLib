@@ -14,7 +14,7 @@ namespace yyLib
         public Assembly Assembly { get; init; }
 
         // -----------------------------------------------------------------------------
-        //     Used Frequently
+        // Used Frequently
         // -----------------------------------------------------------------------------
 
         public string Location => Assembly.Location;
@@ -25,7 +25,7 @@ namespace yyLib
         public string? FullName => Assembly.FullName;
 
         // -----------------------------------------------------------------------------
-        //     From Metadata
+        // From Metadata
         // -----------------------------------------------------------------------------
 
         // The initialization of some of the following Lazy properties occur in the constructor
@@ -154,7 +154,7 @@ namespace yyLib
         }
 
         // -----------------------------------------------------------------------------
-        //     Static Properties
+        // Static Properties
         // -----------------------------------------------------------------------------
 
         private static readonly Lazy <yyAssemblyInfo?> _appAssembly = new (() =>

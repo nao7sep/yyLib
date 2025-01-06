@@ -8,8 +8,8 @@ namespace yyLib
         // https://stackoverflow.com/questions/2420125/coalesce-for-empty-string
 
         // I, at first, implemented something like ConvertNullOrEmptyTo,
-        //     but if the method is designed to be called following a possibly null property (like Hoge?.Moge.Convert...),
-        //     the method may not be called at all and the whole line may return null.
+        // but if the method is designed to be called following a possibly null property (like Hoge?.Moge.Convert...),
+        // the method may not be called at all and the whole line may return null.
         // It's safer to convert each part to null if necessary and continue using the ?? operator.
 
         public static string? EmptyToNull (this string? str) => string.IsNullOrEmpty (str) ? null : str;

@@ -8,7 +8,7 @@ namespace yyLib
         public yyUserSecretsOpenAi? OpenAi { get; set; }
 
         // -----------------------------------------------------------------------------
-        //     Static Members
+        // Static Members
         // -----------------------------------------------------------------------------
 
         public static string DefaultFileName { get; } = ".yyUserSecrets.json";

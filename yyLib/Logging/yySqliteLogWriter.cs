@@ -35,7 +35,7 @@ namespace yyLib
                         $"INSERT INTO {TableName} (CreatedAtUtc, Key, Value) " +
                         "VALUES (@CreatedAtUtc, @Key, @Value)", xConnection))
                     {
-                        xCommand.Parameters.AddWithValue ("@CreatedAtUtc", createdAtUtc.ToRoundtripString ());
+                        xCommand.Parameters.AddWithValue ("@CreatedAtUtc", yyConvertor.DateTimeToRoundtripString (createdAtUtc));
                         xCommand.Parameters.AddWithValue ("@Key", key);
                         xCommand.Parameters.AddWithValue ("@Value", value);
                         xCommand.ExecuteNonQuery ();

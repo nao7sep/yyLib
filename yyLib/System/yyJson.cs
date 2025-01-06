@@ -16,7 +16,7 @@ namespace yyLib
         public static JsonSerializerOptions DefaultDeserializationOptions { get; } = new ()
         {
             // DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull, // Doesnt affect anything here.
-            PropertyNameCaseInsensitive = true
+            // PropertyNameCaseInsensitive = true // Can be slower. There are more serious formatting issues than case sensitivity.
         };
     }
 }

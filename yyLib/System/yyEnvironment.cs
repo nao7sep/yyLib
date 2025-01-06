@@ -2,13 +2,13 @@
 {
     public static class yyEnvironment
     {
-        private static readonly Lazy <bool> _isNt = new (() => OperatingSystem.IsWindows ());
+        private static readonly Lazy <bool> _isWindows = new (() => OperatingSystem.IsWindows ());
 
-        public static bool IsNt => _isNt.Value;
+        public static bool IsWindows => _isWindows.Value;
 
-        private static readonly Lazy <bool> _isPosix = new (() => OperatingSystem.IsLinux () || OperatingSystem.IsMacOS ());
+        private static readonly Lazy <bool> _isUnix = new (() => OperatingSystem.IsLinux () || OperatingSystem.IsMacOS ());
 
         // Not much reason to distinguish between Linux and macOS.
-        public static bool IsPosix => _isPosix.Value;
+        public static bool IsUnix => _isUnix.Value;
     }
 }

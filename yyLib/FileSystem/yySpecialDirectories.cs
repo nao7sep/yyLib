@@ -47,10 +47,11 @@
         // There's no enum value to get "LocalLow".
         // It's less frequently used and is not implemented for now.
 
-        // ChatGPT says: The "LocalLow" folder in Windows is used as a storage location for data specific to an application that requires a lower level of trust.
-        //     It is part of the Windows folder structure that segregates user data into different levels of trust and access.
-        //     Specifically, the "LocalLow" folder is often used by applications that run in a more restricted security context,
-        //     such as Internet Explorer when it operates in Protected Mode or other applications that run in a low integrity level.
+        // ChatGPT says:
+        // The "LocalLow" folder in Windows is used as a storage location for data specific to an application that requires a lower level of trust.
+        // It is part of the Windows folder structure that segregates user data into different levels of trust and access.
+        // Specifically, the "LocalLow" folder is often used by applications that run in a more restricted security context,
+        // such as Internet Explorer when it operates in Protected Mode or other applications that run in a low integrity level.
 
         /// <summary>
         /// Use for app-specific data that is common to all users and does not change frequently.

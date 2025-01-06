@@ -12,6 +12,10 @@ namespace yyLib
 
     public class yyLogger: IEnumerable <yyLog>
     {
+        /// <summary>
+        /// Does not reload logs from previous sessions.
+        /// Consider this to be a toilet-type, last-chance log storage.
+        /// </summary>
         public List <yyLog> RecentLogs { get; } = [];
 
         public int RecentLogCount => RecentLogs.Count;
@@ -138,7 +142,7 @@ namespace yyLib
         public bool TryWriteException (Exception exception) => TryWrite ("Exception", exception.ToString ());
 
         // -----------------------------------------------------------------------------
-        //     Static Members
+        // Static Members
         // -----------------------------------------------------------------------------
 
         private static readonly Lazy <string> _defaultTextLogWriterFilePath = new (() => yyAppDirectory.MapPath ("Logs.txt"));

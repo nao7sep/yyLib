@@ -69,7 +69,7 @@ namespace yyLib
                 throw new yyObjectDisposedException ($"'{nameof (ResponseStreamReader)}' is disposed.");
 
             // GitHub Copilot suggested the following code,
-            //     but I'm still going to use the well-tested piece from yyGptChatClient.
+            // but I'm still going to use the well-tested piece from yyGptChatClient.
             // Worst case scenario, it'll be just harmlessly redundant.
             // return await ResponseStreamReader.ReadToEndAsync ();
 
