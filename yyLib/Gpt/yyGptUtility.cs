@@ -33,7 +33,7 @@ namespace yyLib
         /// onChunkRetrieved should be a light-weight method that would return quickly.
         /// </summary>
         public static async Task <(string? JsonString, string []? GeneratedMessages, string? ErrorMessage)> GenerateMessagesChunksAsync (
-            yyGptChatConnectionInfo connectionInfo, yyGptChatRequest request, Func <int, string?, Task> onChunkRetrieved, CancellationToken cancellationToken = default)
+            yyGptChatConnectionInfo connectionInfo, yyGptChatRequest request, Func <int, string, Task> onChunkRetrieved, CancellationToken cancellationToken = default)
         {
             bool? xStream = request.Stream;
             request.Stream = true;
@@ -70,7 +70,7 @@ namespace yyLib
                     // If ParseChunk succeeded, the extracted values should be valid.
 
                     int xIndex = xResponse.Choices! [0].Index!.Value;
-                    string? xContent = xResponse.Choices! [0]!.Delta!.Content;
+                    string xContent = xResponse.Choices! [0]!.Delta!.Content!;
                     xBuilders [xIndex].Append (xContent);
 
                     await onChunkRetrieved (xIndex, xContent);
@@ -87,7 +87,7 @@ namespace yyLib
             }
         }
 
-        public static async Task <(string JsonString, byte [][]? ImageBytes, string? ErrorMessage)> GenerateImagesAsync (
+        public static async Task <(string JsonString, byte [][]? ImageBytes, string []? RevisedPrompts, string? ErrorMessage)> GenerateImagesAsync (
             yyGptImagesConnectionInfo connectionInfo, yyGptImagesRequest request, CancellationToken cancellationToken = default)
         {
             using yyGptImagesClient xClient = new (connectionInfo);
@@ -120,11 +120,12 @@ namespace yyLib
                 });
 
                 byte [][] xImageBytes = await Task.WhenAll (xTasks);
+                string [] xRevisedPrompts = xResponse.Data!.Select (x => x.RevisedPrompt!).ToArray ();
 
-                return (JsonString: xJsonString!, ImageBytes: xImageBytes, ErrorMessage: null);
+                return (JsonString: xJsonString!, ImageBytes: xImageBytes, RevisedPrompts: xRevisedPrompts, ErrorMessage: null);
             }
 
-            else return (JsonString: xJsonString!, ImageBytes: null, ErrorMessage: xResponse.Error!.Message);
+            else return (JsonString: xJsonString!, ImageBytes: null, RevisedPrompts: null, ErrorMessage: xResponse.Error!.Message);
         }
     }
 }
