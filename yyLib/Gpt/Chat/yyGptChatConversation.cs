@@ -31,7 +31,6 @@
 
                 if (Client.ResponseMessage!.IsSuccessStatusCode)
                     return (true, xJsonString, xResponse.Choices!.Select (x => x.Message!.Content!).ToList (), null);
-
                 else return (false, xJsonString, new [] { xResponse.Error!.Message! }, null);
             }
 

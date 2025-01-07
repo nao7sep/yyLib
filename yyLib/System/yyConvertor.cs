@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using MimeKit;
 
 namespace yyLib
 {
@@ -45,7 +46,6 @@ namespace yyLib
 
             if (utc.Kind == DateTimeKind.Utc)
                 return utc.ToString ("yyyyMMdd'T'HHmmssKfffffff", CultureInfo.InvariantCulture);
-
             else throw new yyArgumentException ($"'{nameof (utc)}' is not an UTC time: {DateTimeToRoundtripString (utc)}");
         }
 
@@ -118,5 +118,20 @@ namespace yyLib
         /// Should parse all variations case-insensitively.
         /// </summary>
         public static bool TryStringToGuid (string str, out Guid guid) => Guid.TryParse (str, out guid);
+
+        // -----------------------------------------------------------------------------
+        // MimeMessage
+        // -----------------------------------------------------------------------------
+
+        public static byte [] MimeMessageToBytes (MimeMessage message, FormatOptions? options = null, CancellationToken cancellationToken = default)
+        {
+            using MemoryStream xMemoryStream = new ();
+
+            if (options != null)
+                message.WriteTo (options, xMemoryStream, cancellationToken);
+            else message.WriteTo (xMemoryStream, cancellationToken);
+
+            return xMemoryStream.ToArray ();
+        }
     }
 }

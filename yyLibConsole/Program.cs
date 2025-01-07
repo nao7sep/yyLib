@@ -8,6 +8,9 @@ namespace yyLibConsole
         {
             try
             {
+                // Set "from" and "to" email addresses for testing.
+                // Default connection must be specified in user secrets.
+                // MailTest.Run (from: "", to: "");
             }
 
             catch (Exception xException)

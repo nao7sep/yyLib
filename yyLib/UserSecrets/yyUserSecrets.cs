@@ -7,6 +7,9 @@ namespace yyLib
         [JsonPropertyName ("openai")]
         public yyUserSecretsOpenAi? OpenAi { get; set; }
 
+        [JsonPropertyName ("mail_connection")]
+        public yyMailConnectionInfo? MailConnection { get; set; }
+
         // -----------------------------------------------------------------------------
         // Static Members
         // -----------------------------------------------------------------------------

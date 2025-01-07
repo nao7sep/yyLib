@@ -21,7 +21,6 @@ namespace yyLib
 
             if (xSendingResult.HttpResponseMessage.IsSuccessStatusCode)
                 return (JsonString: xJsonString!, Messages: xResponse.Choices!.Select (x => x.Message!.Content!).ToArray (), ErrorMessage: null);
-
             else return (JsonString: xJsonString!, Messages: null, ErrorMessage: xResponse.Error!.Message);
         }
 

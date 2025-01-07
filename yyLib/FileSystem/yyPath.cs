@@ -10,10 +10,8 @@
         {
             if (yyEnvironment.IsWindows)
                 return yyPathSeparators.Windows;
-
             else if (yyEnvironment.IsUnix)
                 return yyPathSeparators.Unix;
-
             else throw new yyNotSupportedException ("Unsupported operating system.");
         });
 
@@ -23,10 +21,8 @@
         {
             if (separator == yyPathSeparators.Windows)
                 return yyPathSeparators.Unix;
-
             else if (separator == yyPathSeparators.Unix)
                 return yyPathSeparators.Windows;
-
             else throw new ArgumentException ("Invalid separator.");
         }
 
@@ -55,6 +51,8 @@
 
             return NormalizeSeparators (xJoinedPath, separator);
         }
+
+        public static string Join (params string [] paths) => Join (DefaultSeparator, paths);
 
         public static string GetAbsolutePath (string basePath, string relativePath, char separator)
         {
