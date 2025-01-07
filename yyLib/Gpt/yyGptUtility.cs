@@ -29,11 +29,8 @@ namespace yyLib
         // In the streaming mode, we receive a lot of JSON strings.
         // Only the one that should contain an error message in case of an error can be returned.
 
-        /// <summary>
-        /// onChunkRetrieved should be a light-weight method that would return quickly.
-        /// </summary>
         public static async Task <(string? JsonString, string []? GeneratedMessages, string? ErrorMessage)> GenerateMessagesChunksAsync (
-            yyGptChatConnectionInfo connectionInfo, yyGptChatRequest request, Func <int, string, Task> onChunkRetrieved, CancellationToken cancellationToken = default)
+            yyGptChatConnectionInfo connectionInfo, yyGptChatRequest request, Func <int, string, CancellationToken, Task> onChunkRetrievedAsync, CancellationToken cancellationToken = default)
         {
             bool? xStream = request.Stream;
             request.Stream = true;
@@ -73,7 +70,7 @@ namespace yyLib
                     string xContent = xResponse.Choices! [0]!.Delta!.Content!;
                     xBuilders [xIndex].Append (xContent);
 
-                    await onChunkRetrieved (xIndex, xContent);
+                    await onChunkRetrievedAsync (xIndex, xContent, cancellationToken);
                 }
 
                 return (JsonString: null, GeneratedMessages: xBuilders.Select (x => x.ToString ()).ToArray (), ErrorMessage: null);

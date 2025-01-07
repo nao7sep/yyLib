@@ -60,8 +60,10 @@ namespace yyLib
                     if (x.Delta == null)
                         return true;
 
-                    if (string.IsNullOrWhiteSpace (x.Delta.Content))
-                        return true;
+                    // The "Content" property is not checked because the following (partial) responses have been observed:
+                    // "choices":[{"index":0,"delta":{"role":"assistant","content":"","refusal":null},"logprobs":null,"finish_reason":null}]
+                    // "choices":[{"index":0,"delta":{},"logprobs":null,"finish_reason":"stop"}]
+                    // "Content" can be empty or null.
 
                     return false;
                 }))
