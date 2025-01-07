@@ -37,8 +37,7 @@ namespace yyLib
                 HttpClient.DefaultRequestHeaders.Add ("OpenAI-Project", ConnectionInfo.Project);
         }
 
-        public async Task <(HttpResponseMessage HttpResponseMessage, Stream Stream)> SendAsync (yyGptChatRequest request,
-            CancellationToken? cancellationTokenForSendAsync = null, CancellationToken? cancellationTokenForReadAsStreamAsync = null)
+        public async Task <(HttpResponseMessage HttpResponseMessage, Stream Stream)> SendAsync (yyGptChatRequest request, CancellationToken cancellationToken = default)
         {
             if (HttpClient == null)
                 throw new yyObjectDisposedException ($"'{nameof (HttpClient)}' is disposed.");
@@ -48,7 +47,7 @@ namespace yyLib
             using (var xContent = new StringContent (xJsonString, Encoding.UTF8, "application/json"))
             using (var xMessage = new HttpRequestMessage (HttpMethod.Post, ConnectionInfo.Endpoint) { Content = xContent })
             {
-                var xResponse = await HttpClient.SendAsync (xMessage, HttpCompletionOption.ResponseHeadersRead, cancellationTokenForSendAsync ?? CancellationToken.None);
+                var xResponse = await HttpClient.SendAsync (xMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
                 // Commented out to receive error messages.
                 // xResponse.EnsureSuccessStatusCode ();
@@ -57,7 +56,7 @@ namespace yyLib
                 ResponseMessage = xResponse;
 
                 ResponseStream?.Dispose ();
-                ResponseStream = await xResponse.Content.ReadAsStreamAsync (cancellationTokenForReadAsStreamAsync ?? CancellationToken.None);
+                ResponseStream = await xResponse.Content.ReadAsStreamAsync (cancellationToken);
 
                 ResponseStreamReader?.Dispose ();
                 ResponseStreamReader = new StreamReader (ResponseStream);
@@ -66,7 +65,7 @@ namespace yyLib
             }
         }
 
-        public async Task <string?> ReadToEndAsync (CancellationToken? cancellationToken = null)
+        public async Task <string?> ReadToEndAsync (CancellationToken cancellationToken = default)
         {
             if (ResponseStreamReader == null)
                 throw new yyObjectDisposedException ($"'{nameof (ResponseStreamReader)}' is disposed.");
@@ -74,10 +73,10 @@ namespace yyLib
             if (ResponseStreamReader.EndOfStream)
                 return await Task.FromResult <string?> (null);
 
-            return await ResponseStreamReader.ReadToEndAsync (cancellationToken ?? CancellationToken.None);
+            return await ResponseStreamReader.ReadToEndAsync (cancellationToken);
         }
 
-        public async ValueTask <string?> ReadLineAsync (CancellationToken? cancellationToken = null)
+        public async ValueTask <string?> ReadLineAsync (CancellationToken cancellationToken = default)
         {
             if (ResponseStreamReader == null)
                 throw new yyObjectDisposedException ($"'{nameof (ResponseStreamReader)}' is disposed.");
@@ -85,7 +84,7 @@ namespace yyLib
             if (ResponseStreamReader.EndOfStream)
                 return await ValueTask.FromResult <string?> (null);
 
-            return await ResponseStreamReader.ReadLineAsync (cancellationToken ?? CancellationToken.None);
+            return await ResponseStreamReader.ReadLineAsync (cancellationToken);
         }
 
         public void Dispose ()

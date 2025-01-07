@@ -9,7 +9,7 @@ namespace yyLib
             if (string.IsNullOrWhiteSpace (str))
                 throw new yyArgumentException ($"'{nameof (str)}' is invalid: {str.GetVisibleString ()}");
 
-            var xResponse = (yyGptChatResponse?) JsonSerializer.Deserialize (str, typeof (yyGptChatResponse), yyJson.DefaultDeserializationOptions);
+            var xResponse = JsonSerializer.Deserialize <yyGptChatResponse> (str, yyJson.DefaultDeserializationOptions);
 
             if (xResponse == null)
                 throw new yyFormatException ($"Failed to deserialize JSON: {str.GetVisibleString ()}");
@@ -29,8 +29,7 @@ namespace yyLib
             {
                 string xJsonString = str.Substring ("data: ".Length);
 
-                var xResponse = (yyGptChatResponse?) JsonSerializer.Deserialize (xJsonString,
-                    typeof (yyGptChatResponse), yyJson.DefaultDeserializationOptions);
+                var xResponse = JsonSerializer.Deserialize <yyGptChatResponse> (xJsonString, yyJson.DefaultDeserializationOptions);
 
                 if (xResponse == null)
                     throw new yyFormatException ($"Failed to deserialize JSON: {xJsonString.GetVisibleString ()}");
