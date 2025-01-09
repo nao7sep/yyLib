@@ -2,7 +2,7 @@
 
 namespace yyLib
 {
-    public static class yyString
+    public static class yyStringHelper
     {
         // c# - ?? Coalesce for empty string? - Stack Overflow
         // https://stackoverflow.com/questions/2420125/coalesce-for-empty-string

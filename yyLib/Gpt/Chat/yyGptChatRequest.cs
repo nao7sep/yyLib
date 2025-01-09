@@ -59,40 +59,5 @@ namespace yyLib
         public string? User { get; set; }
 
         public yyGptChatRequest () => Model = yyGptChat.DefaultModel;
-
-        public void AddMessage (yyGptChatMessageRole role, string content, string? name = null)
-        {
-            Messages ??= new List <yyGptChatMessage> ();
-
-            Messages.Add (new yyGptChatMessage
-            {
-                Role = role,
-                Content = content,
-                Name = name
-            });
-        }
-
-        public void AddSystemMessage (string content, string? name = null) =>
-            AddMessage (yyGptChatMessageRole.System, content, name);
-
-        public void AddUserMessage (string content, string? name = null) =>
-            AddMessage (yyGptChatMessageRole.User, content, name);
-
-        public void AddAssistantMessage (string content, string? name = null) =>
-            AddMessage (yyGptChatMessageRole.Assistant, content, name);
-
-        public string? GetLastMessage ()
-        {
-            if (Messages != null && Messages.Count > 0)
-                return Messages [Messages.Count - 1].Content;
-
-            return null;
-        }
-
-        public void RemoveLastMessage ()
-        {
-            if (Messages != null && Messages.Count > 0)
-                Messages.RemoveAt (Messages.Count - 1);
-        }
     }
 }
