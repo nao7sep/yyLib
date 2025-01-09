@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace yyLib
 {
-    public class yyJsonLogWriter (string directoryPath, Encoding? encoding = null): yyLogWriter
+    public class yyJsonLogWriter (string directoryPath, Encoding? encoding = null): yyILogWriter
     {
         public string DirectoryPath { get; init; } = directoryPath;
 

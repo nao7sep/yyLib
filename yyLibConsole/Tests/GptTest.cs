@@ -74,7 +74,7 @@ namespace yyLibConsole
                     xPrompts.AppendLine ("[Original Prompt]");
                     xPrompts.AppendLine (xImagesRequest.Prompt);
                     xPrompts.AppendLine ();
-                    xPrompts.AppendLine ("Revised Prompt]");
+                    xPrompts.AppendLine ("[Revised Prompt]");
                     xPrompts.AppendLine (xImagesResponse.RevisedPrompts! [0]);
 
                     File.WriteAllText (xPromptsFilePath, xPrompts.ToString (), Encoding.UTF8);

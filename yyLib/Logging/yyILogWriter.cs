@@ -1,6 +1,6 @@
 ﻿namespace yyLib
 {
-    public interface yyLogWriter
+    public interface yyILogWriter
     {
         void Write (DateTime createdAtUtc, string key, string value);
     }
