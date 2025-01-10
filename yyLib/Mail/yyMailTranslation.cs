@@ -2,7 +2,7 @@
 
 namespace yyLib
 {
-    public class yyMailMessageTranslation
+    public class yyMailTranslation
     {
         [JsonPropertyName ("translated_at_utc")]
         public DateTime? TranslatedAtUtc { get; set; }

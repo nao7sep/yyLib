@@ -31,7 +31,7 @@ namespace yyLib
         // reducing the need for manual settings or interventions in the encoding process.
 
         [JsonPropertyName ("attachments")]
-        public IList <yyMailMessageAttachment>? Attachments { get; set; }
+        public IList <yyMailAttachment>? Attachments { get; set; }
 
         [JsonPropertyName ("bcc")]
         public IList <yyMailContact>? Bcc { get; set; }
@@ -61,7 +61,7 @@ namespace yyLib
         public string? HtmlBody { get; set; }
 
         [JsonPropertyName ("html_body_translations")]
-        public IList <yyMailMessageTranslation>? HtmlBodyTranslations { get; set; }
+        public IList <yyMailTranslation>? HtmlBodyTranslations { get; set; }
 
         [JsonPropertyName ("importance")]
         [JsonConverter (typeof (JsonStringEnumConverter))]
@@ -96,13 +96,13 @@ namespace yyLib
         public string? Subject { get; set; }
 
         [JsonPropertyName ("subject_translations")]
-        public IList <yyMailMessageTranslation>? SubjectTranslations { get; set; }
+        public IList <yyMailTranslation>? SubjectTranslations { get; set; }
 
         [JsonPropertyName ("text_body")]
         public string? TextBody { get; set; }
 
         [JsonPropertyName ("text_body_translations")]
-        public IList <yyMailMessageTranslation>? TextBodyTranslations { get; set; }
+        public IList <yyMailTranslation>? TextBodyTranslations { get; set; }
 
         [JsonPropertyName ("to")]
         public IList <yyMailContact>? To { get; set; }
@@ -111,13 +111,13 @@ namespace yyLib
         [JsonConverter (typeof (JsonStringEnumConverter))]
         public XMessagePriority? XPriority { get; set; }
 
-        public void AddAttachment (yyMailMessageAttachment attachment)
+        public void AddAttachment (yyMailAttachment attachment)
         {
-            Attachments ??= new List <yyMailMessageAttachment> ();
+            Attachments ??= new List <yyMailAttachment> ();
             Attachments.Add (attachment);
         }
 
-        public void AddAttachment (string originalFilePath, string? newFileName = null) => AddAttachment (new yyMailMessageAttachment (originalFilePath, newFileName));
+        public void AddAttachment (string originalFilePath, string? newFileName = null) => AddAttachment (new yyMailAttachment (originalFilePath, newFileName));
 
         public void AddBcc (yyMailContact contact)
         {
@@ -149,9 +149,9 @@ namespace yyLib
             Headers.Add (key, value);
         }
 
-        public void AddHtmlBodyTranslation (yyMailMessageTranslation translation)
+        public void AddHtmlBodyTranslation (yyMailTranslation translation)
         {
-            HtmlBodyTranslations ??= new List <yyMailMessageTranslation> ();
+            HtmlBodyTranslations ??= new List <yyMailTranslation> ();
             HtmlBodyTranslations.Add (translation);
         }
 
@@ -169,15 +169,15 @@ namespace yyLib
 
         public void AddReplyTo (string address, string? name = null) => AddReplyTo (new yyMailContact { Address = address, Name = name });
 
-        public void AddSubjectTranslation (yyMailMessageTranslation translation)
+        public void AddSubjectTranslation (yyMailTranslation translation)
         {
-            SubjectTranslations ??= new List <yyMailMessageTranslation> ();
+            SubjectTranslations ??= new List <yyMailTranslation> ();
             SubjectTranslations.Add (translation);
         }
 
-        public void AddTextBodyTranslation (yyMailMessageTranslation translation)
+        public void AddTextBodyTranslation (yyMailTranslation translation)
         {
-            TextBodyTranslations ??= new List <yyMailMessageTranslation> ();
+            TextBodyTranslations ??= new List <yyMailTranslation> ();
             TextBodyTranslations.Add (translation);
         }
 

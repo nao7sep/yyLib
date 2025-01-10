@@ -2,7 +2,7 @@
 
 namespace yyLib
 {
-    public class yyMailMessageAttachment
+    public class yyMailAttachment
     {
         // To attach a file, we set OriginalFilePath and, optionally, NewFileName.
         // Before the message is sent, the attachment file is copied and its new path, that is relative to the location of the app, is stored in the instance.
@@ -32,11 +32,11 @@ namespace yyLib
         [JsonPropertyName ("content_length")]
         public long? ContentLength { get; set; }
 
-        public yyMailMessageAttachment ()
+        public yyMailAttachment ()
         {
         }
 
-        public yyMailMessageAttachment (string originalFilePath, string? newFileName = null)
+        public yyMailAttachment (string originalFilePath, string? newFileName = null)
         {
             OriginalFilePath = originalFilePath;
             NewFileName = newFileName ?? Path.GetFileName (originalFilePath);

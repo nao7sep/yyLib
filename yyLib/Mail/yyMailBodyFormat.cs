@@ -1,6 +1,6 @@
 ﻿namespace yyLib
 {
-    public enum yyMailMessageBodyFormat
+    public enum yyMailBodyFormat
     {
         // ChatGPT says:
 

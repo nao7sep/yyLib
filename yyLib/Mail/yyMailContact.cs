@@ -22,7 +22,7 @@ namespace yyLib
 
         [JsonPropertyName ("preferred_body_format")]
         [JsonConverter (typeof (JsonStringEnumConverter))]
-        public yyMailMessageBodyFormat? PreferredBodyFormat { get; set; }
+        public yyMailBodyFormat? PreferredBodyFormat { get; set; }
 
         public yyMailContact ()
         {
