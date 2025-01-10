@@ -2,7 +2,7 @@
 
 namespace yyLib
 {
-    public class yyTextLogWriter (string filePath, Encoding? encoding = null): yyILogWriter
+    public class yyTextLogWriter (string filePath, Encoding? encoding = null): yyLogWriterInterface
     {
         private static readonly object _lock = new ();
 

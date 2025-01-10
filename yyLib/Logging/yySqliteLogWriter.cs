@@ -2,7 +2,7 @@
 
 namespace yyLib
 {
-    public class yySqliteLogWriter (string connectionString, string tableName): yyILogWriter
+    public class yySqliteLogWriter (string connectionString, string tableName): yyLogWriterInterface
     {
         private static readonly object _lock = new ();
 
