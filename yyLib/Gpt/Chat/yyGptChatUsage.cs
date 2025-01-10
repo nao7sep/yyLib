@@ -2,7 +2,7 @@
 
 namespace yyLib
 {
-    public class yyGptChatResponseUsage
+    public class yyGptChatUsage
     {
         // Deserializes the "usage" property:
         // https://platform.openai.com/docs/api-reference/chat/object#chat/object-usage

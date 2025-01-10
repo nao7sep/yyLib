@@ -15,8 +15,8 @@ namespace yyLib
         // The properties are sorted in the natural order except for the "name" property that is optional.
 
         [JsonPropertyName ("role")]
-        [JsonConverter (typeof (yyGptChatMessageRoleJsonConverter))]
-        public yyGptChatMessageRole? Role { get; set; }
+        [JsonConverter (typeof (yyGptChatRoleJsonConverter))]
+        public yyGptChatRole? Role { get; set; }
 
         [JsonPropertyName ("content")]
         public string? Content { get; set; }

@@ -2,7 +2,8 @@
 
 namespace yyLib
 {
-    public class yyGptChatResponseChoice
+    // Singular because it's used as a list.
+    public class yyGptChatChoice
     {
         // This model class can deserialize the following 2 properties:
         // https://platform.openai.com/docs/api-reference/chat/object#chat/object-choices
@@ -27,6 +28,6 @@ namespace yyLib
         public yyGptChatMessage? Delta { get; set; }
 
         [JsonPropertyName ("logprobs")]
-        public yyGptChatResponseChoiceLogProbs? LogProbs { get; set; }
+        public yyGptChatLogProbs? LogProbs { get; set; }
     }
 }

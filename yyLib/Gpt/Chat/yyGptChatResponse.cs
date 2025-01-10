@@ -18,7 +18,7 @@ namespace yyLib
         public string? Id { get; set; }
 
         [JsonPropertyName ("choices")]
-        public IList <yyGptChatResponseChoice>? Choices { get; set; }
+        public IList <yyGptChatChoice>? Choices { get; set; }
 
         [JsonPropertyName ("created")]
         public int? Created { get; set; }
@@ -33,7 +33,7 @@ namespace yyLib
         public string? Object { get; set; }
 
         [JsonPropertyName ("usage")]
-        public yyGptChatResponseUsage? Usage { get; set; }
+        public yyGptChatUsage? Usage { get; set; }
 
         [JsonPropertyName ("error")]
         public yyGptError? Error { get; set; }

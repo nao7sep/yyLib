@@ -2,7 +2,8 @@
 
 namespace yyLib
 {
-    public class yyGptChatResponseChoiceLogProbsContentTopLogProbs
+    // Singular because it's used as a list named TopLogProbs.
+    public class yyGptChatTopLogProb
     {
         // Deserializes "choices/logprobs/content/top_logprobs":
         // https://platform.openai.com/docs/api-reference/chat/object#chat/object-choices

@@ -1,6 +1,6 @@
 ﻿namespace yyLib
 {
-    public enum yyGptChatMessageRole
+    public enum yyGptChatRole
     {
         System,
         User,

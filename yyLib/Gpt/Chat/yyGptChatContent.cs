@@ -2,7 +2,10 @@
 
 namespace yyLib
 {
-    public class yyGptChatResponseChoiceLogProbsContent
+    /// <summary>
+    /// Represents an entry in the "choices/logprobs/content" array.
+    /// </summary>
+    public class yyGptChatContent
     {
         // Deserializes "choices/logprobs/content":
         // https://platform.openai.com/docs/api-reference/chat/object#chat/object-choices
@@ -20,6 +23,6 @@ namespace yyLib
         public IList <int>? Bytes { get; set; }
 
         [JsonPropertyName ("top_logprobs")]
-        public IList <yyGptChatResponseChoiceLogProbsContentTopLogProbs>? TopLogProbs { get; set; }
+        public IList <yyGptChatTopLogProb>? TopLogProbs { get; set; }
     }
 }

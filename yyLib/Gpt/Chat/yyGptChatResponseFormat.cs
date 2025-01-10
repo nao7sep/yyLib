@@ -2,7 +2,7 @@
 
 namespace yyLib
 {
-    public class yyGptChatRequestResponseFormat
+    public class yyGptChatResponseFormat
     {
         [JsonPropertyName ("type")]
         public string? Type { get; set; }

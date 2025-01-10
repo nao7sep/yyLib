@@ -13,7 +13,7 @@ namespace yyLib
         [JsonPropertyName ("messages")]
         public IList <yyGptChatMessage>? Messages { get; set; }
 
-        public void AddMessage (yyGptChatMessageRole role, string content, string? name = null)
+        public void AddMessage (yyGptChatRole role, string content, string? name = null)
         {
             Messages ??= new List <yyGptChatMessage> ();
 
@@ -26,13 +26,13 @@ namespace yyLib
         }
 
         public void AddSystemMessage (string content, string? name = null) =>
-            AddMessage (yyGptChatMessageRole.System, content, name);
+            AddMessage (yyGptChatRole.System, content, name);
 
         public void AddUserMessage (string content, string? name = null) =>
-            AddMessage (yyGptChatMessageRole.User, content, name);
+            AddMessage (yyGptChatRole.User, content, name);
 
         public void AddAssistantMessage (string content, string? name = null) =>
-            AddMessage (yyGptChatMessageRole.Assistant, content, name);
+            AddMessage (yyGptChatRole.Assistant, content, name);
 
         [JsonPropertyName ("model")]
         public string? Model { get; set; }
@@ -59,7 +59,7 @@ namespace yyLib
         public double? PresencePenalty { get; set; }
 
         [JsonPropertyName ("response_format")]
-        public yyGptChatRequestResponseFormat? ResponseFormat { get; set; }
+        public yyGptChatResponseFormat? ResponseFormat { get; set; }
 
         [JsonPropertyName ("seed")]
         public int? Seed { get; set; }
