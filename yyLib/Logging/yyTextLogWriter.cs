@@ -19,7 +19,7 @@ namespace yyLib
                 if (File.Exists (FilePath))
                     xBuilder.AppendLine ("----");
 
-                xBuilder.AppendLine ($"UTC: {yyConvertor.DateTimeToRoundtripString (createdAtUtc)}");
+                xBuilder.AppendLine ($"UTC: {yyConverter.DateTimeToRoundtripString (createdAtUtc)}");
                 xBuilder.AppendLine ($"{key}: {value.TrimRedundantLines ()}"); // Auto trimmed.
 
                 yyDirectory.CreateParent (FilePath);

@@ -15,7 +15,7 @@ namespace yyLib
             xMimeMessage.Load (message);
 
             // Using the default options.
-            byte [] xMimeBytes = yyConvertor.MimeMessageToBytes (xMimeMessage, cancellationToken: cancellationToken);
+            byte [] xMimeBytes = yyConverter.MimeMessageToBytes (xMimeMessage, cancellationToken: cancellationToken);
 
             using SmtpClient xSmtpClient = new ();
 

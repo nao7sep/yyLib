@@ -18,7 +18,7 @@ namespace yyLibConsole
             var xResult = yyMailUtility.SendAsync (xConnectionInfo!, xMessage).Result;
 
             string xPartialFilePath = yyPath.Join (yySpecialDirectories.Desktop,
-                "MailTest-" + yyConvertor.DateTimeToRoundtripFileNameString (DateTime.UtcNow));
+                "MailTest-" + yyConverter.DateTimeToRoundtripFileNameString (DateTime.UtcNow));
 
             // With JavaScriptEncoder.UnsafeRelaxedJsonEscaping taking effect,
             // the JSON string representation of the message may contain CJK characters.

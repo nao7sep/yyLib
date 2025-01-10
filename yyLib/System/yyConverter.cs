@@ -3,7 +3,7 @@ using MimeKit;
 
 namespace yyLib
 {
-    public static class yyConvertor
+    public static class yyConverter
     {
         // In alphabetical order.
         // No extension methods, as they may cause inconsistencies in the method names.

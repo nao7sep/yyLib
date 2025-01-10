@@ -64,7 +64,7 @@ namespace yyLibConsole
 
                     var xImagesResponse = yyGptUtility.GenerateImagesAsync (xImagesConnectionInfo, xImagesRequest).Result;
 
-                    string xImagePartialFilePath = yyPath.Join (yySpecialDirectories.Desktop, "GptTest-" + yyConvertor.DateTimeToRoundtripFileNameString (DateTime.UtcNow)),
+                    string xImagePartialFilePath = yyPath.Join (yySpecialDirectories.Desktop, "GptTest-" + yyConverter.DateTimeToRoundtripFileNameString (DateTime.UtcNow)),
                            xImageFilePath = xImagePartialFilePath + ".png",
                            xPromptsFilePath = xImagePartialFilePath + ".txt";
 
