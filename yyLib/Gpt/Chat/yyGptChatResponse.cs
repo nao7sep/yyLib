@@ -36,7 +36,7 @@ namespace yyLib
         public yyGptChatResponseUsage? Usage { get; set; }
 
         [JsonPropertyName ("error")]
-        public yyGptResponseError? Error { get; set; }
+        public yyGptError? Error { get; set; }
 
         // -----------------------------------------------------------------------------
         // Static Members

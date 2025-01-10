@@ -2,7 +2,7 @@
 
 namespace yyLib
 {
-    public class yyGptResponseError
+    public class yyGptError
     {
         // Chat and Images both seem to use this model.
         // At this moment (meaning February 2024), I havent found any official document regarding this model (and ChatGPT couldnt find one either).

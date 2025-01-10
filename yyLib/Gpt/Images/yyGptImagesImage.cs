@@ -2,7 +2,9 @@
 
 namespace yyLib
 {
-    public class yyGptImagesResponseImage
+    // Used as a list for the Data property.
+    // Considered "image", "entry", "datum", etc.
+    public class yyGptImagesImage
     {
         // https://platform.openai.com/docs/api-reference/images/object
 

@@ -17,9 +17,9 @@ namespace yyLib
         public int? Created { get; set; }
 
         [JsonPropertyName ("data")]
-        public IList <yyGptImagesResponseImage>? Data { get; set; }
+        public IList <yyGptImagesImage>? Data { get; set; }
 
         [JsonPropertyName ("error")]
-        public yyGptResponseError? Error { get; set; }
+        public yyGptError? Error { get; set; }
     }
 }
