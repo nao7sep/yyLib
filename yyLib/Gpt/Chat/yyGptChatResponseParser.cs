@@ -14,6 +14,9 @@ namespace yyLib
             if (xResponse == null)
                 throw new yyFormatException ($"Failed to deserialize JSON: {str.GetVisibleString ()}");
 
+            if (xResponse.Error != null)
+                return xResponse;
+
             if (xResponse.Choices == null)
                 throw new yyFormatException ($"The 'choices' property is missing: {str.GetVisibleString ()}");
 
@@ -48,6 +51,9 @@ namespace yyLib
 
                 if (xResponse == null)
                     throw new yyFormatException ($"Failed to deserialize JSON: {xJsonString.GetVisibleString ()}");
+
+                if (xResponse.Error != null)
+                    return xResponse;
 
                 if (xResponse.Choices == null)
                     throw new yyFormatException ($"The 'choices' property is missing: {xJsonString.GetVisibleString ()}");

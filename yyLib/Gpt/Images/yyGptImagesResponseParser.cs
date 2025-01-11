@@ -14,6 +14,9 @@ namespace yyLib
             if (xResponse == null)
                 throw new yyFormatException ($"Failed to deserialize JSON: {str.GetVisibleString ()}");
 
+            if (xResponse.Error != null)
+                return xResponse;
+
             if (xResponse.Data == null)
                 throw new yyFormatException ($"The 'data' property is missing: {str.GetVisibleString ()}");
 

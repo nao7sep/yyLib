@@ -20,6 +20,12 @@ namespace yyLibConsole
             {
                 var xFirstAssistantResponse = yyGptUtility.GenerateMessagesAsync (xConnectionInfo, xFirstAssistantRequest).Result;
 
+                if (xFirstAssistantResponse.ErrorMessage != null)
+                {
+                    Console.WriteLine ($"First Assistant: {xFirstAssistantResponse.ErrorMessage}");
+                    break;
+                }
+
                 string xGeneratedMessage = xFirstAssistantResponse.GeneratedMessages! [0];
                 Console.WriteLine ($"First Assistant: {xGeneratedMessage}");
 
@@ -36,6 +42,12 @@ namespace yyLibConsole
 
                 var xSecondAssistantResponse = yyGptUtility.GenerateMessagesChunksAsync (xConnectionInfo, xSecondAssistantRequest,
                     (index, content, cancellationToken) => _OnChunkRetrievedAsync (index, content, cancellationToken)).Result;
+
+                if (xSecondAssistantResponse.ErrorMessage != null)
+                {
+                    Console.WriteLine (xSecondAssistantResponse.ErrorMessage);
+                    break;
+                }
 
                 Console.WriteLine ();
 
@@ -63,6 +75,12 @@ namespace yyLibConsole
                     Console.WriteLine ($"Generating image ({xImagesRequest.ResponseFormat})...");
 
                     var xImagesResponse = yyGptUtility.GenerateImagesAsync (xImagesConnectionInfo, xImagesRequest).Result;
+
+                    if (xImagesResponse.ErrorMessage != null)
+                    {
+                        Console.WriteLine ($"Image generation failed: {xImagesResponse.ErrorMessage}");
+                        break;
+                    }
 
                     string xImagePartialFilePath = yyPath.Join (yySpecialDirectories.Desktop, "GptTest-" + yyConverter.DateTimeToRoundtripFileNameString (DateTime.UtcNow)),
                            xImageFilePath = xImagePartialFilePath + ".png",
