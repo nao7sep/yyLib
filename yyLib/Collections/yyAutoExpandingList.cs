@@ -2,44 +2,44 @@
 
 namespace yyLib
 {
-    public class yyAutoExpandingList <T>: IEnumerable <T> where T: new ()
+    public class yyAutoExpandingList <ItemType>: IEnumerable <ItemType> where ItemType: new ()
     {
-        public List <T> Items { get; } = [];
+        public List <ItemType> Items { get; } = [];
 
         public int Count => Items.Count;
 
-        private void EnsureCapacity (int capacity)
+        private void _EnsureCapacity (int capacity)
         {
             while (Items.Count < capacity)
-                Items.Add (new T ());
+                Items.Add (new ItemType ());
         }
 
-        public T this [int index]
+        public ItemType this [int index]
         {
             get
             {
-                EnsureCapacity (index + 1);
+                _EnsureCapacity (index + 1);
                 return Items [index];
             }
 
             set
             {
-                EnsureCapacity (index + 1);
+                _EnsureCapacity (index + 1);
                 Items [index] = value;
             }
         }
 
-        public bool Contains (T item) => Items.Contains (item);
+        public bool Contains (ItemType item) => Items.Contains (item);
 
-        public void Add (T item) => Items.Add (item);
+        public void Add (ItemType item) => Items.Add (item);
 
-        public IEnumerator <T> GetEnumerator () => Items.GetEnumerator ();
+        public IEnumerator <ItemType> GetEnumerator () => Items.GetEnumerator ();
 
         IEnumerator IEnumerable.GetEnumerator () => GetEnumerator ();
 
-        public void CopyTo (T [] array, int arrayIndex) => Items.CopyTo (array, arrayIndex);
+        public void CopyTo (ItemType [] array, int arrayIndex) => Items.CopyTo (array, arrayIndex);
 
-        public bool Remove (T item) => Items.Remove (item);
+        public bool Remove (ItemType item) => Items.Remove (item);
 
         public void Clear () => Items.Clear ();
     }

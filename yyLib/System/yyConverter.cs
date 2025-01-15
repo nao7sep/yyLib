@@ -53,10 +53,10 @@ namespace yyLib
         // Enum
         // -----------------------------------------------------------------------------
 
-        public static string EnumToString <T> (T value) where T: struct, Enum
+        public static string EnumToString <EnumType> (EnumType value) where EnumType: struct, Enum
         {
-            if (Enum.IsDefined (typeof (T), value) == false)
-                throw new yyArgumentException ($"Invalid {typeof (T).Name} value: {value}");
+            if (Enum.IsDefined (typeof (EnumType), value) == false)
+                throw new yyArgumentException ($"Invalid {typeof (EnumType).Name} value: {value}");
 
             return value.ToString ();
         }
@@ -65,34 +65,34 @@ namespace yyLib
         // If the converted value is handled carefully, no security concerns should arise.
         // https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/enums
 
-        public static T StringToEnum <T> (string str, bool ignoreCase = true) where T: struct, Enum
+        public static EnumType StringToEnum <EnumType> (string str, bool ignoreCase = true) where EnumType: struct, Enum
         {
-            if (Enum.TryParse <T> (str, ignoreCase: ignoreCase, out T xValue) == false)
-                throw new yyArgumentException ($"Invalid {typeof (T).Name} string: {str}");
+            if (Enum.TryParse <EnumType> (str, ignoreCase: ignoreCase, out EnumType xValue) == false)
+                throw new yyArgumentException ($"Invalid {typeof (EnumType).Name} string: {str}");
 
             return xValue;
         }
 
-        public static bool TryStringToEnum <T> (string str, out T value, bool ignoreCase = true) where T: struct, Enum =>
-            Enum.TryParse <T> (str, ignoreCase: ignoreCase, out value);
+        public static bool TryStringToEnum <EnumType> (string str, out EnumType value, bool ignoreCase = true) where EnumType: struct, Enum =>
+            Enum.TryParse <EnumType> (str, ignoreCase: ignoreCase, out value);
 
-        public static T ValueToEnum <T> (object value) where T: struct, Enum
+        public static EnumType ValueToEnum <EnumType> (object value) where EnumType: struct, Enum
         {
-            if (Enum.IsDefined (typeof (T), value) == false)
-                throw new yyArgumentException ($"Invalid {typeof (T).Name} value: {value}");
+            if (Enum.IsDefined (typeof (EnumType), value) == false)
+                throw new yyArgumentException ($"Invalid {typeof (EnumType).Name} value: {value}");
 
-            return (T) value;
+            return (EnumType) value;
         }
 
-        public static bool TryValueToEnum <T> (object value, out T enum_value) where T: struct, Enum
+        public static bool TryValueToEnum <EnumType> (object value, out EnumType enum_value) where EnumType: struct, Enum
         {
-            if (Enum.IsDefined (typeof (T), value) == false)
+            if (Enum.IsDefined (typeof (EnumType), value) == false)
             {
                 enum_value = default;
                 return false;
             }
 
-            enum_value = (T) value;
+            enum_value = (EnumType) value;
             return true;
         }
 
