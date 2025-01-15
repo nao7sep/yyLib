@@ -8,15 +8,15 @@ namespace yyLibConsole
         {
             try
             {
-                // API key must be specified in user secrets.
+                // API key must be specified in user secrets or app settings.
                 // GptTest.Run (
                 //     firstAssistantSystemMessage: "You always say a random word.",
                 //     secondAssistantSystemMessage: "You always make a random sentence using the provided word.",
                 //     interactionCount: 10);
 
                 // Set "from" and "to" email addresses for testing.
-                // Default connection must be specified in user secrets.
-                // MailTest.Run (from: "", to: "");
+                // Default connection must be specified in user secrets or app settings.
+                // MailTest.Run (from: string.Empty, to: string.Empty);
             }
 
             catch (Exception xException)

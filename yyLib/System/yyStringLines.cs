@@ -4,7 +4,7 @@
     {
         public static IEnumerable <string> EnumerateLines (string? str)
         {
-            // Console.Write (new StringReader ("").ReadLine () == null) displays True.
+            // Console.Write (new StringReader (string.Empty).ReadLine () == null) displays True.
             // If 'str' is null or empty, it must be an empty enumerator.
 
             if (string.IsNullOrEmpty (str))

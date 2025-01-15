@@ -11,7 +11,7 @@ namespace yyLib
 
     public class yyAssemblyInfo
     {
-        public Assembly Assembly { get; init; }
+        public Assembly Assembly { get; set; }
 
         // -----------------------------------------------------------------------------
         // Used Frequently

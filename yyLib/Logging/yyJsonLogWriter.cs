@@ -1,13 +1,67 @@
 ﻿using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace yyLib
 {
-    public class yyJsonLogWriter (string directoryPath, Encoding? encoding = null): yyLogWriterInterface
+    public class yyJsonLogWriter: yyLogWriterInterface
     {
-        public string DirectoryPath { get; init; } = directoryPath;
+        private string? _relativeDirectoryPath;
 
-        public Encoding Encoding { get; init; } = encoding ?? Encoding.UTF8;
+        [JsonPropertyName ("relative_directory_path")]
+        public string? RelativeDirectoryPath
+        {
+            get => _relativeDirectoryPath;
+
+            set
+            {
+                if (value != null)
+                {
+                    if (string.IsNullOrWhiteSpace (value) || Path.IsPathFullyQualified (value))
+                        throw new yyInvalidDataException ($"'{nameof (RelativeDirectoryPath)}' is invalid: {value.GetVisibleString ()}");
+
+                    _relativeDirectoryPath = value;
+                    DirectoryPath = yyAppDirectory.MapPath (value);
+                }
+
+                // This is a nullable property, which can actually be set to null.
+                else
+                {
+                    _relativeDirectoryPath = null;
+                    DirectoryPath = null;
+                }
+            }
+        }
+
+        [JsonIgnore]
+        public string? DirectoryPath { get; private set; }
+
+        private string? _encodingName;
+
+        [JsonPropertyName ("encoding_name")]
+        public string? EncodingName
+        {
+            get => _encodingName;
+
+            set
+            {
+                if (value != null)
+                {
+                    // GetEncoding must be called first to throw an exception if the encoding name is invalid.
+                    Encoding = Encoding.GetEncoding (value);
+                    _encodingName = value;
+                }
+
+                else
+                {
+                    _encodingName = null;
+                    Encoding = null;
+                }
+            }
+        }
+
+        [JsonIgnore]
+        public Encoding? Encoding { get; private set; }
 
         public void Write (DateTime createdAtUtc, string key, string value)
         {
@@ -26,8 +80,8 @@ namespace yyLib
 
             string xFileContents = JsonSerializer.Serialize (xLog, yyJson.DefaultSerializationOptions);
 
-            yyDirectory.Create (DirectoryPath);
-            File.WriteAllText (xFilePath, xFileContents, Encoding);
+            yyDirectory.Create (DirectoryPath!); // Should throw if null.
+            File.WriteAllText (xFilePath, xFileContents, Encoding ?? Encoding.UTF8);
         }
     }
 }

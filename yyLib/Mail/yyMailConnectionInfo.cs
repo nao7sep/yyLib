@@ -26,7 +26,7 @@ namespace yyLib
         public string? Password { get; set; }
 
         // -----------------------------------------------------------------------------
-        // Default Connection
+        // Default
         // -----------------------------------------------------------------------------
 
         private static yyMailConnectionInfo _CreateDefault ()

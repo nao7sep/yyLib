@@ -1,14 +1,44 @@
 ﻿using System.Data.SQLite;
+using System.Text.Json.Serialization;
 
 namespace yyLib
 {
-    public class yySqliteLogWriter (string connectionString, string tableName): yyLogWriterInterface
+    public class yySqliteLogWriter: yyLogWriterInterface
     {
         private static readonly object _lock = new ();
 
-        public string ConnectionString { get; init; } = connectionString;
+        private string? _relativeFilePath;
 
-        public string TableName { get; init; } = tableName;
+        [JsonPropertyName ("relative_file_path")]
+        public string? RelativeFilePath
+        {
+            get => _relativeFilePath;
+
+            set
+            {
+                if (value != null)
+                {
+                    if (string.IsNullOrWhiteSpace (value) || Path.IsPathFullyQualified (value))
+                        throw new yyInvalidDataException ($"'{nameof (RelativeFilePath)}' is invalid: {value.GetVisibleString ()}");
+
+                    _relativeFilePath = value;
+                    ConnectionString = $"Data Source={yyAppDirectory.MapPath (value)}";
+                }
+
+                // This is a nullable property, which can actually be set to null.
+                else
+                {
+                    _relativeFilePath = null;
+                    ConnectionString = null;
+                }
+            }
+        }
+
+        [JsonIgnore]
+        public string? ConnectionString { get; private set; }
+
+        [JsonPropertyName ("table_name")]
+        public string? TableName { get; set; }
 
         public void Write (DateTime createdAtUtc, string key, string value)
         {

@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using System.Text;
+﻿using System.Text.Json.Serialization;
+using Microsoft.Extensions.Configuration;
 
 namespace yyLib
 {
@@ -10,77 +10,44 @@ namespace yyLib
     // We can change WritesToTextFile/WritesToJsonFiles anytime as there's no caching involved. => And also WritesToSqliteDatabase.
     // Added comment: JSON is still the default mode as it's reliable, entry-based and human-readable.
 
-    public class yyLogger: IEnumerable <yyLog>
+    // The yyLogger class previously inherited from IEnumerable<yyLog> to allow iteration over logs.
+    // However, this caused issues with JSON deserialization because System.Text.Json mistakenly
+    // treated yyLogger as a collection rather than an object. As a result, any JSON nodes that
+    // mapped to yyLogger were incorrectly expected to be arrays, leading to deserialization failures.
+
+    public class yyLogger // : IEnumerable <yyLog>
     {
         /// <summary>
         /// Does not reload logs from previous sessions.
         /// Consider this to be a toilet-type, last-chance log storage.
         /// </summary>
+        [JsonIgnore]
         public List <yyLog> RecentLogs { get; } = [];
 
-        public int RecentLogCount => RecentLogs.Count;
+        // Other methods for RecentLogs removed.
+        // Currently, it's my laziness-based design pattern that only Add* methods are defined for collections within classes.
+        // This makes some sense because creating and adding an object can often be sugar-coated effectively,
+        // while there are few ways to shorten code that accesses nested properties and methods.
 
-        public yyLog this [int index]
-        {
-            get => RecentLogs [index];
-            set => RecentLogs [index] = value;
-        }
+        public void AddRecentLog (yyLog log) => RecentLogs.Add (log);
 
-        public bool Contains (yyLog log) => RecentLogs.Contains (log);
+        [JsonPropertyName ("writes_to_text_file")]
+        public bool? WritesToTextFile { get; set; }
 
-        public void Add (yyLog log) => RecentLogs.Add (log);
+        [JsonPropertyName ("text_log_writer")]
+        public yyTextLogWriter? TextLogWriter { get; set; }
 
-        public IEnumerator <yyLog> GetEnumerator () => RecentLogs.GetEnumerator ();
+        [JsonPropertyName ("writes_to_json_files")]
+        public bool? WritesToJsonFiles { get; set; }
 
-        IEnumerator IEnumerable.GetEnumerator () => GetEnumerator ();
+        [JsonPropertyName ("json_log_writer")]
+        public yyJsonLogWriter? JsonLogWriter { get; set; }
 
-        public void CopyTo (yyLog [] array, int arrayIndex) => RecentLogs.CopyTo (array, arrayIndex);
+        [JsonPropertyName ("writes_to_sqlite_database")]
+        public bool? WritesToSqliteDatabase { get; set; }
 
-        public bool Remove (yyLog log) => RecentLogs.Remove (log);
-
-        public void Clear () => RecentLogs.Clear ();
-
-        // -----------------------------------------------------------------------------
-
-        public bool WritesToTextFile { get; set; }
-
-        public yyTextLogWriter? TextLogWriter { get; init; }
-
-        public bool WritesToJsonFiles { get; set; }
-
-        public yyJsonLogWriter? JsonLogWriter { get; init; }
-
-        public bool WritesToSqliteDatabase { get; set; }
-
-        public yySqliteLogWriter? SqliteLogWriter { get; init; }
-
-        public yyLogger (bool writesToTextFile = false, string? textLogWriterFilePath = null,
-                         bool writesToJsonFiles = false, string? jsonLogWriterDirectoryPath = null, // writesToJsonFiles used to default to true.
-                         bool writesToSqliteDatabase = false, string? sqliteLogWriterConnectionString = null, string? sqliteLogWriterTableName = null,
-                         Encoding? encoding = null)
-        {
-            // The boolean values indicating whether to write in each mode and the actual paths to write to are decoupled.
-            // The former must have the right values only upon writing each log.
-            // The latter are init properties and therefore must be initialized in the constructor.
-
-            if (textLogWriterFilePath == null && jsonLogWriterDirectoryPath == null && (sqliteLogWriterConnectionString == null || sqliteLogWriterTableName == null))
-                throw new yyArgumentException ($"Either '{nameof (textLogWriterFilePath)}' or '{nameof (jsonLogWriterDirectoryPath)}' or '{nameof (sqliteLogWriterConnectionString)}' and '{nameof (sqliteLogWriterTableName)}' must be specified.");
-
-            WritesToTextFile = writesToTextFile;
-
-            if (textLogWriterFilePath != null)
-                TextLogWriter = new (textLogWriterFilePath, encoding ?? Encoding.UTF8);
-
-            WritesToJsonFiles = writesToJsonFiles;
-
-            if (jsonLogWriterDirectoryPath != null)
-                JsonLogWriter = new (jsonLogWriterDirectoryPath, encoding ?? Encoding.UTF8);
-
-            WritesToSqliteDatabase = writesToSqliteDatabase;
-
-            if (sqliteLogWriterConnectionString != null && sqliteLogWriterTableName != null)
-                SqliteLogWriter = new (sqliteLogWriterConnectionString, sqliteLogWriterTableName);
-        }
+        [JsonPropertyName ("sqlite_log_writer")]
+        public yySqliteLogWriter? SqliteLogWriter { get; set; }
 
         /// <summary>
         /// Use TryWrite unless you need to handle exceptions.
@@ -89,7 +56,7 @@ namespace yyLib
         {
             DateTime xCreatedAtUtc = DateTime.UtcNow;
 
-            RecentLogs.Add (new ()
+            AddRecentLog (new ()
             {
                 CreatedAtUtc = xCreatedAtUtc,
                 Key = key,
@@ -100,13 +67,13 @@ namespace yyLib
             // 1) We might eventually need to add a writer that writes to a database or the OS event log. => Just added one.
             // 2) Loggers shouldnt throw exceptions and the recommended TryWrite methods will ignore any exceptions.
 
-            if (WritesToTextFile)
+            if (WritesToTextFile == true)
                 TextLogWriter?.Write (xCreatedAtUtc, key, value);
 
-            if (WritesToJsonFiles)
+            if (WritesToJsonFiles == true)
                 JsonLogWriter?.Write (xCreatedAtUtc, key, value);
 
-            if (WritesToSqliteDatabase)
+            if (WritesToSqliteDatabase == true)
                 SqliteLogWriter?.Write (xCreatedAtUtc, key, value);
         }
 
@@ -142,29 +109,21 @@ namespace yyLib
         public bool TryWriteException (Exception exception) => TryWrite ("Exception", exception.ToString ());
 
         // -----------------------------------------------------------------------------
-        // Static Members
+        // Default
         // -----------------------------------------------------------------------------
 
-        private static readonly Lazy <string> _defaultTextLogWriterFilePath = new (() => yyAppDirectory.MapPath ("Logs.txt"));
+        private static yyLogger _CreateDefault ()
+        {
+            if (yyAppSettings.Config.GetSection ("logger").Get <yyLogger> () is { } xLogger)
+                return xLogger;
 
-        public static string DefaultTextLogWriterFilePath => _defaultTextLogWriterFilePath.Value;
+            if (yyUserSecrets.Default.Logger != null)
+                return yyUserSecrets.Default.Logger;
 
-        private static readonly Lazy <string> _defaultJsonLogWriterDirectoryPath = new (() => yyAppDirectory.MapPath ("Logs"));
+            return new yyLogger ();
+        }
 
-        public static string DefaultJsonLogWriterDirectoryPath => _defaultJsonLogWriterDirectoryPath.Value;
-
-        // Backslashes should be handled well.
-        // If the path may contain spaces or semicolons, it should be enclosed in double quotes.
-        private static readonly Lazy <string> _defaultSqliteLogWriterConnectionString = new (() => $"Data Source=\"{yyAppDirectory.MapPath ("Logs.db")}\"");
-
-        public static string DefaultSqliteLogWriterConnectionString => _defaultSqliteLogWriterConnectionString.Value;
-
-        public static string DefaultSqliteLogWriterTableName { get; } = "Logs";
-
-        private static readonly Lazy <yyLogger> _default = new (() =>
-            new yyLogger (writesToTextFile: false, DefaultTextLogWriterFilePath,
-                          writesToJsonFiles: true, DefaultJsonLogWriterDirectoryPath,
-                          writesToSqliteDatabase: false, DefaultSqliteLogWriterConnectionString, DefaultSqliteLogWriterTableName));
+        private static readonly Lazy <yyLogger> _default = new (_CreateDefault ());
 
         public static yyLogger Default => _default.Value;
     }
