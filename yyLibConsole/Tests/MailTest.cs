@@ -7,7 +7,8 @@ namespace yyLibConsole
     {
         public static void Run (string from, string to)
         {
-            yyMailConnectionInfo? xConnectionInfo = yyMail.DefaultConnection;
+            // One must be provided in user secrets or app settings.
+            yyMailConnectionInfo? xConnectionInfo = yyMailConnectionInfo.Default;
 
             yyMailMessage xMessage = new ();
             (xMessage.From ??= []).Add (new yyMailContact (from));
