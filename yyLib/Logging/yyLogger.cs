@@ -112,6 +112,27 @@ namespace yyLib
         // Default
         // -----------------------------------------------------------------------------
 
+        // ⚠️ Avoid 'const' for values that may change in the future!
+        //
+        // 🔹 Why?
+        // - 'const' values are **inlined at compile time**, meaning updates require recompilation.
+        // - This can lead to outdated values in consuming assemblies, causing unexpected bugs.
+        //
+        // 🔹 Use 'const' for truly immutable values (e.g., Pi).
+        // 🔹 Use 'static readonly' for config values, file paths, or settings to allow updates at runtime.
+
+        public static readonly bool DefaultWritesToTextFile = false;
+        public static readonly string TextLogWriterDefaultRelativeFilePath = "Logs.txt";
+        public static readonly string TextLogWriterDefaultEncodingName = "utf-8";
+
+        public static readonly bool DefaultWritesToJsonFiles = true;
+        public static readonly string JsonLogWriterDefaultRelativeDirectoryPath = "Logs";
+        public static readonly string JsonLogWriterDefaultEncodingName = "utf-8";
+
+        public static readonly bool DefaultWritesToSqliteDatabase = false;
+        public static readonly string SqliteLogWriterDefaultRelativeFilePath = "Logs.db";
+        public static readonly string SqliteLogWriterDefaultTableName = "Logs";
+
         private static yyLogger _CreateDefault ()
         {
             if (yyAppSettings.Config.GetSection ("logger").Get <yyLogger> () is { } xLogger)
@@ -120,7 +141,32 @@ namespace yyLib
             if (yyUserSecrets.Default.Logger != null)
                 return yyUserSecrets.Default.Logger;
 
-            return new yyLogger ();
+            return new yyLogger
+            {
+                WritesToTextFile = DefaultWritesToTextFile,
+
+                TextLogWriter = new yyTextLogWriter
+                {
+                    RelativeFilePath = TextLogWriterDefaultRelativeFilePath,
+                    EncodingName = TextLogWriterDefaultEncodingName
+                },
+
+                WritesToJsonFiles = DefaultWritesToJsonFiles,
+
+                JsonLogWriter = new yyJsonLogWriter
+                {
+                    RelativeDirectoryPath = JsonLogWriterDefaultRelativeDirectoryPath,
+                    EncodingName = JsonLogWriterDefaultEncodingName
+                },
+
+                WritesToSqliteDatabase = DefaultWritesToSqliteDatabase,
+
+                SqliteLogWriter = new yySqliteLogWriter
+                {
+                    RelativeFilePath = SqliteLogWriterDefaultRelativeFilePath,
+                    TableName = SqliteLogWriterDefaultTableName
+                }
+            };
         }
 
         private static readonly Lazy <yyLogger> _default = new (_CreateDefault ());
