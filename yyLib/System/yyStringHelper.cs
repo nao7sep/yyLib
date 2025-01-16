@@ -141,5 +141,22 @@ namespace yyLib
 
             return xBuilder.ToString ();
         }
+
+        public static string Repeat (this string str, int count)
+        {
+            if (string.IsNullOrEmpty (str))
+                return str;
+
+            if (count < 0)
+                throw new yyArgumentException ("The count must be greater than or equal to zero.");
+
+            if (count == 0)
+                return string.Empty; // They held the pen and didnt draw anything rather than they didnt even hold the pen.
+
+            if (count == 1)
+                return str;
+
+            return string.Concat (Enumerable.Repeat (str, count));
+        }
     }
 }
