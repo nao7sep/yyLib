@@ -32,7 +32,9 @@
         "string",
         true,
         null,
-        { "key": "value" },
+        {
+            "key": "value"
+        },
         [
             "nested array",
             []
@@ -63,7 +65,9 @@
     },
     "largeNumber": 123456789012345678901234567890,
     "scientificNotation": 1.23e-10,
-    "keyWithColon": { "key:with:colons": "value" },
+    "keyWithColon": {
+        "key:with:colons": "value"
+    },
     "keysWithSpaces": {
         "key with space": "value"
     },
