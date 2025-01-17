@@ -38,7 +38,7 @@
             if (paths.Length < 2)
                 throw new yyArgumentException ("At least two paths are required.");
 
-            List <string> xTrimmedPaths = new ();
+            List <string> xTrimmedPaths = [];
 
             xTrimmedPaths.Add (paths [0].TrimEnd (Separators));
             xTrimmedPaths.AddRange (paths [1..^1].Select (x => x.Trim (Separators)));
@@ -71,7 +71,7 @@
         // https://github.com/dotnet/runtime/blob/2b60d82ef3e87876128b7f71922a1b72908b6fcf/src/libraries/System.Private.CoreLib/src/System/IO/Path.Windows.cs
         // https://github.com/dotnet/runtime/blob/2b60d82ef3e87876128b7f71922a1b72908b6fcf/src/libraries/System.Private.CoreLib/src/System/IO/Path.Unix.cs
 
-        private static Lazy <char []> _invalidFileNameChars = new (() =>
+        private static readonly Lazy <char []> _invalidFileNameChars = new (() =>
         {
             List <char> xInvalidFileNameChars =
             [
@@ -91,7 +91,7 @@
 
         public static char [] InvalidFileNameChars => _invalidFileNameChars.Value;
 
-        private static Lazy <HashSet <char>> _invalidFileNameCharsSet = new (() => new HashSet <char> (InvalidFileNameChars));
+        private static readonly Lazy <HashSet <char>> _invalidFileNameCharsSet = new (() => new HashSet <char> (InvalidFileNameChars));
 
         public static HashSet <char> InvalidFileNameCharsSet => _invalidFileNameCharsSet.Value;
 
@@ -105,7 +105,7 @@
             return fileName.ReplaceAll (InvalidFileNameCharsSet, replacement);
         }
 
-        private static Lazy <char []> _invalidPathChars = new (() =>
+        private static readonly Lazy <char []> _invalidPathChars = new (() =>
         {
             List <char> xInvalidPathChars =
             [
@@ -123,7 +123,7 @@
 
         public static char [] InvalidPathChars => _invalidPathChars.Value;
 
-        private static Lazy <HashSet <char>> _invalidPathCharsSet = new (() => new HashSet <char> (InvalidPathChars));
+        private static readonly Lazy <HashSet <char>> _invalidPathCharsSet = new (() => new HashSet <char> (InvalidPathChars));
 
         public static HashSet <char> InvalidPathCharsSet => _invalidPathCharsSet.Value;
 

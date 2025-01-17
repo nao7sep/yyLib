@@ -10,7 +10,7 @@
             using StringReader xReader = new (str);
             string? xLine;
 
-            List <string> xParagraph = new ();
+            List <string> xParagraph = [];
             bool xIsFirstVisibleLineDetected = false;
 
             while ((xLine = xReader.ReadLine ()) != null)
@@ -34,7 +34,7 @@
                         if (xParagraph.Count > 0)
                         {
                             yield return xParagraph;
-                            xParagraph = new ();
+                            xParagraph = [];
                         }
 
                         continue;

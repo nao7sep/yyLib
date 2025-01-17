@@ -113,7 +113,7 @@ namespace yyLib
 
         public void AddAttachment (yyMailAttachment attachment)
         {
-            Attachments ??= new List <yyMailAttachment> ();
+            Attachments ??= [];
             Attachments.Add (attachment);
         }
 
@@ -121,7 +121,7 @@ namespace yyLib
 
         public void AddBcc (yyMailContact contact)
         {
-            Bcc ??= new List <yyMailContact> ();
+            Bcc ??= [];
             Bcc.Add (contact);
         }
 
@@ -129,7 +129,7 @@ namespace yyLib
 
         public void AddCc (yyMailContact contact)
         {
-            Cc ??= new List <yyMailContact> ();
+            Cc ??= [];
             Cc.Add (contact);
         }
 
@@ -137,7 +137,7 @@ namespace yyLib
 
         public void AddFrom (yyMailContact contact)
         {
-            From ??= new List <yyMailContact> ();
+            From ??= [];
             From.Add (contact);
         }
 
@@ -151,19 +151,19 @@ namespace yyLib
 
         public void AddHtmlBodyTranslation (yyMailTranslation translation)
         {
-            HtmlBodyTranslations ??= new List <yyMailTranslation> ();
+            HtmlBodyTranslations ??= [];
             HtmlBodyTranslations.Add (translation);
         }
 
         public void AddReference (string reference)
         {
-            References ??= new List <string> ();
+            References ??= [];
             References.Add (reference);
         }
 
         public void AddReplyTo (yyMailContact contact)
         {
-            ReplyTo ??= new List <yyMailContact> ();
+            ReplyTo ??= [];
             ReplyTo.Add (contact);
         }
 
@@ -171,19 +171,19 @@ namespace yyLib
 
         public void AddSubjectTranslation (yyMailTranslation translation)
         {
-            SubjectTranslations ??= new List <yyMailTranslation> ();
+            SubjectTranslations ??= [];
             SubjectTranslations.Add (translation);
         }
 
         public void AddTextBodyTranslation (yyMailTranslation translation)
         {
-            TextBodyTranslations ??= new List <yyMailTranslation> ();
+            TextBodyTranslations ??= [];
             TextBodyTranslations.Add (translation);
         }
 
         public void AddTo (yyMailContact contact)
         {
-            To ??= new List <yyMailContact> ();
+            To ??= [];
             To.Add (contact);
         }
 

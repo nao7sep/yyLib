@@ -36,7 +36,7 @@ namespace yyLib
 
         public void AddPreferredLanguage (string language)
         {
-            PreferredLanguages ??= new List <string> ();
+            PreferredLanguages ??= [];
             PreferredLanguages.Add (language);
         }
     }

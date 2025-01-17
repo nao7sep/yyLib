@@ -32,7 +32,7 @@ namespace yyLibConsole
                 xFirstAssistantRequest.AddAssistantMessage (xGeneratedMessage);
                 xSecondAssistantRequest.AddUserMessage (xGeneratedMessage);
 
-                Task _OnChunkRetrievedAsync (int index, string content, CancellationToken cancellationToken)
+                static Task _OnChunkRetrievedAsync (int index, string content, CancellationToken cancellationToken)
                 {
                     Console.Write (content);
                     return Task.CompletedTask;

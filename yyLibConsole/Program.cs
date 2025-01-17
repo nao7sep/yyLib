@@ -1,9 +1,12 @@
-﻿using yyLib;
+﻿using System.Diagnostics.CodeAnalysis;
+using yyLib;
 
 namespace yyLibConsole
 {
     class Program
     {
+        // Suppresses the warning for unused method parameters.
+        [SuppressMessage ("Style", "IDE0060")]
         static void Main (string [] args)
         {
             try

@@ -72,8 +72,13 @@
         "key with space": "value"
     },
     "duplicateKeys": {
+        "_comment": [
+            "This object demonstrates intentional duplicate keys for testing purposes.",
+            "The second key has been temporarily renamed to '_key' to avoid IDE warnings.",
+            "To perform the test as intended, change '_key' back to 'key'."
+        ],
         "key": "value1",
-        "key": "value2"
+        "_key": "value2"
     },
     "unicodeKeys": {
         "\u4f60\u597d": "hello in Chinese"

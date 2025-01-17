@@ -41,25 +41,24 @@ namespace yyLib
 
             var xJsonString = JsonSerializer.Serialize (request, yyJson.DefaultSerializationOptions);
 
-            using (var xContent = new StringContent (xJsonString, Encoding.UTF8, "application/json"))
-            using (var xMessage = new HttpRequestMessage (HttpMethod.Post, ConnectionInfo.Endpoint) { Content = xContent })
-            {
-                var xResponse = await HttpClient.SendAsync (xMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            using var xContent = new StringContent (xJsonString, Encoding.UTF8, "application/json");
+            using var xMessage = new HttpRequestMessage (HttpMethod.Post, ConnectionInfo.Endpoint) { Content = xContent };
 
-                // Commented out to receive error messages.
-                // xResponse.EnsureSuccessStatusCode ();
+            var xResponse = await HttpClient.SendAsync (xMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
-                ResponseMessage?.Dispose ();
-                ResponseMessage = xResponse;
+            // Commented out to receive error messages.
+            // xResponse.EnsureSuccessStatusCode ();
 
-                ResponseStream?.Dispose ();
-                ResponseStream = await xResponse.Content.ReadAsStreamAsync (cancellationToken);
+            ResponseMessage?.Dispose ();
+            ResponseMessage = xResponse;
 
-                ResponseStreamReader?.Dispose ();
-                ResponseStreamReader = new StreamReader (ResponseStream);
+            ResponseStream?.Dispose ();
+            ResponseStream = await xResponse.Content.ReadAsStreamAsync (cancellationToken);
 
-                return (xResponse, ResponseStream);
-            }
+            ResponseStreamReader?.Dispose ();
+            ResponseStreamReader = new StreamReader (ResponseStream);
+
+            return (xResponse, ResponseStream);
         }
 
         public async Task <string?> ReadToEndAsync (CancellationToken cancellationToken = default)
@@ -90,6 +89,12 @@ namespace yyLib
 
             ResponseStreamReader?.Dispose ();
             ResponseStreamReader = null;
+
+            // Prevents the garbage collector from calling the finalizer for this object.
+            // This is used because the Dispose method has already cleaned up resources, making finalization unnecessary.
+            // Suppressing finalization improves performance by avoiding redundant cleanup during garbage collection.
+            // https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1816
+            GC.SuppressFinalize (this);
         }
     }
 }

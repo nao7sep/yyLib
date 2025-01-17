@@ -14,7 +14,7 @@ namespace yyLibConsole
 
             void _DisplayElement (string? key, JsonElement element, int indentLevel, bool isArrayElement)
             {
-                string xFullIndent = new string (' ', indentLevel * 4),
+                string xFullIndent = new (' ', indentLevel * 4),
                        xKeyPart1 = string.IsNullOrEmpty (key) == false ? $" {JsonSerializer.Serialize (key)}" : string.Empty,
                        xKeyPart2 = isArrayElement ? string.Empty : $"{JsonSerializer.Serialize (key)}: ";
 
@@ -49,7 +49,7 @@ namespace yyLibConsole
                 else if (element.ValueKind == JsonValueKind.Number)
                     Console.WriteLine ($"{xFullIndent}{xKeyPart2}{element.GetDouble ()}");
 
-                else if (element.ValueKind == JsonValueKind.True || element.ValueKind == JsonValueKind.False)
+                else if (element.ValueKind is JsonValueKind.True or JsonValueKind.False)
                     Console.WriteLine ($"{xFullIndent}{xKeyPart2}{element.GetBoolean ()}");
 
                 else if (element.ValueKind == JsonValueKind.Null)

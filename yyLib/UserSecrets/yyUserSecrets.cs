@@ -19,8 +19,8 @@ namespace yyLib
 
         public static string DefaultFileName { get; } = ".yyUserSecrets.json";
 
-        private static readonly Lazy <string []> _defaultFilePaths = new (() => new []
-        {
+        private static readonly Lazy <string []> _defaultFilePaths = new (() =>
+        [
             // By default, the following file paths are tried in order.
             // If any file exists, yyUserSecretsLoader.Load attempts to deserialize it and tries no more.
 
@@ -29,7 +29,7 @@ namespace yyLib
             Path.Join (yySpecialDirectories.LocalAppData, DefaultFileName),
             Path.Join (yySpecialDirectories.CommonAppData, DefaultFileName),
             yyAppDirectory.MapPath (DefaultFileName)
-        });
+        ]);
 
         public static string [] DefaultFilePaths => _defaultFilePaths.Value;
 

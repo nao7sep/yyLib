@@ -55,7 +55,7 @@ namespace yyLib
 
         public static string EnumToString <EnumType> (EnumType value) where EnumType: struct, Enum
         {
-            if (Enum.IsDefined (typeof (EnumType), value) == false)
+            if (Enum.IsDefined (value) == false) // Using the generic method to avoid boxing.
                 throw new yyArgumentException ($"Invalid {typeof (EnumType).Name} value: {value}");
 
             return value.ToString ();

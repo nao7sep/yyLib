@@ -135,7 +135,7 @@ namespace yyLib
         /// </summary>
         public string? GetVisibleStrings (string? newLine = null) // Plural.
         {
-            List <string> xLines = new ();
+            List <string> xLines = [];
 
             // Version.ToString refers to DefaultFormatFieldCount and generates a 2-3 field string if the trailing fields are not specified.
             // https://source.dot.net/#System.Private.CoreLib/src/libraries/System.Private.CoreLib/src/System/Version.cs

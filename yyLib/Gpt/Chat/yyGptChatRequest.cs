@@ -15,7 +15,7 @@ namespace yyLib
 
         public void AddMessage (yyGptChatRole role, string content, string? name = null)
         {
-            Messages ??= new List <yyGptChatMessage> ();
+            Messages ??= [];
 
             Messages.Add (new yyGptChatMessage
             {

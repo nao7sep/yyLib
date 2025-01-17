@@ -6,7 +6,7 @@ namespace yyLib
 {
     public class yyTextLogWriter: yyLogWriterInterface
     {
-        private static readonly object _lock = new ();
+        private static readonly Lock _lock = new ();
 
         private string? _relativeFilePath;
 
