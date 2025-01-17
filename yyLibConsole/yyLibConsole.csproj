@@ -40,7 +40,7 @@
         <None Update="TestData\json_edge_cases.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-            <!-- Output to the same directory as the executable file. -->
+            <!-- Output to the same directory as the executable file.
                  https://github.com/dotnet/msbuild/issues/2795 -->
             <Link>json_edge_cases.json</Link>
         </None>
