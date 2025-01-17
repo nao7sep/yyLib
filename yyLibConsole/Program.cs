@@ -14,6 +14,8 @@ namespace yyLibConsole
                 //     secondAssistantSystemMessage: "You always make a random sentence using the provided word.",
                 //     interactionCount: 10);
 
+                // JsonTest.Run ();
+
                 // Set "from" and "to" email addresses for testing.
                 // Default connection must be specified in user secrets or app settings.
                 // MailTest.Run (from: string.Empty, to: string.Empty);

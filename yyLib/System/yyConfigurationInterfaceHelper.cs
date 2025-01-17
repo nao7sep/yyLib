@@ -6,6 +6,12 @@ namespace yyLib
 {
     public static class yyConfigurationInterfaceHelper
     {
+        // 2025-01-17: Tested with json_edge_cases.json.
+        // Duplicate keys caused the parser to throw an exception.
+        // Empty arrays were recognized as objects.
+        // Key with colons was recognized as a nested object.
+        // Everything else seemed fine.
+
         public static string GetVisibleStrings (this IConfiguration config, string? singleIndent = null, string? newLine = null)
         {
             string xSingleIndent = singleIndent ?? yyString.DefaultSingleIndent,
@@ -16,7 +22,7 @@ namespace yyLib
             // IConfiguration is never null.
             xBuilder.Append ($"{{{xNewLine}");
 
-            void _AppendSection (IConfigurationSection section, int indentLevel, bool isArray, bool isLastChild)
+            void _AppendSection (IConfigurationSection section, int indentLevel, bool isArrayElement, bool isLastChild)
             {
                 string xFullIndent = xSingleIndent.Repeat (indentLevel),
                        xCommaPart = isLastChild ? "" : ",";
@@ -39,14 +45,14 @@ namespace yyLib
                         // https://learn.microsoft.com/en-us/dotnet/api/system.text.json.jsonserializer.serialize
                         string xEscapedValue = JsonSerializer.Serialize (section.Value);
 
-                        if (isArray)
-                            xBuilder.Append ($"{xFullIndent}\"{xEscapedValue}\"{xCommaPart}{xNewLine}");
-                        else xBuilder.Append ($"{xFullIndent}\"{section.Key}\": \"{xEscapedValue}\"{xCommaPart}{xNewLine}");
+                        if (isArrayElement)
+                            xBuilder.Append ($"{xFullIndent}{xEscapedValue}{xCommaPart}{xNewLine}");
+                        else xBuilder.Append ($"{xFullIndent}\"{section.Key}\": {xEscapedValue}{xCommaPart}{xNewLine}");
                     }
 
                     else
                     {
-                        if (isArray)
+                        if (isArrayElement)
                             xBuilder.Append ($"{xFullIndent}{{{xNewLine}");
                         else xBuilder.Append ($"{xFullIndent}\"{section.Key}\": {{{xNewLine}");
 
@@ -77,14 +83,14 @@ namespace yyLib
 
                     if (xChildren.All (x => int.TryParse (x.Key, out _)))
                     {
-                        if (isArray)
+                        if (isArrayElement)
                             xBuilder.Append ($"{xFullIndent}[{xNewLine}");
                         else xBuilder.Append ($"{xFullIndent}\"{section.Key}\": [{xNewLine}");
 
                         for (int temp = 0; temp < xChildren.Length; temp ++)
                         {
                             var xChild = xChildren [temp];
-                            _AppendSection (xChild, indentLevel + 1, isArray: true, isLastChild: temp == xChildren.Length - 1);
+                            _AppendSection (xChild, indentLevel + 1, isArrayElement: true, isLastChild: temp == xChildren.Length - 1);
                         }
 
                         xBuilder.Append ($"{xFullIndent}]{xCommaPart}{xNewLine}");
@@ -92,14 +98,14 @@ namespace yyLib
 
                     else
                     {
-                        if (isArray)
+                        if (isArrayElement)
                             xBuilder.Append ($"{xFullIndent}{{{xNewLine}");
                         else xBuilder.Append ($"{xFullIndent}\"{section.Key}\": {{{xNewLine}");
 
                         for (int temp = 0; temp < xChildren.Length; temp ++)
                         {
                             var xChild = xChildren [temp];
-                            _AppendSection (xChild, indentLevel + 1, isArray: false, isLastChild: temp == xChildren.Length - 1);
+                            _AppendSection (xChild, indentLevel + 1, isArrayElement: false, isLastChild: temp == xChildren.Length - 1);
                         }
 
                         xBuilder.Append ($"{xFullIndent}}}{xCommaPart}{xNewLine}");
@@ -112,7 +118,7 @@ namespace yyLib
             for (int temp = 0; temp < xRootChildren.Length; temp ++)
             {
                 var xChild = xRootChildren [temp];
-                _AppendSection (xChild, 1, isArray: false, isLastChild: temp == xRootChildren.Length - 1);
+                _AppendSection (xChild, 1, isArrayElement: false, isLastChild: temp == xRootChildren.Length - 1);
             }
 
             xBuilder.Append ($"}}{xNewLine}");
