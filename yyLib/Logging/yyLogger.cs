@@ -32,21 +32,27 @@ namespace yyLib
         public void AddRecentLog (yyLog log) => RecentLogs.Add (log);
 
         [JsonPropertyName ("writes_to_text_file")]
+        [ConfigurationKeyName ("writes_to_text_file")]
         public bool? WritesToTextFile { get; set; }
 
         [JsonPropertyName ("text_log_writer")]
+        [ConfigurationKeyName ("text_log_writer")]
         public yyTextLogWriter? TextLogWriter { get; set; }
 
         [JsonPropertyName ("writes_to_json_files")]
+        [ConfigurationKeyName ("writes_to_json_files")]
         public bool? WritesToJsonFiles { get; set; }
 
         [JsonPropertyName ("json_log_writer")]
+        [ConfigurationKeyName ("json_log_writer")]
         public yyJsonLogWriter? JsonLogWriter { get; set; }
 
         [JsonPropertyName ("writes_to_sqlite_database")]
+        [ConfigurationKeyName ("writes_to_sqlite_database")]
         public bool? WritesToSqliteDatabase { get; set; }
 
         [JsonPropertyName ("sqlite_log_writer")]
+        [ConfigurationKeyName ("sqlite_log_writer")]
         public yySqliteLogWriter? SqliteLogWriter { get; set; }
 
         /// <summary>
@@ -135,8 +141,12 @@ namespace yyLib
 
         private static yyLogger _CreateDefault ()
         {
-            if (yyAppSettings.Config.GetSection ("logger").Get <yyLogger> () is { } xLogger)
-                return xLogger;
+            var xLoggerSection = yyAppSettings.Config.GetSection ("logger");
+
+            if (xLoggerSection.Exists () &&
+                xLoggerSection.GetChildren ().Any () &&
+                xLoggerSection.Get <yyLogger> () is { } xLogger)
+                    return xLogger;
 
             if (yyUserSecrets.Default.Logger != null)
                 return yyUserSecrets.Default.Logger;

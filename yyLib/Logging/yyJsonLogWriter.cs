@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Microsoft.Extensions.Configuration;
 
 namespace yyLib
 {
@@ -9,6 +10,7 @@ namespace yyLib
         private string? _relativeDirectoryPath;
 
         [JsonPropertyName ("relative_directory_path")]
+        [ConfigurationKeyName ("relative_directory_path")]
         public string? RelativeDirectoryPath
         {
             get => _relativeDirectoryPath;
@@ -39,6 +41,7 @@ namespace yyLib
         private string? _encodingName;
 
         [JsonPropertyName ("encoding_name")]
+        [ConfigurationKeyName ("encoding_name")]
         public string? EncodingName
         {
             get => _encodingName;
@@ -59,6 +62,8 @@ namespace yyLib
                 }
             }
         }
+
+        // I havent found a way to specify a custom converter to IConfiguration's default binder.
 
         [JsonIgnore]
         public Encoding? Encoding { get; private set; }

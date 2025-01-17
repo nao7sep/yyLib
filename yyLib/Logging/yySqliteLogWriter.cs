@@ -1,5 +1,6 @@
 ﻿using System.Data.SQLite;
 using System.Text.Json.Serialization;
+using Microsoft.Extensions.Configuration;
 
 namespace yyLib
 {
@@ -10,6 +11,7 @@ namespace yyLib
         private string? _relativeFilePath;
 
         [JsonPropertyName ("relative_file_path")]
+        [ConfigurationKeyName ("relative_file_path")]
         public string? RelativeFilePath
         {
             get => _relativeFilePath;
@@ -38,6 +40,7 @@ namespace yyLib
         public string? ConnectionString { get; private set; }
 
         [JsonPropertyName ("table_name")]
+        [ConfigurationKeyName ("table_name")]
         public string? TableName { get; set; }
 
         public void Write (DateTime createdAtUtc, string key, string value)
