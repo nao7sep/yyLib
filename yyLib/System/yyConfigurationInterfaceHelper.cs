@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 
 namespace yyLib
@@ -15,7 +16,7 @@ namespace yyLib
             // IConfiguration is never null.
             xBuilder.Append ($"{{{xNewLine}");
 
-            void _AppendSection (IConfigurationSection section, int indentLevel, bool isLastChild)
+            void _AppendSection (IConfigurationSection section, int indentLevel, bool isArray, bool isLastChild)
             {
                 string xFullIndent = xSingleIndent.Repeat (indentLevel),
                        xCommaPart = isLastChild ? "" : ",";
@@ -35,23 +36,20 @@ namespace yyLib
 
                     if (section.Value != null)
                     {
-                        // Note on escaping special characters:
-                        // This function escapes only backslashes ("\") and double quotes ("\"") in values to ensure the output remains
-                        // readable and somewhat structured. While there are additional characters that should be escaped to produce
-                        // fully valid JSON (e.g., control characters like \b, \f, \n, \r, \t), handling these would complicate the code
-                        // and is unnecessary for this function's primary purpose, which is debugging.
-                        // Since this function is not intended to produce strictly valid JSON, the limited escaping is sufficient for
-                        // readability and debugging needs.
-                        // If strict JSON compliance or escaping of all special characters is required, consider using a JSON library
-                        // like System.Text.Json or Newtonsoft.Json instead.
+                        // https://learn.microsoft.com/en-us/dotnet/api/system.text.json.jsonserializer.serialize
+                        string xEscapedValue = JsonSerializer.Serialize (section.Value);
 
-                        string xEscapedValue = section.Value.Replace ("\\", "\\\\").Replace ("\"", "\\\"");
-                        xBuilder.Append ($"{xFullIndent}\"{section.Key}\": \"{xEscapedValue}\"{xCommaPart}{xNewLine}");
+                        if (isArray)
+                            xBuilder.Append ($"{xFullIndent}\"{xEscapedValue}\"{xCommaPart}{xNewLine}");
+                        else xBuilder.Append ($"{xFullIndent}\"{section.Key}\": \"{xEscapedValue}\"{xCommaPart}{xNewLine}");
                     }
 
                     else
                     {
-                        xBuilder.Append ($"{xFullIndent}\"{section.Key}\": {{{xNewLine}");
+                        if (isArray)
+                            xBuilder.Append ($"{xFullIndent}{{{xNewLine}");
+                        else xBuilder.Append ($"{xFullIndent}\"{section.Key}\": {{{xNewLine}");
+
                         xBuilder.Append ($"{xFullIndent}}}{xCommaPart}{xNewLine}");
                     }
                 }
@@ -79,30 +77,14 @@ namespace yyLib
 
                     if (xChildren.All (x => int.TryParse (x.Key, out _)))
                     {
-                        // Note on arrays with numeric keys and null values:
-                        // This method outputs arrays with numeric keys (e.g., "0", "1") instead of converting them into valid JSON arrays.
-                        // While this is not compliant with JSON standards (where arrays must be enclosed in [ ] without keys),
-                        // it reflects the actual data structure within IConfiguration, which uses a flattened representation where
-                        // arrays are stored as sections with numeric keys.
-                        //
-                        // Similarly, this method does not attempt to restore null values for keys where IConfiguration has
-                        // automatically converted null to an empty string (""). These behaviors are intentional because the purpose
-                        // of this method is to provide a faithful view of the data as represented in IConfiguration for debugging.
-                        // By outputting the raw structure, including numeric keys for arrays and empty strings for nulls,
-                        // this method helps developers understand the exact state of the IConfiguration hierarchy they are working with.
-                        //
-                        // This means:
-                        //    - Arrays will be displayed as objects with numeric keys (e.g., { "0": ..., "1": ... }).
-                        //    - Null values will be displayed as empty strings ("").
-                        //
-                        // For producing strictly valid JSON or restoring null values, a different approach would be needed.
-
-                        xBuilder.Append ($"{xFullIndent}\"{section.Key}\": [{xNewLine}");
+                        if (isArray)
+                            xBuilder.Append ($"{xFullIndent}[{xNewLine}");
+                        else xBuilder.Append ($"{xFullIndent}\"{section.Key}\": [{xNewLine}");
 
                         for (int temp = 0; temp < xChildren.Length; temp ++)
                         {
                             var xChild = xChildren [temp];
-                            _AppendSection (xChild, indentLevel + 1, temp == xChildren.Length - 1);
+                            _AppendSection (xChild, indentLevel + 1, isArray: true, isLastChild: temp == xChildren.Length - 1);
                         }
 
                         xBuilder.Append ($"{xFullIndent}]{xCommaPart}{xNewLine}");
@@ -110,12 +92,14 @@ namespace yyLib
 
                     else
                     {
-                        xBuilder.Append ($"{xFullIndent}\"{section.Key}\": {{{xNewLine}");
+                        if (isArray)
+                            xBuilder.Append ($"{xFullIndent}{{{xNewLine}");
+                        else xBuilder.Append ($"{xFullIndent}\"{section.Key}\": {{{xNewLine}");
 
                         for (int temp = 0; temp < xChildren.Length; temp ++)
                         {
                             var xChild = xChildren [temp];
-                            _AppendSection (xChild, indentLevel + 1, temp == xChildren.Length - 1);
+                            _AppendSection (xChild, indentLevel + 1, isArray: false, isLastChild: temp == xChildren.Length - 1);
                         }
 
                         xBuilder.Append ($"{xFullIndent}}}{xCommaPart}{xNewLine}");
@@ -128,7 +112,7 @@ namespace yyLib
             for (int temp = 0; temp < xRootChildren.Length; temp ++)
             {
                 var xChild = xRootChildren [temp];
-                _AppendSection (xChild, 1, temp == xRootChildren.Length - 1);
+                _AppendSection (xChild, 1, isArray: false, isLastChild: temp == xRootChildren.Length - 1);
             }
 
             xBuilder.Append ($"}}{xNewLine}");
