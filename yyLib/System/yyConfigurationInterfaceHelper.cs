@@ -47,14 +47,14 @@ namespace yyLib
 
                         if (isArrayElement)
                             xBuilder.Append ($"{xFullIndent}{xEscapedValue}{xCommaPart}{xNewLine}");
-                        else xBuilder.Append ($"{xFullIndent}\"{section.Key}\": {xEscapedValue}{xCommaPart}{xNewLine}");
+                        else xBuilder.Append ($"{xFullIndent}{JsonSerializer.Serialize (section.Key)}: {xEscapedValue}{xCommaPart}{xNewLine}");
                     }
 
                     else
                     {
                         if (isArrayElement)
                             xBuilder.Append ($"{xFullIndent}{{{xNewLine}");
-                        else xBuilder.Append ($"{xFullIndent}\"{section.Key}\": {{{xNewLine}");
+                        else xBuilder.Append ($"{xFullIndent}{JsonSerializer.Serialize (section.Key)}: {{{xNewLine}");
 
                         xBuilder.Append ($"{xFullIndent}}}{xCommaPart}{xNewLine}");
                     }
@@ -85,7 +85,7 @@ namespace yyLib
                     {
                         if (isArrayElement)
                             xBuilder.Append ($"{xFullIndent}[{xNewLine}");
-                        else xBuilder.Append ($"{xFullIndent}\"{section.Key}\": [{xNewLine}");
+                        else xBuilder.Append ($"{xFullIndent}{JsonSerializer.Serialize (section.Key)}: [{xNewLine}");
 
                         for (int temp = 0; temp < xChildren.Length; temp ++)
                         {
@@ -100,7 +100,7 @@ namespace yyLib
                     {
                         if (isArrayElement)
                             xBuilder.Append ($"{xFullIndent}{{{xNewLine}");
-                        else xBuilder.Append ($"{xFullIndent}\"{section.Key}\": {{{xNewLine}");
+                        else xBuilder.Append ($"{xFullIndent}{JsonSerializer.Serialize (section.Key)}: {{{xNewLine}");
 
                         for (int temp = 0; temp < xChildren.Length; temp ++)
                         {
