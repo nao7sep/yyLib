@@ -3,6 +3,17 @@
 
 using System.Diagnostics.CodeAnalysis;
 
+// Disables the warning for not specifying an IFormatProvider in formatting methods (CA1305).
+// This warning appears only when the analysis mode is set to "Recommended," which is stricter than the default "Default" mode.
+// I am fully aware of potential culture-related errors. To prevent these issues, I ensure that all values are properly converted to strings
+// before formatting them, thereby avoiding culture-specific ambiguities.
+[assembly: SuppressMessage("Globalization", "CA1305")]
+
+// Disables the warning for naming conventions of generic type parameters (CA1715).
+// This warning appears only when the analysis mode is set to "Recommended," which is stricter than the default "Default" mode.
+// It allows generic type parameters to use non-standard naming conventions instead of the recommended 'T' prefix.
+[assembly: SuppressMessage("Naming", "CA1715")]
+
 // Disables the warning for converting 'if' statements to expressions.
 // This allows traditional 'if' statements to remain instead of being rewritten as conditional expressions.
 [assembly: SuppressMessage("Style", "IDE0046")]

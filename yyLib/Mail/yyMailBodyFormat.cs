@@ -2,8 +2,6 @@
 {
     public enum yyMailBodyFormat
     {
-        // ChatGPT says:
-
         // Plaintext vs. Plain-text:
 
         // "Plaintext" (One Word):

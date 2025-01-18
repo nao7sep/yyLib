@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace yyLib
 {
@@ -30,6 +31,8 @@ namespace yyLib
         public string? SystemFingerprint { get; set; }
 
         [JsonPropertyName ("object")]
+        // Disables the warning for using a member name that may conflict with a type name (CA1720).
+        [SuppressMessage ("Naming", "CA1720")]
         public string? Object { get; set; }
 
         [JsonPropertyName ("usage")]

@@ -88,6 +88,10 @@ namespace yyLibConsole
 
                     File.WriteAllBytes (xImageFilePath, xImagesResponse.ImageBytes! [0]);
 
+                    // This code uses AppendLine, which appends a string followed by a newline character sequence.
+                    // The newline sequence is determined by the current environment (Environment.NewLine),
+                    // making the output platform-dependent (e.g., "\n" on Linux/macOS, "\r\n" on Windows).
+
                     StringBuilder xPrompts = new ();
                     xPrompts.AppendLine ("[Original Prompt]");
                     xPrompts.AppendLine (xImagesRequest.Prompt);

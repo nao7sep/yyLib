@@ -19,8 +19,6 @@ namespace yyLib
 
             using SmtpClient xSmtpClient = new ();
 
-            // Added comments by ChatGPT:
-
             // Connect to the SMTP server using the provided connection info and cancellation token.
             // If the cancellation token is triggered during connection, it cancels the operation and throws OperationCanceledException.
             await xSmtpClient.ConnectAsync (connectionInfo, cancellationToken);

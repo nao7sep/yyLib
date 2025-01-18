@@ -84,15 +84,15 @@ namespace yyLib
             return (EnumType) value;
         }
 
-        public static bool TryValueToEnum <EnumType> (object value, out EnumType enum_value) where EnumType: struct, Enum
+        public static bool TryValueToEnum <EnumType> (object value, out EnumType enumValue) where EnumType: struct, Enum
         {
             if (Enum.IsDefined (typeof (EnumType), value) == false)
             {
-                enum_value = default;
+                enumValue = default;
                 return false;
             }
 
-            enum_value = (EnumType) value;
+            enumValue = (EnumType) value;
             return true;
         }
 
@@ -107,7 +107,7 @@ namespace yyLib
         /// <summary>
         /// 32 digits separated by hyphens: 00000000-0000-0000-0000-000000000000
         /// </summary>
-        public static string GuidToString (Guid guid) => guid.ToString ("D");
+        public static string GuidToString (Guid value) => value.ToString ("D");
 
         /// <summary>
         /// Should parse all variations case-insensitively.
@@ -117,7 +117,7 @@ namespace yyLib
         /// <summary>
         /// Should parse all variations case-insensitively.
         /// </summary>
-        public static bool TryStringToGuid (string str, out Guid guid) => Guid.TryParse (str, out guid);
+        public static bool TryStringToGuid (string str, out Guid value) => Guid.TryParse (str, out value);
 
         // -----------------------------------------------------------------------------
         // MimeMessage

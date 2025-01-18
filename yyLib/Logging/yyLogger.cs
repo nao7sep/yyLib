@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 using Microsoft.Extensions.Configuration;
 
 namespace yyLib
@@ -127,6 +128,8 @@ namespace yyLib
         // 🔹 Use 'const' for truly immutable values (e.g., Pi).
         // 🔹 Use 'static readonly' for config values, file paths, or settings to allow updates at runtime.
 
+        // Disables the warning for explicitly initializing a default value (CA1805).
+        [SuppressMessage ("Performance", "CA1805")]
         public static readonly bool DefaultWritesToTextFile = false;
         public static readonly string TextLogWriterDefaultRelativeFilePath = "Logs.txt";
         public static readonly string TextLogWriterDefaultEncodingName = "utf-8";
@@ -135,6 +138,8 @@ namespace yyLib
         public static readonly string JsonLogWriterDefaultRelativeDirectoryPath = "Logs";
         public static readonly string JsonLogWriterDefaultEncodingName = "utf-8";
 
+        // Disables the warning for explicitly initializing a default value (CA1805).
+        [SuppressMessage ("Performance", "CA1805")]
         public static readonly bool DefaultWritesToSqliteDatabase = false;
         public static readonly string SqliteLogWriterDefaultRelativeFilePath = "Logs.db";
         public static readonly string SqliteLogWriterDefaultTableName = "Logs";

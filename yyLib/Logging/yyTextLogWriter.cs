@@ -73,6 +73,10 @@ namespace yyLib
         {
             lock (_lock)
             {
+                // This code uses AppendLine, which appends a string followed by a newline character sequence.
+                // The newline sequence is determined by the current environment (Environment.NewLine),
+                // making the output platform-dependent (e.g., "\n" on Linux/macOS, "\r\n" on Windows).
+
                 StringBuilder xBuilder = new ();
 
                 if (File.Exists (FilePath))

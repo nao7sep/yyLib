@@ -8,7 +8,7 @@ namespace yyLib
         // Basically, everything that is not Resent* from the following page:
         // http://www.mimekit.net/docs/html/T_MimeKit_MimeMessage.htm
 
-        // Regarding encoding settings, ChatGPT says:
+        // Regarding encoding settings:
 
         // In MimeKit, there's generally no need to explicitly set UTF-8 encoding for standard email components
         // like the subject line, body, or address headers. MimeKit is engineered to automatically handle these encodings.
