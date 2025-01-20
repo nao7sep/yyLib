@@ -6,6 +6,12 @@ namespace yyLib
     {
         private static readonly Lazy <string []> _reservedKeywords = new (() =>
         [
+            // The following keywords appear multiple times in the list:
+            //     ANALYZE, CLUSTER, DEFERRED, EXCLUSIVE, IMMEDIATE, LOAD, MATCH, RULE, SAVEPOINT, WITHOUT
+            // Also, there should be missing/incorrect keywords.
+            // I think that is OK because the primary objective of this list is to avoid confusion and improve code readability.
+            // If a keyword that isnt present in the list is used as an object name, there wont be any significant risks.
+
             // Frequently used
             "SELECT", "INSERT", "UPDATE", "DELETE", "FROM", "WHERE", "JOIN", "TABLE",
 
@@ -60,7 +66,7 @@ namespace yyLib
         [GeneratedRegex (@"^[a-zA-Z_][a-zA-Z0-9_]*$")]
         public static partial Regex ObjectNameRegex ();
 
-        public static void ValidateObjectName (string? objectName)
+        public static void ValidateObjectName (string? objectName, bool avoidsReservedKeywords = true)
         {
             if (string.IsNullOrEmpty (objectName))
                 throw new yyArgumentException ("Object name cannot be null or empty.");
@@ -72,7 +78,7 @@ namespace yyLib
             if (ObjectNameRegex ().IsMatch (objectName) == false)
                 throw new yyArgumentException ($"Object name '{objectName}' is invalid.");
 
-            if (ReservedKeywords.Contains (objectName, StringComparer.OrdinalIgnoreCase))
+            if (avoidsReservedKeywords && ReservedKeywords.Contains (objectName, StringComparer.OrdinalIgnoreCase))
                 throw new yyArgumentException ($"Object name '{objectName}' is a reserved keyword.");
         }
     }
