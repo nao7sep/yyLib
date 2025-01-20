@@ -1,4 +1,5 @@
 ﻿using System.Data.SQLite;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Configuration;
 
@@ -43,6 +44,8 @@ namespace yyLib
         [ConfigurationKeyName ("table_name")]
         public string? TableName { get; set; }
 
+        // Suppresses the warning about using user input to construct SQL commands (CA2100).
+        [SuppressMessage ("Security", "CA2100")]
         public void Write (DateTime createdAtUtc, string key, string value)
         {
             lock (_lock)
@@ -54,6 +57,8 @@ namespace yyLib
 
                 try
                 {
+                    yySql.ValidateObjectName (TableName);
+
                     using (SQLiteCommand xCommand = new (
                         $"CREATE TABLE IF NOT EXISTS {TableName} (" +
                         "Id INTEGER PRIMARY KEY AUTOINCREMENT, " +

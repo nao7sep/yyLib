@@ -91,7 +91,7 @@
 
         public static char [] InvalidFileNameChars => _invalidFileNameChars.Value;
 
-        private static readonly Lazy <HashSet <char>> _invalidFileNameCharsSet = new (() => new HashSet <char> (InvalidFileNameChars));
+        private static readonly Lazy <HashSet <char>> _invalidFileNameCharsSet = new (() => InvalidFileNameChars.ToHashSet ());
 
         public static HashSet <char> InvalidFileNameCharsSet => _invalidFileNameCharsSet.Value;
 
@@ -123,7 +123,7 @@
 
         public static char [] InvalidPathChars => _invalidPathChars.Value;
 
-        private static readonly Lazy <HashSet <char>> _invalidPathCharsSet = new (() => new HashSet <char> (InvalidPathChars));
+        private static readonly Lazy <HashSet <char>> _invalidPathCharsSet = new (() => InvalidPathChars.ToHashSet ());
 
         public static HashSet <char> InvalidPathCharsSet => _invalidPathCharsSet.Value;
 
