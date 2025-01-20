@@ -21,15 +21,15 @@ namespace yyLib
 
             // Connect to the SMTP server using the provided connection info and cancellation token.
             // If the cancellation token is triggered during connection, it cancels the operation and throws OperationCanceledException.
-            await xSmtpClient.ConnectAsync (connectionInfo, cancellationToken);
+            await xSmtpClient.ConnectAsync (connectionInfo, cancellationToken).ConfigureAwait (false);
 
             // Authenticate with the SMTP server using the provided credentials and cancellation token.
             // If the cancellation token is triggered during authentication, it cancels the operation and throws OperationCanceledException.
-            await xSmtpClient.AuthenticateAsync (connectionInfo, cancellationToken);
+            await xSmtpClient.AuthenticateAsync (connectionInfo, cancellationToken).ConfigureAwait (false);
 
             // Send the MIME message using the SMTP client with the provided cancellation token.
             // If the cancellation token is triggered during sending, it cancels the operation and throws OperationCanceledException.
-            string xSendingResult = await xSmtpClient.SendAsync (xMimeMessage, cancellationToken);
+            string xSendingResult = await xSmtpClient.SendAsync (xMimeMessage, cancellationToken).ConfigureAwait (false);
 
             // If any of the above tasks are cancelled due to the cancellation token being triggered,
             // the ongoing operation is stopped immediately and subsequent operations are not initiated.

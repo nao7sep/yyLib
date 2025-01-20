@@ -4,7 +4,7 @@ namespace yyLib
 {
     public class yyAutoExpandingList <ItemType>: IEnumerable <ItemType> where ItemType: new ()
     {
-        public List <ItemType> Items { get; } = [];
+        public IList <ItemType> Items { get; } = [];
 
         public int Count => Items.Count;
 

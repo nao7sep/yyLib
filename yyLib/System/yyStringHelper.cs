@@ -21,7 +21,7 @@ namespace yyLib
             if (str == null)
                 return "(Null)";
 
-            if (str == string.Empty)
+            if (str.Length == 0)
                 return "(Empty)";
 
             // White space characters are not supported as they may contain new lines,
@@ -56,7 +56,7 @@ namespace yyLib
             return yyStringLines.EnumerateLines (str).ToArray ();
         }
 
-        public static List <string> ToLineList (this string? str)
+        public static IList <string> ToLineList (this string? str)
         {
             if (string.IsNullOrEmpty (str))
                 return [];
@@ -83,7 +83,7 @@ namespace yyLib
             return yyStringParagraphs.EnumerateParagraphs (str, emptyLineType).Select (x => string.Join (newLine ?? Environment.NewLine, x)).ToArray ();
         }
 
-        public static List <string> ToParagraphList (this string? str, yyStringType emptyLineType = yyStringType.WhiteSpace, string? newLine = null)
+        public static IList <string> ToParagraphList (this string? str, yyStringType emptyLineType = yyStringType.WhiteSpace, string? newLine = null)
         {
             if (string.IsNullOrEmpty (str))
                 return [];

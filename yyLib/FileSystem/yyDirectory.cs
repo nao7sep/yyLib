@@ -36,7 +36,7 @@
             // Relative path.
             // After Path.IsPathFullyQualified, probably redundant.
 
-            if (xParentDirectoryPath == string.Empty)
+            if (xParentDirectoryPath.Length == 0)
                 throw new yyArgumentException ($"'{nameof (path)}' is invalid: {path.GetVisibleString ()}");
 
             if (Directory.Exists (xParentDirectoryPath) == false)

@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text;
 
 namespace yyLib
 {
@@ -8,13 +9,13 @@ namespace yyLib
             yyGptChatConnectionInfo connectionInfo, yyGptChatRequest request, CancellationToken cancellationToken = default)
         {
             using yyGptChatClient xClient = new (connectionInfo);
-            var xSendingResult = await xClient.SendAsync (request, cancellationToken);
+            var xSendingResult = await xClient.SendAsync (request, cancellationToken).ConfigureAwait (false);
 
             // We dont check IsSuccessStatusCode yet.
             // Let's try retrieving the JSON string and parsing it first.
             // If an error occurs, an exception will be thrown.
 
-            string? xJsonString = await xClient.ReadToEndAsync (cancellationToken);
+            string? xJsonString = await xClient.ReadToEndAsync (cancellationToken).ConfigureAwait (false);
             yyGptChatResponse xResponse = yyGptChatResponseParser.Parse (xJsonString);
 
             // The values are retrieved not as they may be but as they are supposed to be.
@@ -36,7 +37,7 @@ namespace yyLib
             request.Stream = true;
 
             using yyGptChatClient xClient = new (connectionInfo);
-            var xSendingResult = await xClient.SendAsync (request, cancellationToken);
+            var xSendingResult = await xClient.SendAsync (request, cancellationToken).ConfigureAwait (false);
 
             request.Stream = xStream;
 
@@ -47,7 +48,7 @@ namespace yyLib
                 while (true)
                 {
                     // Each line should look like "data: { ..." or "data: [DONE]".
-                    string? xLine = await xClient.ReadLineAsync (cancellationToken);
+                    string? xLine = await xClient.ReadLineAsync (cancellationToken).ConfigureAwait (false);
 
                     // If null is returned before "data: [DONE]", something is wrong.
                     // It is highly unlikely that all the data is received and only the last line is missing.
@@ -70,7 +71,7 @@ namespace yyLib
                     string xContent = xResponse.Choices! [0]!.Delta!.Content!;
                     xBuilders [xIndex].Append (xContent);
 
-                    await onChunkRetrievedAsync (xIndex, xContent, cancellationToken);
+                    await onChunkRetrievedAsync (xIndex, xContent, cancellationToken).ConfigureAwait (false);
                 }
 
                 return (JsonString: null, GeneratedMessages: xBuilders.Select (x => x.ToString ()).ToArray (), ErrorMessage: null);
@@ -78,21 +79,25 @@ namespace yyLib
 
             else
             {
-                string? xJsonString = await xClient.ReadToEndAsync (cancellationToken);
+                string? xJsonString = await xClient.ReadToEndAsync (cancellationToken).ConfigureAwait (false);
                 yyGptChatResponse xResponse = yyGptChatResponseParser.Parse (xJsonString);
                 return (JsonString: xJsonString, GeneratedMessages: null, ErrorMessage: xResponse.Error!.Message);
             }
         }
 
+        // Suppresses the warning about passing a literal string as a parameter to a method expecting a URI (CA2234).
+        // This suppression is used when the string is intentionally passed as a URI,
+        // and the context ensures it is valid and does not require explicit URI construction.
+        [SuppressMessage ("Usage", "CA2234")]
         public static async Task <(string JsonString, byte [][]? ImageBytes, string []? RevisedPrompts, string? ErrorMessage)> GenerateImagesAsync (
             yyGptImagesConnectionInfo connectionInfo, yyGptImagesRequest request, CancellationToken cancellationToken = default)
         {
             using yyGptImagesClient xClient = new (connectionInfo);
-            var xSendingResult = await xClient.SendAsync (request, cancellationToken);
+            var xSendingResult = await xClient.SendAsync (request, cancellationToken).ConfigureAwait (false);
 
             // Not checking IsSuccessStatusCode yet for the same reason as GenerateMessagesAsync.
 
-            string? xJsonString = await xClient.ReadToEndAsync (cancellationToken);
+            string? xJsonString = await xClient.ReadToEndAsync (cancellationToken).ConfigureAwait (false);
             yyGptImagesResponse xResponse = yyGptImagesResponseParser.Parse (xJsonString);
 
             if (xSendingResult.HttpResponseMessage.IsSuccessStatusCode)
@@ -105,18 +110,18 @@ namespace yyLib
                     else if (request.ResponseFormat!.Equals ("url", StringComparison.OrdinalIgnoreCase))
                     {
                         using HttpClient xHttpClient = new ();
-                        var xImageResponse = await xHttpClient.GetAsync (x.Url, cancellationToken);
+                        var xImageResponse = await xHttpClient.GetAsync (x.Url, cancellationToken).ConfigureAwait (false);
 
                         // Just to make sure.
                         xImageResponse.EnsureSuccessStatusCode ();
 
-                        return await xImageResponse.Content.ReadAsByteArrayAsync (cancellationToken);
+                        return await xImageResponse.Content.ReadAsByteArrayAsync (cancellationToken).ConfigureAwait (false);
                     }
 
                     else throw new yyArgumentException ("The response format is invalid.");
                 });
 
-                byte [][] xImageBytes = await Task.WhenAll (xTasks);
+                byte [][] xImageBytes = await Task.WhenAll (xTasks).ConfigureAwait (false);
                 string [] xRevisedPrompts = xResponse.Data!.Select (x => x.RevisedPrompt!).ToArray ();
 
                 return (JsonString: xJsonString!, ImageBytes: xImageBytes, RevisedPrompts: xRevisedPrompts, ErrorMessage: null);

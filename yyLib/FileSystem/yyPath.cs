@@ -17,7 +17,7 @@
 
         public static char DefaultSeparator => _defaultSeparator.Value;
 
-        public static char GetAlternativeSeparator (char separator)
+        public static char GetOtherSeparator (char separator)
         {
             if (separator == yyPathSeparators.Windows)
                 return yyPathSeparators.Unix;
@@ -26,12 +26,12 @@
             else throw new ArgumentException ("Invalid separator.");
         }
 
-        private static readonly Lazy <char> _alternativeSeparator = new (() => GetAlternativeSeparator (DefaultSeparator));
+        private static readonly Lazy <char> _alternativeSeparator = new (() => GetOtherSeparator (DefaultSeparator));
 
         public static char AlternativeSeparator => _alternativeSeparator.Value;
 
         public static string NormalizeSeparators (string path, char separator) =>
-            path.Replace (GetAlternativeSeparator (separator), separator);
+            path.Replace (GetOtherSeparator (separator), separator);
 
         public static string Join (char separator, params string [] paths)
         {

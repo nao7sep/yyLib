@@ -3,7 +3,7 @@ using yyLib;
 
 namespace yyLibConsole
 {
-    public static class JsonTest
+    internal static class JsonTest
     {
         public static void Run ()
         {

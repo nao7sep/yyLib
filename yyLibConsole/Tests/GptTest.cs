@@ -1,10 +1,13 @@
-﻿using System.Text;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using yyLib;
 
 namespace yyLibConsole
 {
-    public static class GptTest
+    internal static class GptTest
     {
+        // Suppresses the warning about passing literals or constant strings as parameters for methods expecting localized resources (CA1303).
+        [SuppressMessage ("Globalization", "CA1303")]
         public static void Run (string firstAssistantSystemMessage, string secondAssistantSystemMessage, int interactionCount)
         {
             yyGptChatConnectionInfo xConnectionInfo = new ();

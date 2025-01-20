@@ -23,7 +23,7 @@ namespace yyLib
         /// Consider this to be a toilet-type, last-chance log storage.
         /// </summary>
         [JsonIgnore]
-        public List <yyLog> RecentLogs { get; } = [];
+        public IList <yyLog> RecentLogs { get; } = [];
 
         // Other methods for RecentLogs removed.
         // Currently, it's my laziness-based design pattern that only Add* methods are defined for collections within classes.
@@ -97,6 +97,8 @@ namespace yyLib
         // Safer methods.
         // If a logging method throws an exception in a catch block, the entire system might go down.
 
+        // Suppresses the warning about catching general exceptions (CA1031).
+        [SuppressMessage ("Design", "CA1031")]
         public bool TryWrite (string key, string value)
         {
             try

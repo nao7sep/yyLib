@@ -33,7 +33,7 @@
         /// <summary>
         /// Trims considered-empty lines from the beginning and the end of enumerated lines of a string, preserving internal empty ones.
         /// </summary>
-        public static List <string> TrimRedundantLines (IEnumerable <string> lines, yyStringType type = yyStringType.WhiteSpace)
+        public static IList <string> TrimRedundantLines (IEnumerable <string> lines, yyStringType type = yyStringType.WhiteSpace)
         {
             // When there's something wrong with "lines", it wont be saved.
             // Basically, only nullable-string-to-something conversions are saved.
@@ -75,7 +75,7 @@
         /// <summary>
         /// Trims considered-empty lines from the beginning and the end of the string, preserving internal empty lines.
         /// </summary>
-        public static List <string> TrimRedundantLines (string? str, yyStringType type = yyStringType.WhiteSpace)
+        public static IList <string> TrimRedundantLines (string? str, yyStringType type = yyStringType.WhiteSpace)
         {
             if (string.IsNullOrEmpty (str))
                 return [];

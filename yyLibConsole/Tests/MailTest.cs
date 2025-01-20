@@ -3,7 +3,7 @@ using yyLib;
 
 namespace yyLibConsole
 {
-    public static class MailTest
+    internal static class MailTest
     {
         public static void Run (string from, string to)
         {

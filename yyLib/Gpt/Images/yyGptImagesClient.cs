@@ -44,16 +44,19 @@ namespace yyLib
             using var xContent = new StringContent (xJsonString, Encoding.UTF8, "application/json");
             using var xMessage = new HttpRequestMessage (HttpMethod.Post, ConnectionInfo.Endpoint) { Content = xContent };
 
-            var xResponse = await HttpClient.SendAsync (xMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            var xResponse = await HttpClient.SendAsync (xMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait (false);
 
             // Commented out to receive error messages.
             // xResponse.EnsureSuccessStatusCode ();
 
+            // DisposeAsync is not available.
             ResponseMessage?.Dispose ();
             ResponseMessage = xResponse;
 
-            ResponseStream?.Dispose ();
-            ResponseStream = await xResponse.Content.ReadAsStreamAsync (cancellationToken);
+            if (ResponseStream != null)
+                await ResponseStream.DisposeAsync ().ConfigureAwait (false);
+
+            ResponseStream = await xResponse.Content.ReadAsStreamAsync (cancellationToken).ConfigureAwait (false);
 
             ResponseStreamReader?.Dispose ();
             ResponseStreamReader = new StreamReader (ResponseStream);
@@ -71,24 +74,32 @@ namespace yyLib
             // Worst case scenario, it'll be just harmlessly redundant.
 
             if (ResponseStreamReader.EndOfStream)
-                return await Task.FromResult <string?> (null);
+                return await Task.FromResult <string?> (null).ConfigureAwait (false);
 
-            return await ResponseStreamReader.ReadToEndAsync (cancellationToken);
+            return await ResponseStreamReader.ReadToEndAsync (cancellationToken).ConfigureAwait (false);
+        }
+
+        protected virtual void Dispose (bool disposing)
+        {
+            if (disposing)
+            {
+                HttpClient?.Dispose ();
+                HttpClient = null;
+
+                ResponseMessage?.Dispose ();
+                ResponseMessage = null;
+
+                ResponseStream?.Dispose ();
+                ResponseStream = null;
+
+                ResponseStreamReader?.Dispose ();
+                ResponseStreamReader = null;
+            }
         }
 
         public void Dispose ()
         {
-            HttpClient?.Dispose ();
-            HttpClient = null;
-
-            ResponseMessage?.Dispose ();
-            ResponseMessage = null;
-
-            ResponseStream?.Dispose ();
-            ResponseStream = null;
-
-            ResponseStreamReader?.Dispose ();
-            ResponseStreamReader = null;
+            Dispose (true);
 
             // Prevents the garbage collector from calling the finalizer for this object.
             // This is used because the Dispose method has already cleaned up resources, making finalization unnecessary.

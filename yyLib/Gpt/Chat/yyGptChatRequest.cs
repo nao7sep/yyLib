@@ -11,12 +11,10 @@ namespace yyLib
         // The properties are sorted in the order of the API reference.
 
         [JsonPropertyName ("messages")]
-        public IList <yyGptChatMessage>? Messages { get; set; }
+        public IList <yyGptChatMessage> Messages { get; } = [];
 
         public void AddMessage (yyGptChatRole role, string content, string? name = null)
         {
-            Messages ??= [];
-
             Messages.Add (new yyGptChatMessage
             {
                 Role = role,

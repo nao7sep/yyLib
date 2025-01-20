@@ -9,6 +9,10 @@ namespace yyLibConsole
     // This change improves encapsulation, aligns with best practices for entry-point classes, and slightly optimizes performance.
     internal sealed class Program
     {
+        // Suppresses the warning about catching general exceptions (CA1031).
+        [SuppressMessage ("Design", "CA1031")]
+        // Suppresses the warning about passing literals or constant strings as parameters for methods expecting localized resources (CA1303).
+        [SuppressMessage ("Globalization", "CA1303")]
         // Suppresses the warning for unused method parameters.
         [SuppressMessage ("Style", "IDE0060")]
         static void Main (string [] args)

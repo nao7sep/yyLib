@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace yyLib
 {
@@ -14,6 +15,8 @@ namespace yyLib
         public string? B64Json { get; set; }
 
         [JsonPropertyName ("url")]
+        // Suppresses the warning about using string properties to represent URIs instead of Uri objects (CA1056).
+        [SuppressMessage ("Design", "CA1056")]
         public string? Url { get; set; }
 
         [JsonPropertyName ("revised_prompt")]
