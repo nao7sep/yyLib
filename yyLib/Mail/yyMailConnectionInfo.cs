@@ -15,6 +15,8 @@ namespace yyLib
         [JsonPropertyName ("port")]
         public required int Port { get; set; }
 
+        // https://mimekit.net/docs/html/T_MailKit_Security_SecureSocketOptions.htm
+
         [JsonPropertyName ("secure_socket_options")]
         [JsonConverter (typeof (JsonStringEnumConverter))]
         [ConfigurationKeyName ("secure_socket_options")]
