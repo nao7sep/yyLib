@@ -33,11 +33,47 @@ namespace yyLib
         [JsonPropertyName ("attachments")]
         public IList <yyMailAttachment>? Attachments { get; set; }
 
+        public void AddAttachment (yyMailAttachment attachment)
+        {
+            Attachments ??= [];
+            Attachments.Add (attachment);
+        }
+
+        public void AddAttachment (string originalFilePath, string? newFileName = null) => AddAttachment (new yyMailAttachment
+        {
+            OriginalFilePath = originalFilePath,
+            NewFileName = newFileName
+        });
+
         [JsonPropertyName ("bcc")]
         public IList <yyMailContact>? Bcc { get; set; }
 
+        public void AddBcc (yyMailContact contact)
+        {
+            Bcc ??= [];
+            Bcc.Add (contact);
+        }
+
+        public void AddBcc (string address, string? name = null) => AddBcc (new yyMailContact
+        {
+            Address = address,
+            Name = name
+        });
+
         [JsonPropertyName ("cc")]
         public IList <yyMailContact>? Cc { get; set; }
+
+        public void AddCc (yyMailContact contact)
+        {
+            Cc ??= [];
+            Cc.Add (contact);
+        }
+
+        public void AddCc (string address, string? name = null) => AddCc (new yyMailContact
+        {
+            Address = address,
+            Name = name
+        });
 
         // The name may appear redundant.
         // Just making sure.
@@ -54,14 +90,38 @@ namespace yyLib
         [JsonPropertyName ("from")]
         public IList <yyMailContact>? From { get; set; }
 
+        public void AddFrom (yyMailContact contact)
+        {
+            From ??= [];
+            From.Add (contact);
+        }
+
+        public void AddFrom (string address, string? name = null) => AddFrom (new yyMailContact
+        {
+            Address = address,
+            Name = name
+        });
+
         [JsonPropertyName ("headers")]
         public IDictionary <string, string>? Headers { get; set; }
+
+        public void AddHeader (string key, string value)
+        {
+            Headers ??= new Dictionary <string, string> ();
+            Headers.Add (key, value);
+        }
 
         [JsonPropertyName ("html_body")]
         public string? HtmlBody { get; set; }
 
         [JsonPropertyName ("html_body_translations")]
         public IList <yyMailTranslation>? HtmlBodyTranslations { get; set; }
+
+        public void AddHtmlBodyTranslation (yyMailTranslation translation)
+        {
+            HtmlBodyTranslations ??= [];
+            HtmlBodyTranslations.Add (translation);
+        }
 
         [JsonPropertyName ("importance")]
         [JsonConverter (typeof (JsonStringEnumConverter))]
@@ -86,96 +146,14 @@ namespace yyLib
         [JsonPropertyName ("references")]
         public IList <string>? References { get; set; }
 
-        [JsonPropertyName ("reply_to")]
-        public IList <yyMailContact>? ReplyTo { get; set; }
-
-        [JsonPropertyName ("sender")]
-        public yyMailContact? Sender { get; set; }
-
-        [JsonPropertyName ("subject")]
-        public string? Subject { get; set; }
-
-        [JsonPropertyName ("subject_translations")]
-        public IList <yyMailTranslation>? SubjectTranslations { get; set; }
-
-        [JsonPropertyName ("text_body")]
-        public string? TextBody { get; set; }
-
-        [JsonPropertyName ("text_body_translations")]
-        public IList <yyMailTranslation>? TextBodyTranslations { get; set; }
-
-        [JsonPropertyName ("to")]
-        public IList <yyMailContact>? To { get; set; }
-
-        [JsonPropertyName ("x_priority")]
-        [JsonConverter (typeof (JsonStringEnumConverter))]
-        public XMessagePriority? XPriority { get; set; }
-
-        public void AddAttachment (yyMailAttachment attachment)
-        {
-            Attachments ??= [];
-            Attachments.Add (attachment);
-        }
-
-        public void AddAttachment (string originalFilePath, string? newFileName = null) => AddAttachment (new yyMailAttachment
-        {
-            OriginalFilePath = originalFilePath,
-            NewFileName = newFileName
-        });
-
-        public void AddBcc (yyMailContact contact)
-        {
-            Bcc ??= [];
-            Bcc.Add (contact);
-        }
-
-        public void AddBcc (string address, string? name = null) => AddBcc (new yyMailContact
-        {
-            Address = address,
-            Name = name
-        });
-
-        public void AddCc (yyMailContact contact)
-        {
-            Cc ??= [];
-            Cc.Add (contact);
-        }
-
-        public void AddCc (string address, string? name = null) => AddCc (new yyMailContact
-        {
-            Address = address,
-            Name = name
-        });
-
-        public void AddFrom (yyMailContact contact)
-        {
-            From ??= [];
-            From.Add (contact);
-        }
-
-        public void AddFrom (string address, string? name = null) => AddFrom (new yyMailContact
-        {
-            Address = address,
-            Name = name
-        });
-
-        public void AddHeader (string key, string value)
-        {
-            Headers ??= new Dictionary <string, string> ();
-            Headers.Add (key, value);
-        }
-
-        public void AddHtmlBodyTranslation (yyMailTranslation translation)
-        {
-            HtmlBodyTranslations ??= [];
-            HtmlBodyTranslations.Add (translation);
-        }
-
         public void AddReference (string reference)
         {
             References ??= [];
             References.Add (reference);
         }
+
+        [JsonPropertyName ("reply_to")]
+        public IList <yyMailContact>? ReplyTo { get; set; }
 
         public void AddReplyTo (yyMailContact contact)
         {
@@ -189,17 +167,35 @@ namespace yyLib
             Name = name
         });
 
+        [JsonPropertyName ("sender")]
+        public yyMailContact? Sender { get; set; }
+
+        [JsonPropertyName ("subject")]
+        public string? Subject { get; set; }
+
+        [JsonPropertyName ("subject_translations")]
+        public IList <yyMailTranslation>? SubjectTranslations { get; set; }
+
         public void AddSubjectTranslation (yyMailTranslation translation)
         {
             SubjectTranslations ??= [];
             SubjectTranslations.Add (translation);
         }
 
+        [JsonPropertyName ("text_body")]
+        public string? TextBody { get; set; }
+
+        [JsonPropertyName ("text_body_translations")]
+        public IList <yyMailTranslation>? TextBodyTranslations { get; set; }
+
         public void AddTextBodyTranslation (yyMailTranslation translation)
         {
             TextBodyTranslations ??= [];
             TextBodyTranslations.Add (translation);
         }
+
+        [JsonPropertyName ("to")]
+        public IList <yyMailContact>? To { get; set; }
 
         public void AddTo (yyMailContact contact)
         {
@@ -212,5 +208,9 @@ namespace yyLib
             Address = address,
             Name = name
         });
+
+        [JsonPropertyName ("x_priority")]
+        [JsonConverter (typeof (JsonStringEnumConverter))]
+        public XMessagePriority? XPriority { get; set; }
     }
 }
