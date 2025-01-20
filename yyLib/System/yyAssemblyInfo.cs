@@ -11,7 +11,7 @@ namespace yyLib
 
     public class yyAssemblyInfo
     {
-        public Assembly Assembly { get; set; }
+        public Assembly Assembly { get; private set; }
 
         // -----------------------------------------------------------------------------
         // Used Frequently
@@ -112,6 +112,23 @@ namespace yyLib
         /// Returns something like: 0.1+03073b01cc6d77db9dfaab1b7411d7a940e54eb2
         /// </summary>
         public string? InformationalVersion => _informationalVersion.Value;
+
+        // The constructor initializes the yyAssemblyInfo class with a specific Assembly instance,
+        // rather than using a setter method for the Assembly property. This design ensures that
+        // the Assembly property remains immutable after initialization, preserving the consistency
+        // and integrity of the metadata extracted from it.
+        //
+        // This approach differs from classes designed with self-updating properties via setters,
+        // which are often better suited for scenarios like JSON serialization. Since yyAssemblyInfo
+        // is a utility class and not a model class, immutability is prioritized to avoid confusion
+        // and misuse.
+        //
+        // Lazy initialization is used for non-essential properties to optimize performance and
+        // resource usage. Properties like Configuration or Description are only computed when
+        // accessed, ensuring efficient operation when these properties are not needed.
+        //
+        // For more details about the class design and reasoning, refer to the file:
+        // yyAssemblyInfo-design-and-usage-guide.md.
 
         public yyAssemblyInfo (Assembly assembly)
         {
