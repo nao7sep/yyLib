@@ -5,12 +5,12 @@ namespace yyLib
     public class yyLog
     {
         [JsonPropertyName ("created_at_utc")]
-        public DateTime? CreatedAtUtc { get; set; }
+        public required DateTime CreatedAtUtc { get; set; }
 
         [JsonPropertyName ("key")]
-        public string? Key { get; set; }
+        public required string Key { get; set; }
 
         [JsonPropertyName ("value")]
-        public string? Value { get; set; }
+        public required string Value { get; set; }
     }
 }

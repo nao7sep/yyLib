@@ -8,7 +8,7 @@ namespace yyLib
         public string? Name { get; set; }
 
         [JsonPropertyName ("address")]
-        public string? Address { get; set; }
+        public required string Address { get; set; }
 
         // Could be a list of enums, but better to keep it flexible.
         // https://botpress.com/blog/list-of-languages-supported-by-chatgpt
@@ -23,16 +23,6 @@ namespace yyLib
         [JsonPropertyName ("preferred_body_format")]
         [JsonConverter (typeof (JsonStringEnumConverter))]
         public yyMailBodyFormat? PreferredBodyFormat { get; set; }
-
-        public yyMailContact ()
-        {
-        }
-
-        public yyMailContact (string address, string? name = null)
-        {
-            Address = address;
-            Name = name;
-        }
 
         public void AddPreferredLanguage (string language)
         {

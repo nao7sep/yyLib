@@ -117,7 +117,11 @@ namespace yyLib
             Attachments.Add (attachment);
         }
 
-        public void AddAttachment (string originalFilePath, string? newFileName = null) => AddAttachment (new yyMailAttachment (originalFilePath, newFileName));
+        public void AddAttachment (string originalFilePath, string? newFileName = null) => AddAttachment (new yyMailAttachment
+        {
+            OriginalFilePath = originalFilePath,
+            NewFileName = newFileName
+        });
 
         public void AddBcc (yyMailContact contact)
         {
@@ -125,7 +129,11 @@ namespace yyLib
             Bcc.Add (contact);
         }
 
-        public void AddBcc (string address, string? name = null) => AddBcc (new yyMailContact { Address = address, Name = name });
+        public void AddBcc (string address, string? name = null) => AddBcc (new yyMailContact
+        {
+            Address = address,
+            Name = name
+        });
 
         public void AddCc (yyMailContact contact)
         {
@@ -133,7 +141,11 @@ namespace yyLib
             Cc.Add (contact);
         }
 
-        public void AddCc (string address, string? name = null) => AddCc (new yyMailContact { Address = address, Name = name });
+        public void AddCc (string address, string? name = null) => AddCc (new yyMailContact
+        {
+            Address = address,
+            Name = name
+        });
 
         public void AddFrom (yyMailContact contact)
         {
@@ -141,7 +153,11 @@ namespace yyLib
             From.Add (contact);
         }
 
-        public void AddFrom (string address, string? name = null) => AddFrom (new yyMailContact { Address = address, Name = name });
+        public void AddFrom (string address, string? name = null) => AddFrom (new yyMailContact
+        {
+            Address = address,
+            Name = name
+        });
 
         public void AddHeader (string key, string value)
         {
@@ -167,7 +183,11 @@ namespace yyLib
             ReplyTo.Add (contact);
         }
 
-        public void AddReplyTo (string address, string? name = null) => AddReplyTo (new yyMailContact { Address = address, Name = name });
+        public void AddReplyTo (string address, string? name = null) => AddReplyTo (new yyMailContact
+        {
+            Address = address,
+            Name = name
+        });
 
         public void AddSubjectTranslation (yyMailTranslation translation)
         {
@@ -187,6 +207,10 @@ namespace yyLib
             To.Add (contact);
         }
 
-        public void AddTo (string address, string? name = null) => AddTo (new yyMailContact { Address = address, Name = name });
+        public void AddTo (string address, string? name = null) => AddTo (new yyMailContact
+        {
+            Address = address,
+            Name = name
+        });
     }
 }

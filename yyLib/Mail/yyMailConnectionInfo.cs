@@ -10,25 +10,22 @@ namespace yyLib
         // http://www.mimekit.net/docs/html/T_MailKit_Net_Smtp_SmtpClient.htm
 
         [JsonPropertyName ("host")]
-        public string? Host { get; set; }
+        public required string Host { get; set; }
 
         [JsonPropertyName ("port")]
-        public int? Port { get; set; }
-
-        // I'll be setting the ConfigurationKeyName attribute ONLY to the properties that would, otherwise, fail to receive values from IConfiguration's default binder.
-        // For now, the binding is one-way only from IConfiguration to model classes, and the binder's default behavior seems to be case-insensitive.
+        public required int Port { get; set; }
 
         [JsonPropertyName ("secure_socket_options")]
         [JsonConverter (typeof (JsonStringEnumConverter))]
         [ConfigurationKeyName ("secure_socket_options")]
-        public SecureSocketOptions? SecureSocketOptions { get; set; }
+        public required SecureSocketOptions SecureSocketOptions { get; set; }
 
         [JsonPropertyName ("user_name")]
         [ConfigurationKeyName ("user_name")]
-        public string? UserName { get; set; }
+        public required string UserName { get; set; }
 
         [JsonPropertyName ("password")]
-        public string? Password { get; set; }
+        public required string Password { get; set; }
 
         // -----------------------------------------------------------------------------
         // Default
@@ -46,7 +43,7 @@ namespace yyLib
             if (yyUserSecrets.Default.MailConnection != null)
                 return yyUserSecrets.Default.MailConnection;
 
-            return new yyMailConnectionInfo ();
+            throw new yyInvalidDataException ("No mail connection info found.");
         }
 
         private static readonly Lazy <yyMailConnectionInfo> _default = new (_CreateDefault ());

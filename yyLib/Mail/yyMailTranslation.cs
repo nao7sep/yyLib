@@ -5,13 +5,13 @@ namespace yyLib
     public class yyMailTranslation
     {
         [JsonPropertyName ("translated_at_utc")]
-        public DateTime? TranslatedAtUtc { get; set; }
+        public required DateTime TranslatedAtUtc { get; set; }
 
         [JsonPropertyName ("language")]
-        public string? Language { get; set; }
+        public required string Language { get; set; }
 
         [JsonPropertyName ("text")]
-        public string? Text { get; set; }
+        public required string Text { get; set; }
 
         /// <summary>
         /// Should contain name of translator, API endpoint, parameters, etc.
