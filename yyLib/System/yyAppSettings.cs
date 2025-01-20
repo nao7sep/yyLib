@@ -7,57 +7,7 @@ namespace yyLib
         // Configuration in ASP.NET Core | Microsoft Learn
         // https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration/
 
-        // ============================
-        // 1. Detecting Configuration Changes
-        // ============================
-        // - When "reloadOnChange: true" is set, IConfiguration automatically reloads values from JSON files when modified.
-        // - To detect changes in ASP.NET Core, use IOptionsMonitor<T> with an OnChange() event.
-        // - For desktop applications (WPF/WinForms), use a background task that periodically checks IConfiguration values.
-
-        // ============================
-        // 2. Updating the UI Dynamically When Configuration Changes
-        // ============================
-        // - Use IOptionsMonitor<T>.OnChange() to listen for changes and update UI components dynamically.
-        // - Example: When "FontFamily" changes in appsettings.json, update the UI theme or text elements.
-        // - In desktop applications, a background polling mechanism may be needed since IConfiguration does not trigger events.
-
-        // ============================
-        // 3. Reloading IConfiguration Manually
-        // ============================
-        // - IConfiguration does not provide a direct "Reload()" method, but IConfigurationRoot does.
-        // - Example:
-        //   IConfigurationRoot config = (IConfigurationRoot)configuration;
-        //   config.Reload(); // Manually reload configuration if needed.
-
-        // ============================
-        // 4. Modifying IConfiguration Dynamically
-        // ============================
-        // - IConfiguration is read-only; modifying values at runtime requires an InMemoryCollection() provider.
-        // - Example:
-        //   var configBuilder = new ConfigurationBuilder()
-        //       .AddInMemoryCollection(new Dictionary<string, string> { { "UISettings:FontFamily", "Arial" } })
-        //       .Build();
-        //
-        //   config["UISettings:FontFamily"] = "Comic Sans MS"; // Change at runtime (but not saved to JSON)
-
-        // ============================
-        // 5. Writing Changes Back to appsettings.json
-        // ============================
-        // - IConfiguration does NOT save changes back to JSON files automatically.
-        // - To persist changes, manually read the JSON file, modify the values, and write it back.
-        // - Example:
-        //   var json = File.ReadAllText("appsettings.json");
-        //   var jsonObj = JsonSerializer.Deserialize<Dictionary<string, object>>(json);
-        //   jsonObj["UISettings"] = new Dictionary<string, object> { { "FontFamily", "Times New Roman" } };
-        //   File.WriteAllText("appsettings.json", JsonSerializer.Serialize(jsonObj, new JsonSerializerOptions { WriteIndented = true }));
-
-        // ============================
-        // 6. Best Practices
-        // ============================
-        // ✅ Use IOptionsMonitor<T> for real-time updates (ASP.NET Core).
-        // ✅ Use polling mechanisms for WPF/WinForms apps.
-        // ✅ To persist changes, manually update JSON and reload IConfiguration.
-        // ✅ Use InMemoryCollection() for temporary changes that reset on restart.
+        // configuration-in-aspnet-core-detecting-and-updating.md
 
         private static readonly Lazy <IConfiguration> _config = new (() =>
         {

@@ -121,14 +121,7 @@ namespace yyLib
         // Default
         // -----------------------------------------------------------------------------
 
-        // ⚠️ Avoid 'const' for values that may change in the future!
-        //
-        // 🔹 Why?
-        // - 'const' values are **inlined at compile time**, meaning updates require recompilation.
-        // - This can lead to outdated values in consuming assemblies, causing unexpected bugs.
-        //
-        // 🔹 Use 'const' for truly immutable values (e.g., Pi).
-        // 🔹 Use 'static readonly' for config values, file paths, or settings to allow updates at runtime.
+        // const-vs-static-readonly-in-csharp.md
 
         // Disables the warning for explicitly initializing a default value (CA1805).
         [SuppressMessage ("Performance", "CA1805")]
