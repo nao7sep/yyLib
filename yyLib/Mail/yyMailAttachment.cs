@@ -21,6 +21,13 @@ namespace yyLib
 
             set
             {
+                // If the file has been sent and saved somewhere else,
+                // the file may not be available at the original path, which is OK.
+                // We just need to make sure the path is fully qualified.
+
+                if (Path.IsPathFullyQualified (value) == false)
+                    throw new yyArgumentException ($"The path '{value}' is not fully qualified.");
+
                 _originalFilePath = value;
 
                 FileInfo xFile = new (value);
@@ -40,15 +47,47 @@ namespace yyLib
             }
         }
 
+        private string? _newFileName;
+
         /// <summary>
         /// NOT auto-generated from OriginalFilePath.
         /// Use the ?? operator when referencing this property.
         /// </summary>
         [JsonPropertyName ("new_file_name")]
-        public string? NewFileName { get; set; }
+        public string? NewFileName
+        {
+            get => _newFileName;
+
+            set
+            {
+                if (string.IsNullOrWhiteSpace (value))
+                    throw new yyArgumentException ("The new file name is null or empty.");
+
+                if (Path.IsPathFullyQualified (value))
+                    throw new yyArgumentException ($"The path '{value}' is fully qualified.");
+
+                _newFileName = value;
+            }
+        }
+
+        private string? _currentRelativeFilePath;
 
         [JsonPropertyName ("current_relative_file_path")]
-        public string? CurrentRelativeFilePath { get; set; }
+        public string? CurrentRelativeFilePath
+        {
+            get => _currentRelativeFilePath;
+
+            set
+            {
+                if (string.IsNullOrWhiteSpace (value))
+                    throw new yyArgumentException ("The current relative file path is null or empty.");
+
+                if (Path.IsPathFullyQualified (value))
+                    throw new yyArgumentException ($"The path '{value}' is fully qualified.");
+
+                _currentRelativeFilePath = value;
+            }
+        }
 
         /// <summary>
         /// Auto-generated from OriginalFilePath.
