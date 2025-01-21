@@ -8,6 +8,9 @@
         /// </summary>
         public static void Create (string path)
         {
+            if (string.IsNullOrWhiteSpace (path) || Path.IsPathFullyQualified (path) == false)
+                throw new yyArgumentException ($"'{nameof (path)}' is invalid: {path.GetVisibleString ()}");
+
             if (File.Exists (path) == false)
             {
                 yyDirectory.CreateParent (path);

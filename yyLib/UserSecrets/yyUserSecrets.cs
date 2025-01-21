@@ -24,10 +24,10 @@ namespace yyLib
             // By default, the following file paths are tried in order.
             // If any file exists, yyUserSecretsLoader.Load attempts to deserialize it and tries no more.
 
-            Path.Join (yySpecialDirectories.UserProfile, DefaultFileName),
-            Path.Join (yySpecialDirectories.AppData, DefaultFileName),
-            Path.Join (yySpecialDirectories.LocalAppData, DefaultFileName),
-            Path.Join (yySpecialDirectories.CommonAppData, DefaultFileName),
+            yyPath.Join (yySpecialDirectories.UserProfile, DefaultFileName),
+            yyPath.Join (yySpecialDirectories.AppData, DefaultFileName),
+            yyPath.Join (yySpecialDirectories.LocalAppData, DefaultFileName),
+            yyPath.Join (yySpecialDirectories.CommonAppData, DefaultFileName),
             yyAppDirectory.MapPath (DefaultFileName)
         ]);
 

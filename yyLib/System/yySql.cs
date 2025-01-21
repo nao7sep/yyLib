@@ -66,7 +66,7 @@ namespace yyLib
         [GeneratedRegex (@"^[a-zA-Z_][a-zA-Z0-9_]*$")]
         public static partial Regex ObjectNameRegex ();
 
-        public static void ValidateObjectName (string? objectName, bool avoidsReservedKeywords = true)
+        public static void ValidateObjectName (string? objectName, bool avoidReservedKeywords = true)
         {
             if (string.IsNullOrEmpty (objectName))
                 throw new yyArgumentException ("Object name cannot be null or empty.");
@@ -78,7 +78,7 @@ namespace yyLib
             if (ObjectNameRegex ().IsMatch (objectName) == false)
                 throw new yyArgumentException ($"Object name '{objectName}' is invalid.");
 
-            if (avoidsReservedKeywords && ReservedKeywords.Contains (objectName, StringComparer.OrdinalIgnoreCase))
+            if (avoidReservedKeywords && ReservedKeywords.Contains (objectName, StringComparer.OrdinalIgnoreCase))
                 throw new yyArgumentException ($"Object name '{objectName}' is a reserved keyword.");
         }
     }

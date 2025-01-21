@@ -13,6 +13,9 @@ namespace yyLib
         {
             foreach (string xFilePath in filePaths)
             {
+                if (string.IsNullOrWhiteSpace (xFilePath) || Path.IsPathFullyQualified (xFilePath) == false)
+                    throw new yyArgumentException ($"'{nameof (filePaths)}' is invalid: {xFilePath.GetVisibleString ()}");
+
                 if (File.Exists (xFilePath))
                     return yyUserSecretsParser.Parse (File.ReadAllText (xFilePath, encoding ?? Encoding.UTF8));
             }

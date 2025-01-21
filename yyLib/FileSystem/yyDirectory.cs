@@ -7,6 +7,9 @@
         /// </summary>
         public static void Create (string path)
         {
+            if (string.IsNullOrWhiteSpace (path) || Path.IsPathFullyQualified (path) == false)
+                throw new yyArgumentException ($"'{nameof (path)}' is invalid: {path.GetVisibleString ()}");
+
             if (Directory.Exists (path) == false)
                 Directory.CreateDirectory (path);
         }
@@ -22,7 +25,7 @@
             // Path.GetDirectoryName returns null if 'path' is null or it's a root directory.
             // No point in specifying null as 'path' and call this method.
 
-            if (path == null || Path.IsPathFullyQualified (path) == false)
+            if (string.IsNullOrWhiteSpace (path) || Path.IsPathFullyQualified (path) == false)
                 throw new yyArgumentException ($"'{nameof (path)}' is invalid: {path.GetVisibleString ()}");
 
             string? xParentDirectoryPath = Path.GetDirectoryName (path);

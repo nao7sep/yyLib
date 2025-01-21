@@ -73,8 +73,11 @@ namespace yyLib
             // There's no point in locking here because the file name will be based on createdAtUtc.
             // We can only hope that createdAtUtc will be unique enough to prevent conflicts.
 
+            if (DirectoryPath == null)
+                throw new yyInvalidOperationException ($"'{nameof (DirectoryPath)}' is null.");
+
             string xFileName = $"Log-{yyConverter.DateTimeToRoundtripFileNameString (createdAtUtc)}.json",
-                xFilePath = Path.Join (DirectoryPath, xFileName);
+                xFilePath = yyPath.Join (DirectoryPath, xFileName);
 
             yyLog xLog = new ()
             {

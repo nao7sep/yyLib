@@ -33,7 +33,10 @@
         public static string NormalizeSeparators (string path, char separator) =>
             path.Replace (GetOtherSeparator (separator), separator);
 
-        public static string Join (char separator, params string [] paths)
+        /// <summary>
+        /// Does NOT check if each path is valid.
+        /// </summary>
+        public static string Join (char separator, bool normalize, params string [] paths)
         {
             if (paths.Length < 2)
                 throw new yyArgumentException ("At least two paths are required.");
@@ -47,14 +50,30 @@
             if (xTrimmedPaths.Any (x => string.IsNullOrEmpty (x)))
                 throw new yyArgumentException ("Empty paths are not allowed.");
 
-            string xJoinedPath = string.Join (separator, xTrimmedPaths);
+            string xJoinedPath = string.Join (separator, xTrimmedPaths),
+               xNormalizedPath = NormalizeSeparators (xJoinedPath, separator);
 
-            return NormalizeSeparators (xJoinedPath, separator);
+            if (normalize)
+                return Path.GetFullPath (xNormalizedPath);
+            else return xNormalizedPath;
         }
 
-        public static string Join (params string [] paths) => Join (DefaultSeparator, paths);
+        /// <summary>
+        /// Does NOT check if each path is valid.
+        /// </summary>
+        public static string Join (char separator, params string [] paths) => Join (separator, normalize: true, paths);
 
-        public static string GetAbsolutePath (string basePath, string relativePath, char separator)
+        /// <summary>
+        /// Does NOT check if each path is valid.
+        /// </summary>
+        public static string Join (bool normalize, params string [] paths) => Join (DefaultSeparator, normalize, paths);
+
+        /// <summary>
+        /// Does NOT check if each path is valid.
+        /// </summary>
+        public static string Join (params string [] paths) => Join (DefaultSeparator, normalize: true, paths);
+
+        public static string GetAbsolutePath (string basePath, string relativePath, char separator, bool normalize = true)
         {
             if (Path.IsPathFullyQualified (basePath) == false)
                 throw new yyArgumentException ("The base path must be fully qualified.");
@@ -62,11 +81,11 @@
             if (Path.IsPathFullyQualified (relativePath))
                 throw new yyArgumentException ("The relative path must be relative.");
 
-            return Join (separator, basePath, relativePath);
+            return Join (separator, normalize, basePath, relativePath);
         }
 
-        public static string GetAbsolutePath (string basePath, string relativePath) =>
-            GetAbsolutePath (basePath, relativePath, DefaultSeparator);
+        public static string GetAbsolutePath (string basePath, string relativePath, bool normalize = true) =>
+            GetAbsolutePath (basePath, relativePath, DefaultSeparator, normalize);
 
         // https://github.com/dotnet/runtime/blob/2b60d82ef3e87876128b7f71922a1b72908b6fcf/src/libraries/System.Private.CoreLib/src/System/IO/Path.Windows.cs
         // https://github.com/dotnet/runtime/blob/2b60d82ef3e87876128b7f71922a1b72908b6fcf/src/libraries/System.Private.CoreLib/src/System/IO/Path.Unix.cs

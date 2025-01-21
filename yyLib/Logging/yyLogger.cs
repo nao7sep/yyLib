@@ -8,7 +8,7 @@ namespace yyLib
     // 'RecentLogs' contains only the logs that have been written during the current session.
 
     // By default, logs are written only to JSON files as the JSON mode is almost thread-safe (but not completely). => Added a lock to the text mode.
-    // We can change WritesToTextFile/WritesToJsonFiles anytime as there's no caching involved. => And also WritesToSqliteDatabase.
+    // We can change WriteToTextFile/WriteToJsonFiles anytime as there's no caching involved. => And also WriteToSqliteDatabase.
     // Added comment: JSON is still the default mode as it's reliable, entry-based and human-readable.
 
     // The yyLogger class previously inherited from IEnumerable<yyLog> to allow iteration over logs.
@@ -32,25 +32,25 @@ namespace yyLib
 
         public void AddRecentLog (yyLog log) => RecentLogs.Add (log);
 
-        [JsonPropertyName ("writes_to_text_file")]
-        [ConfigurationKeyName ("writes_to_text_file")]
-        public bool? WritesToTextFile { get; set; }
+        [JsonPropertyName ("write_to_text_file")]
+        [ConfigurationKeyName ("write_to_text_file")]
+        public bool? WriteToTextFile { get; set; }
 
         [JsonPropertyName ("text_log_writer")]
         [ConfigurationKeyName ("text_log_writer")]
         public yyTextLogWriter? TextLogWriter { get; set; }
 
-        [JsonPropertyName ("writes_to_json_files")]
-        [ConfigurationKeyName ("writes_to_json_files")]
-        public bool? WritesToJsonFiles { get; set; }
+        [JsonPropertyName ("write_to_json_files")]
+        [ConfigurationKeyName ("write_to_json_files")]
+        public bool? WriteToJsonFiles { get; set; }
 
         [JsonPropertyName ("json_log_writer")]
         [ConfigurationKeyName ("json_log_writer")]
         public yyJsonLogWriter? JsonLogWriter { get; set; }
 
-        [JsonPropertyName ("writes_to_sqlite_database")]
-        [ConfigurationKeyName ("writes_to_sqlite_database")]
-        public bool? WritesToSqliteDatabase { get; set; }
+        [JsonPropertyName ("write_to_sqlite_database")]
+        [ConfigurationKeyName ("write_to_sqlite_database")]
+        public bool? WriteToSqliteDatabase { get; set; }
 
         [JsonPropertyName ("sqlite_log_writer")]
         [ConfigurationKeyName ("sqlite_log_writer")]
@@ -74,13 +74,13 @@ namespace yyLib
             // 1) We might eventually need to add a writer that writes to a database or the OS event log. => Just added one.
             // 2) Loggers shouldnt throw exceptions and the recommended TryWrite methods will ignore any exceptions.
 
-            if (WritesToTextFile == true)
+            if (WriteToTextFile == true)
                 TextLogWriter?.Write (xCreatedAtUtc, key, value);
 
-            if (WritesToJsonFiles == true)
+            if (WriteToJsonFiles == true)
                 JsonLogWriter?.Write (xCreatedAtUtc, key, value);
 
-            if (WritesToSqliteDatabase == true)
+            if (WriteToSqliteDatabase == true)
                 SqliteLogWriter?.Write (xCreatedAtUtc, key, value);
         }
 
@@ -125,17 +125,17 @@ namespace yyLib
 
         // Disables the warning for explicitly initializing a default value (CA1805).
         [SuppressMessage ("Performance", "CA1805")]
-        public static readonly bool DefaultWritesToTextFile = false;
+        public static readonly bool DefaultWriteToTextFile = false;
         public static readonly string TextLogWriterDefaultRelativeFilePath = "Logs.txt";
         public static readonly string TextLogWriterDefaultEncodingName = "utf-8";
 
-        public static readonly bool DefaultWritesToJsonFiles = true;
+        public static readonly bool DefaultWriteToJsonFiles = true;
         public static readonly string JsonLogWriterDefaultRelativeDirectoryPath = "Logs";
         public static readonly string JsonLogWriterDefaultEncodingName = "utf-8";
 
         // Disables the warning for explicitly initializing a default value (CA1805).
         [SuppressMessage ("Performance", "CA1805")]
-        public static readonly bool DefaultWritesToSqliteDatabase = false;
+        public static readonly bool DefaultWriteToSqliteDatabase = false;
         public static readonly string SqliteLogWriterDefaultRelativeFilePath = "Logs.db";
         public static readonly string SqliteLogWriterDefaultTableName = "Logs";
 
@@ -153,7 +153,7 @@ namespace yyLib
 
             return new yyLogger
             {
-                WritesToTextFile = DefaultWritesToTextFile,
+                WriteToTextFile = DefaultWriteToTextFile,
 
                 TextLogWriter = new yyTextLogWriter
                 {
@@ -161,7 +161,7 @@ namespace yyLib
                     EncodingName = TextLogWriterDefaultEncodingName
                 },
 
-                WritesToJsonFiles = DefaultWritesToJsonFiles,
+                WriteToJsonFiles = DefaultWriteToJsonFiles,
 
                 JsonLogWriter = new yyJsonLogWriter
                 {
@@ -169,7 +169,7 @@ namespace yyLib
                     EncodingName = JsonLogWriterDefaultEncodingName
                 },
 
-                WritesToSqliteDatabase = DefaultWritesToSqliteDatabase,
+                WriteToSqliteDatabase = DefaultWriteToSqliteDatabase,
 
                 SqliteLogWriter = new yySqliteLogWriter
                 {
