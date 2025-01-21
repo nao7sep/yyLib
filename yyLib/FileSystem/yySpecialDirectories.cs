@@ -5,12 +5,12 @@
         // Environment.SpecialFolder Enum (System) | Microsoft Learn
         // https://docs.microsoft.com/en-us/dotnet/api/system.environment.specialfolder
 
-        private static readonly Lazy <string> _desktop = new (() => Environment.GetFolderPath (Environment.SpecialFolder.DesktopDirectory)); // The one that gets the physical path.
+        private static readonly Lazy <string> _desktop = new (Environment.GetFolderPath (Environment.SpecialFolder.DesktopDirectory)); // The one that gets the physical path.
 
         // "DesktopDirectory" would be redundant.
         public static string Desktop => _desktop.Value;
 
-        private static readonly Lazy <string> _commonDesktop = new (() => Environment.GetFolderPath (Environment.SpecialFolder.CommonDesktopDirectory));
+        private static readonly Lazy <string> _commonDesktop = new (Environment.GetFolderPath (Environment.SpecialFolder.CommonDesktopDirectory));
 
         public static string CommonDesktop => _commonDesktop.Value;
 
@@ -19,7 +19,7 @@
         // The official document says: Applications should not create files or folders at this level; they should put their data under the locations referred to by ApplicationData.
         // But a lot of apps do make directories and files there.
 
-        private static readonly Lazy <string> _userProfile = new (() => Environment.GetFolderPath (Environment.SpecialFolder.UserProfile));
+        private static readonly Lazy <string> _userProfile = new (Environment.GetFolderPath (Environment.SpecialFolder.UserProfile));
 
         public static string UserProfile => _userProfile.Value;
 
@@ -28,21 +28,21 @@
 
         // -----------------------------------------------------------------------------
 
-        private static readonly Lazy <string> _appData = new (() => Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData));
+        private static readonly Lazy <string> _appData = new (Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData));
 
         /// <summary>
         /// Store user-specific settings and data that should persist across multiple networked machines here.
         /// </summary>
         public static string AppData => _appData.Value;
 
-        private static readonly Lazy <string> _localAppData = new (() => Environment.GetFolderPath (Environment.SpecialFolder.LocalApplicationData));
+        private static readonly Lazy <string> _localAppData = new (Environment.GetFolderPath (Environment.SpecialFolder.LocalApplicationData));
 
         /// <summary>
         /// Ideal for storing large or machine-specific user data that doesn't need to be shared across machines.
         /// </summary>
         public static string LocalAppData => _localAppData.Value;
 
-        private static readonly Lazy <string> _commonAppData = new (() => Environment.GetFolderPath (Environment.SpecialFolder.CommonApplicationData));
+        private static readonly Lazy <string> _commonAppData = new (Environment.GetFolderPath (Environment.SpecialFolder.CommonApplicationData));
 
         // There's no enum value to get "LocalLow".
         // It's less frequently used and is not implemented for now.

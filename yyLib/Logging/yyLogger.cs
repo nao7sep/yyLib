@@ -151,11 +151,11 @@ namespace yyLib
             if (yyUserSecrets.Default.Logger != null)
                 return yyUserSecrets.Default.Logger;
 
-            return new yyLogger
+            return new ()
             {
                 WriteToTextFile = DefaultWriteToTextFile,
 
-                TextLogWriter = new yyTextLogWriter
+                TextLogWriter = new ()
                 {
                     RelativeFilePath = TextLogWriterDefaultRelativeFilePath,
                     EncodingName = TextLogWriterDefaultEncodingName
@@ -163,7 +163,7 @@ namespace yyLib
 
                 WriteToJsonFiles = DefaultWriteToJsonFiles,
 
-                JsonLogWriter = new yyJsonLogWriter
+                JsonLogWriter = new ()
                 {
                     RelativeDirectoryPath = JsonLogWriterDefaultRelativeDirectoryPath,
                     EncodingName = JsonLogWriterDefaultEncodingName
@@ -171,7 +171,7 @@ namespace yyLib
 
                 WriteToSqliteDatabase = DefaultWriteToSqliteDatabase,
 
-                SqliteLogWriter = new yySqliteLogWriter
+                SqliteLogWriter = new ()
                 {
                     RelativeFilePath = SqliteLogWriterDefaultRelativeFilePath,
                     TableName = SqliteLogWriterDefaultTableName

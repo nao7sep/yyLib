@@ -9,11 +9,9 @@ namespace yyLib
         // The properties are sorted in the order of the API reference.
 
         [JsonPropertyName ("prompt")]
-        public string? Prompt { get; set; }
+        public required string Prompt { get; set; }
 
-        // There's no default value for this property because it's optional.
-        // Chat completions' Model, on the other hand, is required and has a default value.
-
+        // Surprisingly, an optional parameter.
         [JsonPropertyName ("model")]
         public string? Model { get; set; }
 

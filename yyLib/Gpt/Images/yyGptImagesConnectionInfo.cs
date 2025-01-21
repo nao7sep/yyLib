@@ -1,31 +1,59 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.Configuration;
 
 namespace yyLib
 {
-    public class yyGptImagesConnectionInfo
+    public class yyGptImagesConnectionInfo: yyGptConnectionInfo
     {
-        [JsonPropertyName ("api_key")]
-        public string? ApiKey { get; set; }
+        // -----------------------------------------------------------------------------
+        // Default
+        // -----------------------------------------------------------------------------
 
-        [JsonPropertyName ("organization")]
-        public string? Organization { get; set; }
+        public static readonly string DefaultEndpoint = "https://api.openai.com/v1/images/generations";
 
-        [JsonPropertyName ("project")]
-        public string? Project { get; set; }
-
-        [JsonPropertyName ("endpoint")]
-        public string? Endpoint { get; set; }
-
-        [JsonPropertyName ("timeout")]
-        public int? Timeout { get; set; }
-
-        public yyGptImagesConnectionInfo ()
+        public static yyGptImagesConnectionInfo ConvertFromBase (yyGptConnectionInfo gptConnectionInfo)
         {
-            ApiKey = yyGpt.DefaultApiKey;
-            Organization = yyGpt.DefaultOrganization;
-            Project = yyGpt.DefaultProject;
-            Endpoint = yyGptImages.DefaultEndpoint;
-            Timeout = yyGpt.DefaultTimeout;
+            return new yyGptImagesConnectionInfo
+            {
+                ApiKey = gptConnectionInfo.ApiKey,
+                Organization = gptConnectionInfo.Organization,
+                Project = gptConnectionInfo.Project,
+                Endpoint = gptConnectionInfo.Endpoint,
+                Timeout = gptConnectionInfo.Timeout
+            };
         }
+
+        // Suppresses the warning about catching a general exception (CA1031).
+        [SuppressMessage ("Design", "CA1031")]
+        private static yyGptImagesConnectionInfo _CreateDefault ()
+        {
+            var xGptImagesConnectionSection = yyAppSettings.Config.GetSection ("gpt_images_connection");
+
+            if (xGptImagesConnectionSection.Exists () &&
+                xGptImagesConnectionSection.GetChildren ().Any () &&
+                xGptImagesConnectionSection.Get <yyGptImagesConnectionInfo> () is { } xGptImagesConnectionInfo)
+                    return xGptImagesConnectionInfo;
+
+            if (yyUserSecrets.Default.GptImagesConnection != null)
+                return yyUserSecrets.Default.GptImagesConnection;
+
+            try
+            {
+                var xGptConnectionInfo = yyGptConnectionInfo.Default;
+                return ConvertFromBase (xGptConnectionInfo);
+            }
+
+            catch
+            {
+                // The exception from accessing the Default property is disregarded because this is a fallback mechanism.
+                // The purpose here is to try our luck and proceed only if it succeeds.
+            }
+
+            throw new yyInvalidDataException ("No GPT images connection info found.");
+        }
+
+        private static readonly Lazy <yyGptImagesConnectionInfo> _default = new (_CreateDefault ());
+
+        public static new yyGptImagesConnectionInfo Default => _default.Value;
     }
 }

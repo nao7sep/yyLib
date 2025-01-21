@@ -59,7 +59,7 @@ namespace yyLib
 
         public static string [] ReservedKeywords => _reservedKeywords.Value;
 
-        private static readonly Lazy <HashSet <string>> _reservedKeywordsSet = new (() => ReservedKeywords.ToHashSet ());
+        private static readonly Lazy <HashSet <string>> _reservedKeywordsSet = new (ReservedKeywords.ToHashSet ());
 
         public static HashSet <string> ReservedKeywordsSet => _reservedKeywordsSet.Value;
 

@@ -10,11 +10,11 @@ namespace yyLibConsole
         [SuppressMessage ("Globalization", "CA1303")]
         public static void Run (string firstAssistantSystemMessage, string secondAssistantSystemMessage, int interactionCount)
         {
-            yyGptChatConnectionInfo xConnectionInfo = new ();
-            yyGptImagesConnectionInfo xImagesConnectionInfo = new ();
+            yyGptChatConnectionInfo xConnectionInfo = yyGptChatConnectionInfo.Default;
+            yyGptImagesConnectionInfo xImagesConnectionInfo = yyGptImagesConnectionInfo.Default;
 
-            yyGptChatRequest xFirstAssistantRequest = new (),
-                            xSecondAssistantRequest = new ();
+            yyGptChatRequest xFirstAssistantRequest = new () { Model = yyGptChat.DefaultModel },
+                             xSecondAssistantRequest = new () { Model = yyGptChat.DefaultModel };
 
             xFirstAssistantRequest.AddSystemMessage (firstAssistantSystemMessage);
             xSecondAssistantRequest.AddSystemMessage (secondAssistantSystemMessage);
@@ -66,9 +66,10 @@ namespace yyLibConsole
                         // https://platform.openai.com/docs/guides/images
 
                         Prompt = xGeneratedMessage,
-                        Model = "dall-e-3",
-                        Quality = "hd", // or "standard"
-                        Size = "1024x1024" // or "1792x1024" or "1024x1792"
+                        Model = yyGptImages.DefaultModel,
+                        Quality = yyGptImages.DefaultQuality,
+                        Size = yyGptImages.DefaultSize,
+                        Style = yyGptImages.DefaultStyle
                     };
 
                     if ((temp + 6) % 10 == 0) // 4, 14...

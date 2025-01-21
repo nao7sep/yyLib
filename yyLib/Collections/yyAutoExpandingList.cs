@@ -11,7 +11,7 @@ namespace yyLib
         private void _EnsureCapacity (int capacity)
         {
             while (Items.Count < capacity)
-                Items.Add (new ItemType ());
+                Items.Add (new ());
         }
 
         public ItemType this [int index]

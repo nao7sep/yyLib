@@ -20,12 +20,12 @@ namespace yyLib
         {
             ConnectionInfo = connectionInfo;
 
-            HttpClient = new HttpClient ();
+            HttpClient = new ()
+            {
+                Timeout = TimeSpan.FromSeconds (ConnectionInfo.Timeout)
+            };
 
-            if (ConnectionInfo.Timeout != null)
-                HttpClient.Timeout = TimeSpan.FromSeconds (ConnectionInfo.Timeout.Value);
-
-            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue ("Bearer", ConnectionInfo.ApiKey);
+            HttpClient.DefaultRequestHeaders.Authorization = new ("Bearer", ConnectionInfo.ApiKey);
 
             if (string.IsNullOrWhiteSpace (ConnectionInfo.Organization) == false)
                 HttpClient.DefaultRequestHeaders.Add ("OpenAI-Organization", ConnectionInfo.Organization);
@@ -41,8 +41,8 @@ namespace yyLib
 
             var xJsonString = JsonSerializer.Serialize (request, yyJson.DefaultSerializationOptions);
 
-            using var xContent = new StringContent (xJsonString, Encoding.UTF8, "application/json");
-            using var xMessage = new HttpRequestMessage (HttpMethod.Post, ConnectionInfo.Endpoint) { Content = xContent };
+            using StringContent xContent = new (xJsonString, Encoding.UTF8, "application/json");
+            using HttpRequestMessage xMessage = new (HttpMethod.Post, ConnectionInfo.Endpoint) { Content = xContent };
 
             var xResponse = await HttpClient.SendAsync (xMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait (false);
 
@@ -59,7 +59,7 @@ namespace yyLib
             ResponseStream = await xResponse.Content.ReadAsStreamAsync (cancellationToken).ConfigureAwait (false);
 
             ResponseStreamReader?.Dispose ();
-            ResponseStreamReader = new StreamReader (ResponseStream);
+            ResponseStreamReader = new (ResponseStream);
 
             return (xResponse, ResponseStream);
         }

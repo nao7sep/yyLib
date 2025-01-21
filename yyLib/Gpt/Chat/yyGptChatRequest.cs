@@ -11,11 +11,11 @@ namespace yyLib
         // The properties are sorted in the order of the API reference.
 
         [JsonPropertyName ("messages")]
-        public IList <yyGptChatMessage> Messages { get; } = [];
+        public IList <yyGptChatMessage> Messages { get; } = []; // Required.
 
         public void AddMessage (yyGptChatRole role, string content, string? name = null)
         {
-            Messages.Add (new yyGptChatMessage
+            Messages.Add (new ()
             {
                 Role = role,
                 Content = content,
@@ -33,7 +33,7 @@ namespace yyLib
             AddMessage (yyGptChatRole.Assistant, content, name);
 
         [JsonPropertyName ("model")]
-        public string? Model { get; set; }
+        public required string Model { get; set; }
 
         [JsonPropertyName ("frequency_penalty")]
         public double? FrequencyPenalty { get; set; }
@@ -76,7 +76,5 @@ namespace yyLib
 
         [JsonPropertyName ("user")]
         public string? User { get; set; }
-
-        public yyGptChatRequest () => Model = yyGptChat.DefaultModel;
     }
 }

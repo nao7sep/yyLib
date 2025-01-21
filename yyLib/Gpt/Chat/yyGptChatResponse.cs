@@ -48,6 +48,6 @@ namespace yyLib
         /// <summary>
         /// Returned by yyGptChatResponseParser.ParseChunk when "data: [DONE]" is detected.
         /// </summary>
-        public static yyGptChatResponse Empty { get; } = new yyGptChatResponse ();
+        public static yyGptChatResponse Empty { get; } = new ();
     }
 }

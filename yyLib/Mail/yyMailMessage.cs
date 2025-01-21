@@ -39,7 +39,7 @@ namespace yyLib
             Attachments.Add (attachment);
         }
 
-        public void AddAttachment (string originalFilePath, string? newFileName = null) => AddAttachment (new yyMailAttachment
+        public void AddAttachment (string originalFilePath, string? newFileName = null) => AddAttachment (new ()
         {
             OriginalFilePath = originalFilePath,
             NewFileName = newFileName
@@ -54,7 +54,7 @@ namespace yyLib
             Bcc.Add (contact);
         }
 
-        public void AddBcc (string address, string? name = null) => AddBcc (new yyMailContact
+        public void AddBcc (string address, string? name = null) => AddBcc (new ()
         {
             Address = address,
             Name = name
@@ -69,7 +69,7 @@ namespace yyLib
             Cc.Add (contact);
         }
 
-        public void AddCc (string address, string? name = null) => AddCc (new yyMailContact
+        public void AddCc (string address, string? name = null) => AddCc (new ()
         {
             Address = address,
             Name = name
@@ -96,7 +96,7 @@ namespace yyLib
             From.Add (contact);
         }
 
-        public void AddFrom (string address, string? name = null) => AddFrom (new yyMailContact
+        public void AddFrom (string address, string? name = null) => AddFrom (new ()
         {
             Address = address,
             Name = name
@@ -161,7 +161,7 @@ namespace yyLib
             ReplyTo.Add (contact);
         }
 
-        public void AddReplyTo (string address, string? name = null) => AddReplyTo (new yyMailContact
+        public void AddReplyTo (string address, string? name = null) => AddReplyTo (new ()
         {
             Address = address,
             Name = name
@@ -203,7 +203,7 @@ namespace yyLib
             To.Add (contact);
         }
 
-        public void AddTo (string address, string? name = null) => AddTo (new yyMailContact
+        public void AddTo (string address, string? name = null) => AddTo (new ()
         {
             Address = address,
             Name = name

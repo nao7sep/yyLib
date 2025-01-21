@@ -2,11 +2,15 @@
 {
     public static class yyGptChat
     {
-        public static string DefaultEndpoint { get; } = yyUserSecrets.Default.OpenAi?.ChatEndpoint.WhiteSpaceToNull () ?? "https://api.openai.com/v1/chat/completions";
+        // https://platform.openai.com/docs/api-reference/chat
 
-        // Must be updated periodically to the latest stable model.
         // https://platform.openai.com/docs/models/gpt-4o
-        // https://platform.openai.com/docs/models/gpt-4-turbo-and-gpt-4
-        public static string DefaultModel { get; } = yyUserSecrets.Default.OpenAi?.ChatModel.WhiteSpaceToNull () ?? "gpt-4o";
+        public static readonly string DefaultModel = "gpt-4o";
+
+        // The 'reasoning_effort' parameter is applicable exclusively to o1 models.
+        // It accepts the following string values: 'low', 'medium', and 'high'.
+        // This parameter constrains the model's reasoning effort, with 'medium' as the default setting.
+        // Lowering the reasoning effort can lead to faster responses and reduce the number of tokens used for reasoning in a response.
+        public static readonly string DefaultReasoningEffort = "medium";
     }
 }

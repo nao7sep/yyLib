@@ -11,8 +11,8 @@ namespace yyLibConsole
             yyMailConnectionInfo? xConnectionInfo = yyMailConnectionInfo.Default;
 
             yyMailMessage xMessage = new ();
-            (xMessage.From ??= []).Add (new yyMailContact { Address = from });
-            (xMessage.To ??= []).Add (new yyMailContact { Address = to });
+            (xMessage.From ??= []).Add (new () { Address = from });
+            (xMessage.To ??= []).Add (new () { Address = to });
             xMessage.Subject = "Test Message";
             xMessage.TextBody = "This is a test message.";
 

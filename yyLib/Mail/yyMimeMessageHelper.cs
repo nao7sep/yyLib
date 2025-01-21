@@ -46,7 +46,7 @@ namespace yyLib
                 mimeMessage.ReplyTo.AddRange (mailMessage.ReplyTo.Select (x => new MailboxAddress (x.Name, x.Address)));
 
             if (mailMessage.Sender != null)
-                mimeMessage.Sender = new MailboxAddress (mailMessage.Sender.Name, mailMessage.Sender.Address);
+                mimeMessage.Sender = new (mailMessage.Sender.Name, mailMessage.Sender.Address);
 
             if (mailMessage.Subject != null)
                 mimeMessage.Subject = mailMessage.Subject;
@@ -81,7 +81,7 @@ namespace yyLib
                     xBodyBuilder.Attachments.Add (new MimePart (MimeTypes.GetMimeType (xAttachment.OriginalFilePath))
                     {
                         FileName = xAttachment.NewFileName ?? Path.GetFileName (xAttachment.OriginalFilePath),
-                        ContentDisposition = new ContentDisposition (ContentDisposition.Attachment),
+                        ContentDisposition = new (ContentDisposition.Attachment),
                         ContentTransferEncoding = ContentEncoding.Base64,
                         Content = new MimeContent (new MemoryStream (File.ReadAllBytes (xAttachment.OriginalFilePath!))) // Avoids memory leakage.
                     });

@@ -134,17 +134,17 @@ namespace yyLib
         {
             Assembly = assembly;
 
-            _assemblyName = new (() => Assembly.GetName ().Name);
-            _assemblyTitle = new (() => Assembly.GetCustomAttribute <AssemblyTitleAttribute> ()?.Title);
-            _company = new (() => Assembly.GetCustomAttribute <AssemblyCompanyAttribute> ()?.Company);
-            _product = new (() => Assembly.GetCustomAttribute <AssemblyProductAttribute> ()?.Product);
-            _description = new (() => Assembly.GetCustomAttribute <AssemblyDescriptionAttribute> ()?.Description);
-            _copyright = new (() => Assembly.GetCustomAttribute <AssemblyCopyrightAttribute> ()?.Copyright);
-            _configuration = new (() => Assembly.GetCustomAttribute <AssemblyConfigurationAttribute> ()?.Configuration);
-            _version = new (() => Assembly.GetName ().Version);
-            _assemblyVersion = new (() => Assembly.GetName ().Version);
-            _fileVersion = new (() => Assembly.GetCustomAttribute <AssemblyFileVersionAttribute> ()?.Version);
-            _informationalVersion = new (() => Assembly.GetCustomAttribute <AssemblyInformationalVersionAttribute> ()?.InformationalVersion);
+            _assemblyName = new (Assembly.GetName ().Name);
+            _assemblyTitle = new (Assembly.GetCustomAttribute <AssemblyTitleAttribute> ()?.Title);
+            _company = new (Assembly.GetCustomAttribute <AssemblyCompanyAttribute> ()?.Company);
+            _product = new (Assembly.GetCustomAttribute <AssemblyProductAttribute> ()?.Product);
+            _description = new (Assembly.GetCustomAttribute <AssemblyDescriptionAttribute> ()?.Description);
+            _copyright = new (Assembly.GetCustomAttribute <AssemblyCopyrightAttribute> ()?.Copyright);
+            _configuration = new (Assembly.GetCustomAttribute <AssemblyConfigurationAttribute> ()?.Configuration);
+            _version = new (Assembly.GetName ().Version);
+            _assemblyVersion = new (Assembly.GetName ().Version);
+            _fileVersion = new (Assembly.GetCustomAttribute <AssemblyFileVersionAttribute> ()?.Version);
+            _informationalVersion = new (Assembly.GetCustomAttribute <AssemblyInformationalVersionAttribute> ()?.InformationalVersion);
         }
 
         /// <summary>

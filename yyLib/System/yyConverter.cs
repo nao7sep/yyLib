@@ -67,14 +67,14 @@ namespace yyLib
 
         public static EnumType StringToEnum <EnumType> (string str, bool ignoreCase = true) where EnumType: struct, Enum
         {
-            if (Enum.TryParse <EnumType> (str, ignoreCase: ignoreCase, out EnumType xValue) == false)
+            if (Enum.TryParse (str, ignoreCase: ignoreCase, out EnumType xValue) == false)
                 throw new yyArgumentException ($"Invalid {typeof (EnumType).Name} string: {str}");
 
             return xValue;
         }
 
         public static bool TryStringToEnum <EnumType> (string str, out EnumType value, bool ignoreCase = true) where EnumType: struct, Enum =>
-            Enum.TryParse <EnumType> (str, ignoreCase: ignoreCase, out value);
+            Enum.TryParse (str, ignoreCase: ignoreCase, out value);
 
         public static EnumType ValueToEnum <EnumType> (object value) where EnumType: struct, Enum
         {
