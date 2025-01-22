@@ -23,7 +23,7 @@ namespace yyLib
             });
         }
 
-        [Obsolete ("Use AddDeveloperMessage instead, if the model supports it.")]
+        [Obsolete ("Use AddDeveloperMessage instead.")]
         public void AddSystemMessage (string content, string? name = null) =>
             AddMessage (yyGptChatRole.System, content, name);
 

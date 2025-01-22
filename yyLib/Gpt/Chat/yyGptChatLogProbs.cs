@@ -11,5 +11,8 @@ namespace yyLib
 
         [JsonPropertyName ("content")]
         public IList <yyGptChatContent>? Content { get; set; }
+
+        [JsonPropertyName ("refusal")]
+        public IList <yyGptChatContent>? Refusal { get; set; }
     }
 }

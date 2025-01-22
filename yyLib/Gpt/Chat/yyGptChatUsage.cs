@@ -17,5 +17,11 @@ namespace yyLib
 
         [JsonPropertyName ("total_tokens")]
         public int? TotalTokens { get; set; }
+
+        [JsonPropertyName ("completion_tokens_details")]
+        public yyGptChatTokensDetails? CompletionTokensDetails { get; set; }
+
+        [JsonPropertyName ("prompt_tokens_details")]
+        public yyGptChatTokensDetails? PromptTokensDetails { get; set; }
     }
 }
