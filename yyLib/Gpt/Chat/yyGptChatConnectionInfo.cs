@@ -50,7 +50,7 @@ namespace yyLib
             throw new yyInvalidDataException ("No GPT chat connection info found.");
         }
 
-        private static readonly Lazy <yyGptChatConnectionInfo> _default = new (_CreateDefault ());
+        private static readonly Lazy <yyGptChatConnectionInfo> _default = new (() => _CreateDefault ());
 
         public static new yyGptChatConnectionInfo Default => _default.Value;
     }

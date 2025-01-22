@@ -70,7 +70,7 @@ namespace yyLib
             throw new yyInvalidDataException ("No GPT connection info found.");
         }
 
-        private static readonly Lazy <yyGptConnectionInfo> _default = new (_CreateDefault ());
+        private static readonly Lazy <yyGptConnectionInfo> _default = new (() => _CreateDefault ());
 
         public static yyGptConnectionInfo Default => _default.Value;
     }

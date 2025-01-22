@@ -179,7 +179,7 @@ namespace yyLib
             };
         }
 
-        private static readonly Lazy <yyLogger> _default = new (_CreateDefault ());
+        private static readonly Lazy <yyLogger> _default = new (() => _CreateDefault ());
 
         public static yyLogger Default => _default.Value;
     }

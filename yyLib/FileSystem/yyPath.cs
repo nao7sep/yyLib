@@ -26,7 +26,7 @@
             else throw new ArgumentException ("Invalid separator.");
         }
 
-        private static readonly Lazy <char> _alternativeSeparator = new (GetOtherSeparator (DefaultSeparator));
+        private static readonly Lazy <char> _alternativeSeparator = new (() => GetOtherSeparator (DefaultSeparator));
 
         public static char AlternativeSeparator => _alternativeSeparator.Value;
 
@@ -110,7 +110,7 @@
 
         public static char [] InvalidFileNameChars => _invalidFileNameChars.Value;
 
-        private static readonly Lazy <HashSet <char>> _invalidFileNameCharsSet = new (InvalidFileNameChars.ToHashSet ());
+        private static readonly Lazy <HashSet <char>> _invalidFileNameCharsSet = new (() => InvalidFileNameChars.ToHashSet ());
 
         public static HashSet <char> InvalidFileNameCharsSet => _invalidFileNameCharsSet.Value;
 
@@ -142,7 +142,7 @@
 
         public static char [] InvalidPathChars => _invalidPathChars.Value;
 
-        private static readonly Lazy <HashSet <char>> _invalidPathCharsSet = new (InvalidPathChars.ToHashSet ());
+        private static readonly Lazy <HashSet <char>> _invalidPathCharsSet = new (() => InvalidPathChars.ToHashSet ());
 
         public static HashSet <char> InvalidPathCharsSet => _invalidPathCharsSet.Value;
 

@@ -50,7 +50,7 @@ namespace yyLib
             throw new yyInvalidDataException ("No GPT images connection info found.");
         }
 
-        private static readonly Lazy <yyGptImagesConnectionInfo> _default = new (_CreateDefault ());
+        private static readonly Lazy <yyGptImagesConnectionInfo> _default = new (() => _CreateDefault ());
 
         public static new yyGptImagesConnectionInfo Default => _default.Value;
     }

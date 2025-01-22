@@ -42,7 +42,7 @@ namespace yyLib
         // The following code used to be a separate model class.
         // If the model class contains Default, it can and should have DefaultFileName and other things as well.
 
-        private static readonly Lazy <yyUserSecrets> _default = new (yyUserSecretsLoader.Load (DefaultFilePaths));
+        private static readonly Lazy <yyUserSecrets> _default = new (() => yyUserSecretsLoader.Load (DefaultFilePaths));
 
         /// <summary>
         /// NOT thread-safe.

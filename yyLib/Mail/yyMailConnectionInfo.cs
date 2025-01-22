@@ -48,7 +48,7 @@ namespace yyLib
             throw new yyInvalidDataException ("No mail connection info found.");
         }
 
-        private static readonly Lazy <yyMailConnectionInfo> _default = new (_CreateDefault ());
+        private static readonly Lazy <yyMailConnectionInfo> _default = new (() => _CreateDefault ());
 
         public static yyMailConnectionInfo Default => _default.Value;
     }
