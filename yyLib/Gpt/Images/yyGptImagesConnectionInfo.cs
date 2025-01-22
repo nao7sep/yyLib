@@ -11,7 +11,7 @@ namespace yyLib
 
         public static readonly string DefaultEndpoint = "https://api.openai.com/v1/images/generations";
 
-        public static yyGptImagesConnectionInfo ConvertFromBase (yyGptConnectionInfo gptConnectionInfo)
+        public static yyGptImagesConnectionInfo Downcast (yyGptConnectionInfo gptConnectionInfo)
         {
             return new yyGptImagesConnectionInfo
             {
@@ -40,13 +40,11 @@ namespace yyLib
             try
             {
                 var xGptConnectionInfo = yyGptConnectionInfo.Default;
-                return ConvertFromBase (xGptConnectionInfo);
+                return Downcast (xGptConnectionInfo);
             }
 
             catch
             {
-                // The exception from accessing the Default property is disregarded because this is a fallback mechanism.
-                // The purpose here is to try our luck and proceed only if it succeeds.
             }
 
             throw new yyInvalidDataException ("No GPT images connection info found.");
