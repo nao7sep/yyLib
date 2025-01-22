@@ -27,6 +27,9 @@ namespace yyLib
         [JsonPropertyName ("model")]
         public string? Model { get; set; }
 
+        [JsonPropertyName ("service_tier")]
+        public string? ServiceTier { get; set; }
+
         [JsonPropertyName ("system_fingerprint")]
         public string? SystemFingerprint { get; set; }
 

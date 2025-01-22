@@ -39,6 +39,15 @@ namespace yyLib
         [JsonPropertyName ("model")]
         public required string Model { get; set; }
 
+        [JsonPropertyName ("store")]
+        public bool? Store { get; set; }
+
+        [JsonPropertyName ("reasoning_effort")]
+        public string? ReasoningEffort { get; set; }
+
+        [JsonPropertyName ("metadata")]
+        public object? Metadata { get; set; }
+
         [JsonPropertyName ("frequency_penalty")]
         public double? FrequencyPenalty { get; set; }
 
@@ -51,11 +60,18 @@ namespace yyLib
         [JsonPropertyName ("top_logprobs")]
         public int? TopLogProbs { get; set; }
 
+        [Obsolete ("Use MaxCompletionTokens instead.")]
         [JsonPropertyName ("max_tokens")]
         public int? MaxTokens { get; set; }
 
+        [JsonPropertyName ("max_completion_tokens")]
+        public int? MaxCompletionTokens { get; set; }
+
         [JsonPropertyName ("n")]
         public int? N { get; set; }
+
+        [JsonPropertyName ("modalities")]
+        public IList <string>? Modalities { get; set; }
 
         [JsonPropertyName ("presence_penalty")]
         public double? PresencePenalty { get; set; }
@@ -65,6 +81,9 @@ namespace yyLib
 
         [JsonPropertyName ("seed")]
         public int? Seed { get; set; }
+
+        [JsonPropertyName ("service_tier")]
+        public string? ServiceTier { get; set; }
 
         [JsonPropertyName ("stop")]
         public IList <string>? Stop { get; set; }
@@ -77,6 +96,9 @@ namespace yyLib
 
         [JsonPropertyName ("top_p")]
         public double? TopP { get; set; }
+
+        [JsonPropertyName ("parallel_tool_calls")]
+        public bool? ParallelToolCalls { get; set; }
 
         [JsonPropertyName ("user")]
         public string? User { get; set; }

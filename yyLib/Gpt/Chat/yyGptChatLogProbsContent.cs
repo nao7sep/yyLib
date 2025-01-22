@@ -5,7 +5,7 @@ namespace yyLib
     /// <summary>
     /// Represents an entry in the "choices/logprobs/content" array.
     /// </summary>
-    public class yyGptChatContent
+    public class yyGptChatLogProbsContent
     {
         // Deserializes "choices/logprobs/content":
         // https://platform.openai.com/docs/api-reference/chat/object#chat/object-choices

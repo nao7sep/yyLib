@@ -10,9 +10,9 @@ namespace yyLib
         // https://platform.openai.com/docs/api-reference/chat/streaming#chat/streaming-choices
 
         [JsonPropertyName ("content")]
-        public IList <yyGptChatContent>? Content { get; set; }
+        public IList <yyGptChatLogProbsContent>? Content { get; set; }
 
         [JsonPropertyName ("refusal")]
-        public IList <yyGptChatContent>? Refusal { get; set; }
+        public IList <yyGptChatLogProbsContent>? Refusal { get; set; }
     }
 }
