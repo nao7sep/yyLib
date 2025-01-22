@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 
 namespace yyLib
 {
@@ -11,20 +10,12 @@ namespace yyLib
 
         public static readonly string DefaultEndpoint = "https://api.openai.com/v1/chat/completions";
 
-        public static yyGptChatConnectionInfo Downcast (yyGptConnectionInfo gptConnectionInfo)
+        private yyGptChatConnectionInfo _CopyMissingValues ()
         {
-            return new yyGptChatConnectionInfo
-            {
-                ApiKey = gptConnectionInfo.ApiKey,
-                Organization = gptConnectionInfo.Organization,
-                Project = gptConnectionInfo.Project,
-                Endpoint = gptConnectionInfo.Endpoint,
-                Timeout = gptConnectionInfo.Timeout
-            };
+            _CopyMissingValues (this, yyGptConnectionInfo.Default);
+            return this;
         }
 
-        // Suppresses the warning about catching a general exception (CA1031).
-        [SuppressMessage ("Design", "CA1031")]
         private static yyGptChatConnectionInfo _CreateDefault ()
         {
             var xGptChatConnectionSection = yyAppSettings.Config.GetSection ("gpt_chat_connection");
@@ -32,22 +23,17 @@ namespace yyLib
             if (xGptChatConnectionSection.Exists () &&
                 xGptChatConnectionSection.GetChildren ().Any () &&
                 xGptChatConnectionSection.Get <yyGptChatConnectionInfo> () is { } xGptChatConnectionInfo)
-                    return xGptChatConnectionInfo;
+                    return xGptChatConnectionInfo._CopyMissingValues ();
 
             if (yyUserSecrets.Default.GptChatConnection != null)
-                return yyUserSecrets.Default.GptChatConnection;
+                return yyUserSecrets.Default.GptChatConnection._CopyMissingValues ();
 
-            try
+            return new yyGptChatConnectionInfo ()
             {
-                var xGptConnectionInfo = yyGptConnectionInfo.Default;
-                return Downcast (xGptConnectionInfo);
-            }
-
-            catch
-            {
-            }
-
-            throw new yyInvalidDataException ("No GPT chat connection info found.");
+                Endpoint = DefaultEndpoint,
+                Timeout = DefaultTimeout
+            }.
+            _CopyMissingValues ();
         }
 
         private static readonly Lazy <yyGptChatConnectionInfo> _default = new (() => _CreateDefault ());

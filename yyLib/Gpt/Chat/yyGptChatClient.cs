@@ -1,5 +1,4 @@
-﻿using System.Net.Http.Headers;
-using System.Text;
+﻿using System.Text;
 using System.Text.Json;
 
 namespace yyLib
@@ -22,7 +21,7 @@ namespace yyLib
 
             HttpClient = new ()
             {
-                Timeout = TimeSpan.FromSeconds (ConnectionInfo.Timeout)
+                Timeout = TimeSpan.FromSeconds (ConnectionInfo.Timeout ?? yyGptChatConnectionInfo.DefaultTimeout) // From derived class.
             };
 
             HttpClient.DefaultRequestHeaders.Authorization = new ("Bearer", ConnectionInfo.ApiKey);

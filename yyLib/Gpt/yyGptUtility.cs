@@ -109,7 +109,11 @@ namespace yyLib
 
                     else if (request.ResponseFormat!.Equals ("url", StringComparison.OrdinalIgnoreCase))
                     {
-                        using HttpClient xHttpClient = new ();
+                        using HttpClient xHttpClient = new ()
+                        {
+                            Timeout = TimeSpan.FromSeconds (connectionInfo.Timeout ?? yyGptImagesConnectionInfo.DefaultTimeout) // From derived class.
+                        };
+
                         var xImageResponse = await xHttpClient.GetAsync (x.Url, cancellationToken).ConfigureAwait (false);
 
                         // Just to make sure.
