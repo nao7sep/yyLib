@@ -8,7 +8,7 @@ namespace yyLibConsole
     {
         // Suppresses the warning about passing literals or constant strings as parameters for methods expecting localized resources (CA1303).
         [SuppressMessage ("Globalization", "CA1303")]
-        public static void Run (string firstAssistantSystemMessage, string secondAssistantSystemMessage, int interactionCount)
+        public static void Run (string firstAssistantDeveloperMessage, string secondAssistantDeveloperMessage, int interactionCount)
         {
             yyGptChatConnectionInfo xConnectionInfo = yyGptChatConnectionInfo.Default;
             yyGptImagesConnectionInfo xImagesConnectionInfo = yyGptImagesConnectionInfo.Default;
@@ -16,8 +16,8 @@ namespace yyLibConsole
             yyGptChatRequest xFirstAssistantRequest = new () { Model = yyGptChat.DefaultModel },
                              xSecondAssistantRequest = new () { Model = yyGptChat.DefaultModel };
 
-            xFirstAssistantRequest.AddSystemMessage (firstAssistantSystemMessage);
-            xSecondAssistantRequest.AddSystemMessage (secondAssistantSystemMessage);
+            xFirstAssistantRequest.AddDeveloperMessage (firstAssistantDeveloperMessage);
+            xSecondAssistantRequest.AddDeveloperMessage (secondAssistantDeveloperMessage);
 
             for (int temp = 0; temp < interactionCount; temp ++)
             {

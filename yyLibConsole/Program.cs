@@ -21,8 +21,8 @@ namespace yyLibConsole
             {
                 // API key must be specified in user secrets or app settings.
                 // GptTest.Run (
-                //     firstAssistantSystemMessage: "You always say a random word.",
-                //     secondAssistantSystemMessage: "You always make a random sentence using the provided word.",
+                //     firstAssistantDeveloperMessage: "You always say a random word.",
+                //     secondAssistantDeveloperMessage: "You always make a random sentence using the provided word.",
                 //     interactionCount: 10);
 
                 // JsonTest.Run ();
