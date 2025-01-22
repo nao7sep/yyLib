@@ -6,6 +6,7 @@ namespace yyLib
     public class yyGptConnectionInfo
     {
         [JsonPropertyName ("api_key")]
+        [ConfigurationKeyName ("api_key")]
         public required string ApiKey { get; set; }
 
         [JsonPropertyName ("organization")]

@@ -32,6 +32,9 @@ namespace yyLib
 
         public void AddRecentLog (yyLog log) => RecentLogs.Add (log);
 
+        // These are nullable because not all of them must be specified for logging to work.
+        // Logging must not fail casually, so nothing should happen when data is insufficient.
+
         [JsonPropertyName ("write_to_text_file")]
         [ConfigurationKeyName ("write_to_text_file")]
         public bool? WriteToTextFile { get; set; }
@@ -150,6 +153,9 @@ namespace yyLib
 
             if (yyUserSecrets.Default.Logger != null)
                 return yyUserSecrets.Default.Logger;
+
+            // Missing values (after settings are loaded from user secrets or app settings) wont be set to defaults because data must be consistent.
+            // If the whole thing is missing, however, we can safely return a new instance with default values.
 
             return new ()
             {
