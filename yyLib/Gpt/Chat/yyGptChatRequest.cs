@@ -23,7 +23,6 @@ namespace yyLib
             });
         }
 
-        [Obsolete ("Use AddDeveloperMessage instead.")]
         public void AddSystemMessage (string content, string? name = null) =>
             AddMessage (yyGptChatRole.System, content, name);
 
@@ -60,7 +59,6 @@ namespace yyLib
         [JsonPropertyName ("top_logprobs")]
         public int? TopLogProbs { get; set; }
 
-        [Obsolete ("Use MaxCompletionTokens instead.")]
         [JsonPropertyName ("max_tokens")]
         public int? MaxTokens { get; set; }
 
