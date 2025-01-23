@@ -59,11 +59,8 @@ namespace yyLib
 
             // If there's nothing at all to output, BodyBuilder creates a message with "Content-Type: text/plain; charset=utf-8" and no content.
             // We could also say an empty string is the mail body.
-
             // If there's one, we get a single part message with the right "Content-Type".
-
             // If there are 2 or more, we get a multipart message with the right "Content-Type" and a "boundary" parameter.
-
             // So, no reason to check the actual number of parts or determine whether to update message.Body or not.
 
             BodyBuilder xBodyBuilder = new ();
@@ -80,10 +77,12 @@ namespace yyLib
                 {
                     xBodyBuilder.Attachments.Add (new MimePart (MimeTypes.GetMimeType (xAttachment.OriginalFilePath))
                     {
+                        // Both NewFileName and the return value of GetFileName can be null, but I currently dont get a compiler warning.
                         FileName = xAttachment.NewFileName ?? Path.GetFileName (xAttachment.OriginalFilePath),
                         ContentDisposition = new (ContentDisposition.Attachment),
                         ContentTransferEncoding = ContentEncoding.Base64,
-                        Content = new MimeContent (new MemoryStream (File.ReadAllBytes (xAttachment.OriginalFilePath!))) // Avoids memory leakage.
+                        // The following code ensures that the file is read into memory and closed immediately, avoiding the need to keep the file open.
+                        Content = new MimeContent (new MemoryStream (File.ReadAllBytes (xAttachment.OriginalFilePath! /* Intentional */ )))
                     });
                 }
             }

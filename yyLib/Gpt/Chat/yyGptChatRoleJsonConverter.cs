@@ -12,6 +12,6 @@ namespace yyLib
             writer.WriteStringValue (yyConverter.EnumToString (value).ToLowerInvariant ());
 
         public override yyGptChatRole Read (ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
-            yyConverter.StringToEnum <yyGptChatRole> (reader.GetString ()!, ignoreCase: true);
+            yyConverter.StringToEnum <yyGptChatRole> (reader.GetString ()! /* Intentional */ , ignoreCase: true);
     }
 }

@@ -8,22 +8,36 @@ namespace yyLib
         // Before the message is sent, the attachment file is copied and its new path, that is relative to the location of the app, is stored in the instance.
         // We have the absolute path of the new base directory, so the current absolute path doesnt need to be in the instance.
 
+        // Added: I made OriginalFilePath nullable because we might want to set it to null after the file has been sent and saved somewhere else.
+        // The original file path may contain sensitive information, so we should consider removing it when it's no longer needed.
+
         // http://www.mimekit.net/docs/html/T_MimeKit_MimeEntity.htm
         // http://www.mimekit.net/docs/html/T_MimeKit_ContentDisposition.htm
 
-        // Nullable just to silence the compiler.
         private string? _originalFilePath;
 
+        /// <summary>
+        /// If the file exists, the file's metadata is auto-generated.
+        /// If the path is null or empty, the metadata will NOT be affected.
+        /// This is by design because the original file path may need to be removed if it contains sensitive information.
+        /// </summary>
         [JsonPropertyName ("original_file_path")]
-        public required string OriginalFilePath
+        public string? OriginalFilePath
         {
-            get => _originalFilePath!;
+            get => _originalFilePath;
 
             set
             {
                 // If the file has been sent and saved somewhere else,
                 // the file may not be available at the original path, which is OK.
-                // We just need to make sure the path is fully qualified.
+                // We just need to make sure the path is fully qualified IF it's given.
+
+                if (string.IsNullOrWhiteSpace (value))
+                {
+                    _originalFilePath = null;
+                    // Metadata not affected.
+                    return;
+                }
 
                 if (Path.IsPathFullyQualified (value) == false)
                     throw new yyArgumentException ($"The path '{value}' is not fully qualified.");
