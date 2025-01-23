@@ -20,10 +20,6 @@ namespace yyLib
         [JsonPropertyName ("details")]
         public IDictionary <string, string>? Details { get; set; }
 
-        public void AddDetail (string key, string value)
-        {
-            Details ??= new Dictionary <string, string> ();
-            Details.Add (key, value);
-        }
+        public void AddDetail (string key, string value) => (Details ??= new Dictionary <string, string> ()).Add (key, value);
     }
 }

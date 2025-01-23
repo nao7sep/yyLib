@@ -24,10 +24,6 @@ namespace yyLib
         [JsonConverter (typeof (JsonStringEnumConverter))]
         public yyMailBodyFormat? PreferredBodyFormat { get; set; }
 
-        public void AddPreferredLanguage (string language)
-        {
-            PreferredLanguages ??= [];
-            PreferredLanguages.Add (language);
-        }
+        public void AddPreferredLanguage (string language) => (PreferredLanguages ??= []).Add (language);
     }
 }
