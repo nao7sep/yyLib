@@ -19,23 +19,25 @@ namespace yyLibConsole
             xFirstAssistantRequest.AddDeveloperMessage (firstAssistantDeveloperMessage);
             xSecondAssistantRequest.AddDeveloperMessage (secondAssistantDeveloperMessage);
 
+            xSecondAssistantRequest.Stream = true;
+
             for (int temp = 0; temp < interactionCount; temp ++)
             {
                 var xFirstAssistantResponse = yyGptUtility.GenerateMessagesAsync (xConnectionInfo, xFirstAssistantRequest).Result;
 
-                if (xFirstAssistantResponse.ErrorMessage != null)
+                if (xFirstAssistantResponse.IsSuccess == false)
                 {
-                    Console.WriteLine ($"First Assistant: {xFirstAssistantResponse.ErrorMessage}");
+                    Console.WriteLine ($"First Assistant: {(xFirstAssistantResponse.Response.Error?.Message).GetVisibleString ()}");
                     break;
                 }
 
-                string xGeneratedMessage = xFirstAssistantResponse.GeneratedMessages! [0];
-                Console.WriteLine ($"First Assistant: {xGeneratedMessage}");
+                string xMessage = xFirstAssistantResponse.Messages [0];
+                Console.WriteLine ($"First Assistant: {xMessage}");
 
-                xFirstAssistantRequest.AddAssistantMessage (xGeneratedMessage);
-                xSecondAssistantRequest.AddUserMessage (xGeneratedMessage);
+                xFirstAssistantRequest.AddAssistantMessage (xMessage);
+                xSecondAssistantRequest.AddUserMessage (xMessage);
 
-                static Task _OnChunkRetrievedAsync (int index, string content, CancellationToken cancellationToken)
+                static Task _OnChunkRetrievedAsync (int index, string? content, CancellationToken cancellationToken)
                 {
                     Console.Write (content);
                     return Task.CompletedTask;
@@ -46,18 +48,18 @@ namespace yyLibConsole
                 var xSecondAssistantResponse = yyGptUtility.GenerateMessagesChunksAsync (xConnectionInfo, xSecondAssistantRequest,
                     (index, content, cancellationToken) => _OnChunkRetrievedAsync (index, content, cancellationToken)).Result;
 
-                if (xSecondAssistantResponse.ErrorMessage != null)
+                if (xSecondAssistantResponse.IsSuccess == false)
                 {
-                    Console.WriteLine (xSecondAssistantResponse.ErrorMessage);
+                    Console.WriteLine ((xSecondAssistantResponse.Responses [0].Error?.Message).GetVisibleString ());
                     break;
                 }
 
                 Console.WriteLine ();
 
-                xGeneratedMessage = xSecondAssistantResponse.GeneratedMessages! [0];
+                xMessage = xSecondAssistantResponse.Messages [0];
 
-                xFirstAssistantRequest.AddUserMessage (xGeneratedMessage);
-                xSecondAssistantRequest.AddAssistantMessage (xGeneratedMessage);
+                xFirstAssistantRequest.AddUserMessage (xMessage);
+                xSecondAssistantRequest.AddAssistantMessage (xMessage);
 
                 if ((temp + 1) % 5 == 0) // 4, 9, 14...
                 {
@@ -65,7 +67,7 @@ namespace yyLibConsole
                     {
                         // https://platform.openai.com/docs/guides/images
 
-                        Prompt = xGeneratedMessage,
+                        Prompt = xMessage,
                         Model = yyGptImages.DefaultModel,
                         Quality = yyGptImages.DefaultQuality,
                         Size = yyGptImages.DefaultSize,
@@ -80,9 +82,9 @@ namespace yyLibConsole
 
                     var xImagesResponse = yyGptUtility.GenerateImagesAsync (xImagesConnectionInfo, xImagesRequest).Result;
 
-                    if (xImagesResponse.ErrorMessage != null)
+                    if (xImagesResponse.IsSuccess == false)
                     {
-                        Console.WriteLine ($"Image generation failed: {xImagesResponse.ErrorMessage}");
+                        Console.WriteLine ($"Image generation failed: {(xImagesResponse.Response.Error?.Message).GetVisibleString ()}");
                         break;
                     }
 
@@ -90,7 +92,7 @@ namespace yyLibConsole
                            xImageFilePath = xImagePartialFilePath + ".png",
                            xPromptsFilePath = xImagePartialFilePath + ".txt";
 
-                    File.WriteAllBytes (xImageFilePath, xImagesResponse.ImageBytes! [0]);
+                    File.WriteAllBytes (xImageFilePath, xImagesResponse.ImageBytes [0]);
 
                     // This code uses AppendLine, which appends a string followed by a newline character sequence.
                     // The newline sequence is determined by the current environment (Environment.NewLine),
@@ -101,9 +103,9 @@ namespace yyLibConsole
                     xPrompts.AppendLine (xImagesRequest.Prompt);
                     xPrompts.AppendLine ();
                     xPrompts.AppendLine ("[Revised Prompt]");
-                    xPrompts.AppendLine (xImagesResponse.RevisedPrompts! [0]);
+                    xPrompts.AppendLine (xImagesResponse.RevisedPrompts [0]);
 
-                    File.WriteAllText (xPromptsFilePath, xPrompts.ToString (), Encoding.UTF8);
+                    File.WriteAllText (xPromptsFilePath, xPrompts.ToString (), yyEncoding.DefaultEncoding);
 
                     Console.WriteLine ($"Image saved: {xImageFilePath}");
                     Console.WriteLine ($"Prompts saved: {xPromptsFilePath}");

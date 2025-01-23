@@ -118,7 +118,7 @@ namespace yyLib
             if (string.IsNullOrEmpty (str))
                 return str;
 
-            string xNewLines = newLine != null ? newLine + newLine : Environment.NewLine + Environment.NewLine;
+            string xNewLines = newLine.OrDefaultNewLine () + newLine.OrDefaultNewLine ();
             return string.Join (xNewLines, yyStringParagraphs.EnumerateParagraphs (str, type).Select (x => string.Join (newLine.OrDefaultNewLine (), x)));
         }
 

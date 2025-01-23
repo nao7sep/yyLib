@@ -8,7 +8,7 @@ namespace yyLibConsole
         public static void Run ()
         {
             string xJsonFilePath = yyAppDirectory.MapPath ("json_edge_cases.json"),
-                   xJsonString = File.ReadAllText (xJsonFilePath);
+                   xJsonString = File.ReadAllText (xJsonFilePath, yyEncoding.DefaultEncoding);
 
             using JsonDocument xDocument = JsonDocument.Parse (xJsonString);
 

@@ -44,7 +44,7 @@ namespace yyLib
 
             var xJsonString = JsonSerializer.Serialize (request, yyJson.DefaultSerializationOptions);
 
-            using StringContent xContent = new (xJsonString, Encoding.UTF8, "application/json");
+            using StringContent xContent = new (xJsonString, Encoding.UTF8, "application/json"); // Must be UTF-8.
             using HttpRequestMessage xMessage = new (HttpMethod.Post, ConnectionInfo.Endpoint) { Content = xContent };
 
             var xResponse = await HttpClient.SendAsync (xMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait (false);
