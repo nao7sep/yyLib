@@ -24,8 +24,12 @@ namespace yyLib
         [JsonConverter (typeof (yyGptChatRoleJsonConverter))]
         public yyGptChatRole? Role { get; set; }
 
+        /// <summary>
+        /// When being sent in a request, a string or an IEnumerable or null.
+        /// When received in a response, a string or null, but NOT an IEnumerable.
+        /// </summary>
         [JsonPropertyName ("content")]
-        public string? Content { get; set; }
+        public object? Content { get; set; }
 
         [JsonPropertyName ("name")]
         public string? Name { get; set; }

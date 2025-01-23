@@ -18,7 +18,7 @@ namespace yyLib
 #pragma warning disable CS8604 // Disables warnings for passing a possibly null reference as an argument.
 #pragma warning disable CS8619 // Disables warnings for conversion of nullability in type annotations.
             // The following code assumes that 'Choices', 'Message', and 'Content' are all non-null, as they are validated before this section of code.
-            string [] xMessages = xResponse.Choices.Select (x => x.Message.Content).ToArray ();
+            string [] xMessages = xResponse.Choices.Select (x => x.Message.Content as string).ToArray (); // We know Content is a string.
 #pragma warning restore CS8602
 #pragma warning restore CS8604
 #pragma warning restore CS8619
@@ -70,7 +70,7 @@ namespace yyLib
                     // as they are validated before this section of code.
                     // The 'Content' property, however, can be null, and this is acceptable in this context.
                     int xIndex = xResponse.Choices [0].Index.Value;
-                    string? xContent = xResponse.Choices [0].Delta.Content;
+                    string? xContent = xResponse.Choices [0].Delta.Content as string; // We know Content cant be an IEnumerable.
 #pragma warning restore CS8602
 #pragma warning restore CS8629
 

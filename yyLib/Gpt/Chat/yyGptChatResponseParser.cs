@@ -25,7 +25,7 @@ namespace yyLib
                 if (x.Message == null)
                     return true;
 
-                if (string.IsNullOrWhiteSpace (x.Message.Content))
+                if (string.IsNullOrWhiteSpace (x.Message.Content as string)) // Content cant be an IEnumerable.
                     return true;
 
                 return false;
