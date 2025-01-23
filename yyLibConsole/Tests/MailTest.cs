@@ -8,7 +8,7 @@ namespace yyLibConsole
         public static void Run (string from, string to)
         {
             // One must be provided in user secrets or app settings.
-            yyMailConnectionInfo? xConnectionInfo = yyMailConnectionInfo.Default;
+            yyMailConnectionInfo xConnectionInfo = yyMailConnectionInfo.Default;
 
             yyMailMessage xMessage = new ();
             (xMessage.From ??= []).Add (new () { Address = from });
@@ -16,7 +16,7 @@ namespace yyLibConsole
             xMessage.Subject = "Test Message";
             xMessage.TextBody = "This is a test message.";
 
-            var xResult = yyMailUtility.SendAsync (xConnectionInfo!, xMessage).Result;
+            var xResult = yyMailUtility.SendAsync (xConnectionInfo, xMessage).Result;
 
             string xPartialFilePath = yyPath.Join (yySpecialDirectories.Desktop,
                 "MailTest-" + yyConverter.DateTimeToRoundtripFileNameString (DateTime.UtcNow));

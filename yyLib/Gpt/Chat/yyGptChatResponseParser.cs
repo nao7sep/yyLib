@@ -58,6 +58,9 @@ namespace yyLib
                 if (xResponse.Choices == null)
                     throw new yyFormatException ($"The 'choices' property is missing: {xJsonString.GetVisibleString ()}");
 
+                if (xResponse.Choices.Any () == false)
+                    throw new yyFormatException ($"The 'choices' property is empty: {xJsonString.GetVisibleString ()}");
+
                 if (xResponse.Choices.Any (x =>
                 {
                     if (x.Index == null)

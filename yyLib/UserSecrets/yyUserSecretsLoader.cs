@@ -17,7 +17,7 @@ namespace yyLib
                     throw new yyArgumentException ($"'{nameof (filePaths)}' is invalid: {xFilePath.GetVisibleString ()}");
 
                 if (File.Exists (xFilePath))
-                    return yyUserSecretsParser.Parse (File.ReadAllText (xFilePath, encoding ?? Encoding.UTF8));
+                    return yyUserSecretsParser.Parse (File.ReadAllText (xFilePath, encoding.OrDefaultEncoding ()));
             }
 
             // If no file is found, it's not an error.

@@ -71,6 +71,9 @@ namespace yyLib
 
         public void Write (DateTime createdAtUtc, string key, string value)
         {
+            if (FilePath == null)
+                throw new yyInvalidOperationException ($"'{nameof (FilePath)}' is not set.");
+
             lock (_lock)
             {
                 // This code uses AppendLine, which appends a string followed by a newline character sequence.
@@ -85,8 +88,8 @@ namespace yyLib
                 xBuilder.AppendLine ($"UTC: {yyConverter.DateTimeToRoundtripString (createdAtUtc)}");
                 xBuilder.AppendLine ($"{key}: {value.TrimRedundantLines ()}"); // Auto trimmed.
 
-                yyDirectory.CreateParent (FilePath!); // Should throw if null.
-                File.AppendAllText (FilePath!, xBuilder.ToString (), Encoding ?? Encoding.UTF8);
+                yyDirectory.CreateParent (FilePath);
+                File.AppendAllText (FilePath, xBuilder.ToString (), Encoding.OrDefaultEncoding ());
             }
         }
     }

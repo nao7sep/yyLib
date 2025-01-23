@@ -33,7 +33,8 @@ namespace yyLib
                 HttpClient.DefaultRequestHeaders.Add ("OpenAI-Project", ConnectionInfo.Project);
         }
 
-        public async Task <(HttpResponseMessage HttpResponseMessage, Stream Stream)> SendAsync (yyGptImagesRequest request, CancellationToken cancellationToken = default)
+        public async Task <(string RequestJsonString, HttpResponseMessage ResponseMessage, Stream ResponseStream)> SendAsync (
+            yyGptImagesRequest request, CancellationToken cancellationToken = default)
         {
             if (HttpClient == null)
                 throw new yyObjectDisposedException ($"'{nameof (HttpClient)}' is disposed.");
@@ -60,10 +61,10 @@ namespace yyLib
             ResponseStreamReader?.Dispose ();
             ResponseStreamReader = new (ResponseStream);
 
-            return (xResponse, ResponseStream);
+            return (xJsonString, xResponse, ResponseStream);
         }
 
-        public async Task <string?> ReadToEndAsync (CancellationToken cancellationToken = default)
+        public async Task <string> ReadToEndAsync (CancellationToken cancellationToken = default)
         {
             if (ResponseStreamReader == null)
                 throw new yyObjectDisposedException ($"'{nameof (ResponseStreamReader)}' is disposed.");
@@ -72,8 +73,12 @@ namespace yyLib
             // but I'm still going to use the well-tested piece from yyGptChatClient.
             // Worst case scenario, it'll be just harmlessly redundant.
 
+            // Added: If we call ReadToEnd at the end of a stream, we get an empty string.
+            // The following code used to return null.
+            // We dont need to receive null to know that the stream has ended.
+
             if (ResponseStreamReader.EndOfStream)
-                return await Task.FromResult <string?> (null).ConfigureAwait (false);
+                return await Task.FromResult (string.Empty).ConfigureAwait (false);
 
             return await ResponseStreamReader.ReadToEndAsync (cancellationToken).ConfigureAwait (false);
         }

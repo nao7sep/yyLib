@@ -14,8 +14,8 @@ namespace yyLib
 
         public static string GetVisibleStrings (this IConfiguration config, string? singleIndent = null, string? newLine = null)
         {
-            string xSingleIndent = singleIndent ?? yyString.DefaultSingleIndent,
-                   xNewLine = newLine ?? Environment.NewLine;
+            string xSingleIndent = singleIndent.OrDefaultSingleIndent (),
+                   xNewLine = newLine.OrDefaultNewLine ();
 
             StringBuilder xBuilder = new ();
 

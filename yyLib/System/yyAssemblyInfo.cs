@@ -171,7 +171,7 @@ namespace yyLib
             xLines.Add ($"FileVersion: {FileVersion.GetVisibleString ()}");
             xLines.Add ($"InformationalVersion: {InformationalVersion.GetVisibleString ()}");
 
-            return string.Join (newLine ?? Environment.NewLine, xLines);
+            return string.Join (newLine.OrDefaultNewLine (), xLines);
         }
 
         // -----------------------------------------------------------------------------

@@ -16,6 +16,10 @@ namespace yyLib
 
         public static string? WhiteSpaceToNull (this string? str) => string.IsNullOrWhiteSpace (str) ? null : str;
 
+        public static string OrDefaultNewLine (this string? str) => str ?? yyString.DefaultNewLine;
+
+        public static string OrDefaultSingleIndent (this string? str) => str ?? yyString.DefaultSingleIndent;
+
         public static string GetVisibleString (this string? str)
         {
             if (str == null)
@@ -45,7 +49,7 @@ namespace yyLib
 
             // If 2 or more lines are returned, we dont need each obviously-empty string to be "(Empty)".
 
-            return string.Join (newLine ?? Environment.NewLine, yyStringLines.EnumerateLines (str).Select (x => $"{linePrefix}{x}{lineSuffix}"));
+            return string.Join (newLine.OrDefaultNewLine (), yyStringLines.EnumerateLines (str).Select (x => $"{linePrefix}{x}{lineSuffix}"));
         }
 
         public static string [] ToLineArray (this string? str)
@@ -72,7 +76,7 @@ namespace yyLib
             if (string.IsNullOrEmpty (str))
                 return str;
 
-            return string.Join (newLine ?? Environment.NewLine, yyStringLines.TrimRedundantLines (str, type));
+            return string.Join (newLine.OrDefaultNewLine (), yyStringLines.TrimRedundantLines (str, type));
         }
 
         public static string [] ToParagraphArray (this string? str, yyStringType emptyLineType = yyStringType.WhiteSpace, string? newLine = null)
@@ -80,7 +84,7 @@ namespace yyLib
             if (string.IsNullOrEmpty (str))
                 return [];
 
-            return yyStringParagraphs.EnumerateParagraphs (str, emptyLineType).Select (x => string.Join (newLine ?? Environment.NewLine, x)).ToArray ();
+            return yyStringParagraphs.EnumerateParagraphs (str, emptyLineType).Select (x => string.Join (newLine.OrDefaultNewLine (), x)).ToArray ();
         }
 
         public static IList <string> ToParagraphList (this string? str, yyStringType emptyLineType = yyStringType.WhiteSpace, string? newLine = null)
@@ -88,7 +92,7 @@ namespace yyLib
             if (string.IsNullOrEmpty (str))
                 return [];
 
-            return yyStringParagraphs.EnumerateParagraphs (str, emptyLineType).Select (x => string.Join (newLine ?? Environment.NewLine, x)).ToList ();
+            return yyStringParagraphs.EnumerateParagraphs (str, emptyLineType).Select (x => string.Join (newLine.OrDefaultNewLine (), x)).ToList ();
         }
 
         // This method could be faster, but performance is not my main concern at the moment.
@@ -115,7 +119,7 @@ namespace yyLib
                 return str;
 
             string xNewLines = newLine != null ? newLine + newLine : Environment.NewLine + Environment.NewLine;
-            return string.Join (xNewLines, yyStringParagraphs.EnumerateParagraphs (str, type).Select (x => string.Join (newLine ?? Environment.NewLine, x)));
+            return string.Join (xNewLines, yyStringParagraphs.EnumerateParagraphs (str, type).Select (x => string.Join (newLine.OrDefaultNewLine (), x)));
         }
 
         // Why "ReplaceAll" is the better name:

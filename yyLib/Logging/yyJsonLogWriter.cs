@@ -74,7 +74,7 @@ namespace yyLib
             // We can only hope that createdAtUtc will be unique enough to prevent conflicts.
 
             if (DirectoryPath == null)
-                throw new yyInvalidOperationException ($"'{nameof (DirectoryPath)}' is null.");
+                throw new yyInvalidOperationException ($"'{nameof (DirectoryPath)}' is not set.");
 
             string xFileName = $"Log-{yyConverter.DateTimeToRoundtripFileNameString (createdAtUtc)}.json",
                 xFilePath = yyPath.Join (DirectoryPath, xFileName);
@@ -88,8 +88,8 @@ namespace yyLib
 
             string xFileContents = JsonSerializer.Serialize (xLog, yyJson.DefaultSerializationOptions);
 
-            yyDirectory.Create (DirectoryPath!); // Should throw if null.
-            File.WriteAllText (xFilePath, xFileContents, Encoding ?? Encoding.UTF8);
+            yyDirectory.Create (DirectoryPath);
+            File.WriteAllText (xFilePath, xFileContents, Encoding.OrDefaultEncoding ());
         }
     }
 }

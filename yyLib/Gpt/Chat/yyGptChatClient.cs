@@ -36,7 +36,8 @@ namespace yyLib
                 HttpClient.DefaultRequestHeaders.Add ("OpenAI-Project", ConnectionInfo.Project);
         }
 
-        public async Task <(HttpResponseMessage HttpResponseMessage, Stream Stream)> SendAsync (yyGptChatRequest request, CancellationToken cancellationToken = default)
+        public async Task <(string RequestJsonString, HttpResponseMessage ResponseMessage, Stream ResponseStream)> SendAsync (
+            yyGptChatRequest request, CancellationToken cancellationToken = default)
         {
             if (HttpClient == null)
                 throw new yyObjectDisposedException ($"'{nameof (HttpClient)}' is disposed.");
@@ -63,16 +64,18 @@ namespace yyLib
             ResponseStreamReader?.Dispose ();
             ResponseStreamReader = new (ResponseStream);
 
-            return (xResponse, ResponseStream);
+            return (xJsonString, xResponse, ResponseStream);
         }
 
-        public async Task <string?> ReadToEndAsync (CancellationToken cancellationToken = default)
+        public async Task <string> ReadToEndAsync (CancellationToken cancellationToken = default)
         {
             if (ResponseStreamReader == null)
                 throw new yyObjectDisposedException ($"'{nameof (ResponseStreamReader)}' is disposed.");
 
+            // Refer to the comment in yyGptImagesClient.ReadToEndAsync.
+
             if (ResponseStreamReader.EndOfStream)
-                return await Task.FromResult <string?> (null).ConfigureAwait (false);
+                return await Task.FromResult (string.Empty).ConfigureAwait (false);
 
             return await ResponseStreamReader.ReadToEndAsync (cancellationToken).ConfigureAwait (false);
         }
@@ -81,6 +84,10 @@ namespace yyLib
         {
             if (ResponseStreamReader == null)
                 throw new yyObjectDisposedException ($"'{nameof (ResponseStreamReader)}' is disposed.");
+
+            // If we call ReadLine at the end of a stream, we will get null.
+            // Unlike ReadToEnd, where we get an empty string at the end of the stream,
+            // null must be returned to indicate the end of the stream.
 
             if (ResponseStreamReader.EndOfStream)
                 return await ValueTask.FromResult <string?> (null).ConfigureAwait (false);
