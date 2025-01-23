@@ -1,11 +1,10 @@
-﻿using System.Text;
-using yyLib;
+﻿using yyLib;
 
 namespace yyLibConsole
 {
-    internal static class MailTest
+    internal static class MailTester
     {
-        public static void Run (string from, string to)
+        public static void Test1 (string from, string to)
         {
             // One must be provided in user secrets or app settings.
             yyMailConnectionInfo xConnectionInfo = yyMailConnectionInfo.Default;

@@ -3,9 +3,9 @@ using yyLib;
 
 namespace yyLibConsole
 {
-    internal static class JsonTest
+    internal static class JsonTester
     {
-        public static void Run ()
+        public static void Test1 ()
         {
             string xJsonFilePath = yyAppDirectory.MapPath ("json_edge_cases.json"),
                    xJsonString = File.ReadAllText (xJsonFilePath, yyEncoding.DefaultEncoding);

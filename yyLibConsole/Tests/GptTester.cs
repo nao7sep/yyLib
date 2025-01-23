@@ -4,11 +4,11 @@ using yyLib;
 
 namespace yyLibConsole
 {
-    internal static class GptTest
+    internal static class GptTester
     {
         // Suppresses the warning about passing literals or constant strings as parameters for methods expecting localized resources (CA1303).
         [SuppressMessage ("Globalization", "CA1303")]
-        public static void Run (string firstAssistantDeveloperMessage, string secondAssistantDeveloperMessage, int interactionCount)
+        public static void Test1 (string firstAssistantDeveloperMessage, string secondAssistantDeveloperMessage, int interactionCount)
         {
             yyGptChatConnectionInfo xConnectionInfo = yyGptChatConnectionInfo.Default;
             yyGptImagesConnectionInfo xImagesConnectionInfo = yyGptImagesConnectionInfo.Default;
