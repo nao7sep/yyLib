@@ -11,8 +11,6 @@ namespace yyLib
         // https://platform.openai.com/docs/api-reference/chat/object#chat/object-choices
         // https://platform.openai.com/docs/api-reference/chat/streaming#chat/streaming-choices
 
-        // The properties are sorted in the order of the API reference.
-
         [JsonPropertyName ("token")]
         public string? Token { get; set; }
 

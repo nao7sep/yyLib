@@ -8,10 +8,10 @@ namespace yyLib
 
     public class yyGptChatFunctionCall
     {
-        [JsonPropertyName ("arguments")]
-        public string? Arguments { get; set; }
-
         [JsonPropertyName ("name")]
         public string? Name { get; set; }
+
+        [JsonPropertyName ("arguments")]
+        public string? Arguments { get; set; }
     }
 }

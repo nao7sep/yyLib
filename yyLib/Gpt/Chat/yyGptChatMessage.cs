@@ -10,9 +10,12 @@ namespace yyLib
         // This model class is used both in requests and responses.
         // That's why the name is more generic.
 
-        // Function-related things are not currently supported.
-
-        // The properties are sorted in the natural order except for the "name" property that is optional.
+        /// <summary>
+        /// Must be string or List <yyGptChatContentPart> or null when in request.
+        /// Must be string or null when in response.
+        /// </summary>
+        [JsonPropertyName ("content")]
+        public object? Content { get; set; }
 
         // Having discovered that the default binder for IConfiguration ignores JSON-related attributes including JsonConverter,
         // we could remove the converter here, hoping OpenAI's API will accept message roles case-insensitively,
@@ -24,14 +27,22 @@ namespace yyLib
         [JsonConverter (typeof (yyGptChatRoleJsonConverter))]
         public yyGptChatRole? Role { get; set; }
 
-        /// <summary>
-        /// When being sent in a request, a string or an IEnumerable or null.
-        /// When received in a response, a string or null, but NOT an IEnumerable.
-        /// </summary>
-        [JsonPropertyName ("content")]
-        public object? Content { get; set; }
-
         [JsonPropertyName ("name")]
         public string? Name { get; set; }
+
+        [JsonPropertyName ("refusal")]
+        public string? Refusal { get; set; }
+
+        [JsonPropertyName ("audio")]
+        public yyGptChatAudio? Audio { get; set; }
+
+        [JsonPropertyName ("tool_calls")]
+        public IList <yyGptChatToolCall>? ToolCalls { get; set; }
+
+        [JsonPropertyName ("function_call")]
+        public yyGptChatFunctionCall? FunctionCall { get; set; }
+
+        [JsonPropertyName ("tool_call_id")]
+        public string? ToolCallId { get; set; }
     }
 }

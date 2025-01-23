@@ -13,8 +13,6 @@ namespace yyLib
         // We could pre-parse a portion of the response to determine if it's a valid response or an error,
         // but the developer shouldnt have to deal with the 2 model classes that can be returned in a strongly-typed language.
 
-        // The properties are sorted in the order of the API reference.
-
         [JsonPropertyName ("id")]
         public string? Id { get; set; }
 

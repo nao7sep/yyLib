@@ -13,6 +13,12 @@ namespace yyLib
         [JsonPropertyName ("text")]
         public string? Text { get; set; }
 
+        [JsonPropertyName ("image_url")]
+        public yyGptChatImageUrl? ImageUrl { get; set; }
+
+        [JsonPropertyName ("input_audio")]
+        public yyGptChatInputAudio? InputAudio { get; set; }
+
         [JsonPropertyName ("refusal")]
         public string? Refusal { get; set; }
     }

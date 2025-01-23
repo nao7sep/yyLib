@@ -2,6 +2,8 @@
 
 namespace yyLib
 {
+    // Used for "response/choices/message/audio".
+
     public class yyGptChatAudio
     {
         [JsonPropertyName ("id")]

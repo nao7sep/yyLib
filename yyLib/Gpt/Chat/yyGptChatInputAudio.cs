@@ -2,6 +2,8 @@
 
 namespace yyLib
 {
+    // Refer to the comment in yyGptChatOutputAudio.
+
     public class yyGptChatInputAudio
     {
         [JsonPropertyName ("data")]

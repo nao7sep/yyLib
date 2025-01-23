@@ -6,8 +6,6 @@ namespace yyLib
     {
         // https://platform.openai.com/docs/api-reference/images/create
 
-        // The properties are sorted in the order of the API reference.
-
         [JsonPropertyName ("prompt")]
         public required string Prompt { get; set; }
 

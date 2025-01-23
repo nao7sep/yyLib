@@ -4,36 +4,33 @@ namespace yyLib
 {
     public class yyGptChatRequest
     {
-        // Everything except function-related things.
         // https://platform.openai.com/docs/api-reference/chat/create
         // https://github.com/openai/openai-dotnet/blob/main/src/Custom/Chat/ChatCompletionOptions.cs
-
-        // The properties are sorted in the order of the API reference.
 
         [JsonPropertyName ("messages")]
         public IList <yyGptChatMessage> Messages { get; } = []; // Required.
 
-        public void AddMessage (yyGptChatRole role, string content, string? name = null)
+        public void AddMessage (string content, yyGptChatRole role, string? name = null)
         {
             Messages.Add (new ()
             {
-                Role = role,
                 Content = content,
+                Role = role,
                 Name = name
             });
         }
 
         public void AddSystemMessage (string content, string? name = null) =>
-            AddMessage (yyGptChatRole.System, content, name);
+            AddMessage (content, yyGptChatRole.System, name);
 
         public void AddDeveloperMessage (string content, string? name = null) =>
-            AddMessage (yyGptChatRole.Developer, content, name);
+            AddMessage (content, yyGptChatRole.Developer, name);
 
         public void AddUserMessage (string content, string? name = null) =>
-            AddMessage (yyGptChatRole.User, content, name);
+            AddMessage (content, yyGptChatRole.User, name);
 
         public void AddAssistantMessage (string content, string? name = null) =>
-            AddMessage (yyGptChatRole.Assistant, content, name);
+            AddMessage (content, yyGptChatRole.Assistant, name);
 
         [JsonPropertyName ("model")]
         public required string Model { get; set; }
@@ -71,6 +68,12 @@ namespace yyLib
         [JsonPropertyName ("modalities")]
         public IList <string>? Modalities { get; set; }
 
+        [JsonPropertyName ("prediction")]
+        public yyGptChatPrediction? Prediction { get; set; }
+
+        [JsonPropertyName ("audio")]
+        public yyGptChatOutputAudio? Audio { get; set; }
+
         [JsonPropertyName ("presence_penalty")]
         public double? PresencePenalty { get; set; }
 
@@ -83,11 +86,17 @@ namespace yyLib
         [JsonPropertyName ("service_tier")]
         public string? ServiceTier { get; set; }
 
+        /// <summary>
+        /// Must be string or List <string> or null.
+        /// </summary>
         [JsonPropertyName ("stop")]
-        public IList <string>? Stop { get; set; }
+        public object? Stop { get; set; }
 
         [JsonPropertyName ("stream")]
         public bool? Stream { get; set; }
+
+        [JsonPropertyName ("stream_options")]
+        public yyGptChatStreamOptions? StreamOptions { get; set; }
 
         [JsonPropertyName ("temperature")]
         public double? Temperature { get; set; }
@@ -95,10 +104,32 @@ namespace yyLib
         [JsonPropertyName ("top_p")]
         public double? TopP { get; set; }
 
+        [JsonPropertyName ("tools")]
+        public IList <yyGptChatTool>? Tools { get; set; }
+
+        /// <summary>
+        /// Must be string or yyGptChatTool or null.
+        /// </summary>
+        [JsonPropertyName ("tool_choice")]
+        public object? ToolChoice { get; set; }
+
         [JsonPropertyName ("parallel_tool_calls")]
         public bool? ParallelToolCalls { get; set; }
 
         [JsonPropertyName ("user")]
         public string? User { get; set; }
+
+        // Both yyGptChatFunctionCall and yyGptChatFunction contain "Name".
+        // However, the next property "Functions" is apparently a list of yyGptChatFunction.
+        // It's safe to use the same model for "function_call" too.
+
+        /// <summary>
+        /// Must be string or yyGptChatFunction or null.
+        /// </summary>
+        [JsonPropertyName ("function_call")]
+        public object? FunctionCall { get; set; }
+
+        [JsonPropertyName ("functions")]
+        public IList <yyGptChatFunction>? Functions { get; set; }
     }
 }
