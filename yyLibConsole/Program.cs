@@ -23,7 +23,7 @@ namespace yyLibConsole
                 // GptTester.Test1 (
                 //     firstAssistantDeveloperMessage: "You always say a random word.",
                 //     secondAssistantDeveloperMessage: "You always make a random sentence using the provided word.",
-                //     interactionCount: 10);
+                //     interactionCount: 30);
 
                 // JsonTester.Test1 ();
 

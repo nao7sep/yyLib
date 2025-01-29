@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Text;
+﻿using System.Text;
 
 namespace yyLib
 {
@@ -90,11 +89,12 @@ namespace yyLib
             }
         }
 
-        // Suppresses the warning about passing a literal string as a parameter to a method expecting a URI (CA2234).
-        // This suppression is used when the string is intentionally passed as a URI,
-        // and the context ensures it is valid and does not require explicit URI construction.
-        [SuppressMessage ("Usage", "CA2234")]
-        public static async Task <(bool IsSuccess, string RequestJsonString, string ResponseJsonString, yyGptImagesResponse Response, string [] RevisedPrompts, byte [][] ImageBytes)> GenerateImagesAsync (
+        /// <summary>
+        /// Only one of Urls or ImageBytes will contain data, while the other will be an empty array.
+        /// This method does not catch exceptions internally, so the caller must handle potential errors.
+        /// </summary>
+        public static async Task <(bool IsSuccess, string RequestJsonString, string ResponseJsonString,
+            yyGptImagesResponse Response, string [] RevisedPrompts, string [] Urls, byte [][] ImageBytes)> GenerateImagesAsync (
             yyGptImagesConnectionInfo connectionInfo, yyGptImagesRequest request, CancellationToken cancellationToken = default)
         {
             using yyGptImagesClient xClient = new (connectionInfo);
@@ -108,43 +108,58 @@ namespace yyLib
 #pragma warning disable CS8604 // Suppresses warnings for passing a possibly null reference as an argument.
                 // It is guaranteed that 'Data' is not null, and either 'x.Url' or 'x.B64Json' will be non-null (one will always have a value).
                 // These properties are validated beforehand.
-                var xTasks = xResponse.Data.Select (async x =>
-                {
-                    // If ResponseFormat is not specified, the API takes it as "url".
-                    if (request.ResponseFormat == null || request.ResponseFormat.Equals ("url", StringComparison.OrdinalIgnoreCase))
-                    {
-                        using HttpClient xHttpClient = new ()
-                        {
-                            Timeout = TimeSpan.FromSeconds (connectionInfo.Timeout ?? yyGptImagesConnectionInfo.DefaultTimeout) // From derived class.
-                        };
-
-                        // The IsSuccessStatusCode property is not checked because it is more beneficial to retrieve and return whatever data is available.
-                        // Note that GenerateImagesAsync does not adhere to the single-responsibility principle.
-                        // Image retrieval connections may experience timeouts, and there is no guarantee that the returned Base64 strings are valid.
-                        // For precise control over the image retrieval process, consider implementing a separate, dedicated logic for this functionality.
-
-                        var xImageResponse = await xHttpClient.GetAsync (x.Url, cancellationToken).ConfigureAwait (false);
-                        return await xImageResponse.Content.ReadAsByteArrayAsync (cancellationToken).ConfigureAwait (false);
-                    }
-
-                    else if (request.ResponseFormat.Equals ("b64_json", StringComparison.OrdinalIgnoreCase))
-                        return Convert.FromBase64String (x.B64Json);
-
-                    else throw new yyArgumentException ("The response format is invalid.");
-                });
-#pragma warning restore CS8604
-
 #pragma warning disable CS8619 // Suppresses warnings for conversion of nullability in type annotations.
                 // The API documentation indicates that 'RevisedPrompt' will not be null.
+
                 string [] xRevisedPrompts = xResponse.Data.Select (x => x.RevisedPrompt).ToArray ();
+
+                if (request.ResponseFormat == null || request.ResponseFormat.Equals ("url", StringComparison.OrdinalIgnoreCase))
+                {
+                    string [] xUrls = xResponse.Data.Select (x => x.Url).ToArray ();
+                    return (IsSuccess: true, xSendingResult.RequestJsonString, xJsonString, xResponse, xRevisedPrompts, xUrls, []);
+                }
+
+                else if (request.ResponseFormat.Equals ("b64_json", StringComparison.OrdinalIgnoreCase))
+                {
+                    byte [][] xImageBytes = xResponse.Data.Select (x => Convert.FromBase64String (x.B64Json)).ToArray ();
+                    return (IsSuccess: true, xSendingResult.RequestJsonString, xJsonString, xResponse, xRevisedPrompts, [], xImageBytes);
+                }
+
+                else throw new yyArgumentException ("The response format is invalid.");
+
+#pragma warning restore CS8604
 #pragma warning restore CS8619
-
-                byte [][] xImageBytes = await Task.WhenAll (xTasks).ConfigureAwait (false);
-
-                return (IsSuccess: true, xSendingResult.RequestJsonString, xJsonString, xResponse, xRevisedPrompts, xImageBytes);
             }
 
-            else return (IsSuccess: false, xSendingResult.RequestJsonString, xJsonString, xResponse, [], []);
+            else return (IsSuccess: false, xSendingResult.RequestJsonString, xJsonString, xResponse, [], [], []);
+        }
+
+        public static HttpClient CreateImageRetrievalHttpClient (yyGptImagesConnectionInfo connectionInfo)
+        {
+            return new HttpClient
+            {
+                Timeout = TimeSpan.FromSeconds (connectionInfo.Timeout ?? yyGptImagesConnectionInfo.DefaultTimeout)
+            };
+        }
+
+        /// <summary>
+        /// The HttpClient's Timeout must be set to match the yyGptImagesConnectionInfo instance
+        /// that initiated the image generation process or to yyGptImagesConnectionInfo.DefaultTimeout.
+        /// This method does not handle exceptions internally.
+        /// Callers should catch HttpRequestException for network errors and TaskCanceledException if the request is canceled.
+        /// </summary>
+        public static async Task <(bool IsSuccess, byte [] ImageBytes)> RetrieveImageBytesAsync (
+            HttpClient httpClient, string url, CancellationToken cancellationToken = default)
+        {
+            var xImageResponse = await httpClient.GetAsync (url, cancellationToken).ConfigureAwait (false);
+
+            if (xImageResponse.IsSuccessStatusCode)
+            {
+                var xImageBytes = await xImageResponse.Content.ReadAsByteArrayAsync (cancellationToken).ConfigureAwait (false);
+                return (IsSuccess: true, xImageBytes);
+            }
+
+            else return (IsSuccess: false, []);
         }
     }
 }

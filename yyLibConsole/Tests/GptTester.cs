@@ -21,6 +21,11 @@ namespace yyLibConsole
 
             xSecondAssistantRequest.Stream = true;
 
+            // Reusing a single HttpClient instance improves performance and avoids issues like socket exhaustion.
+            // Creating a new HttpClient for each image retrieval would add unnecessary overhead and slow down the process.
+            // By using a pre-created HttpClient, we keep connections efficient and make better use of system resources.
+            using HttpClient xHttpClient = yyGptUtility.CreateImageRetrievalHttpClient (xImagesConnectionInfo);
+
             for (int temp = 0; temp < interactionCount; temp ++)
             {
                 var xFirstAssistantResponse = yyGptUtility.GenerateMessagesAsync (xConnectionInfo, xFirstAssistantRequest).Result;
@@ -75,8 +80,8 @@ namespace yyLibConsole
                     };
 
                     if ((temp + 6) % 10 == 0) // 4, 14...
-                        xImagesRequest.ResponseFormat = "b64_json";
-                    else xImagesRequest.ResponseFormat = "url";
+                        xImagesRequest.ResponseFormat = "url";
+                    else xImagesRequest.ResponseFormat = "b64_json";
 
                     Console.WriteLine ($"Generating image ({xImagesRequest.ResponseFormat})...");
 
@@ -88,11 +93,28 @@ namespace yyLibConsole
                         break;
                     }
 
+                    byte [] xImageBytes = [];
+
+                    if (xImagesRequest.ResponseFormat.Equals ("url", StringComparison.OrdinalIgnoreCase))
+                    {
+                        var xImageRetrievalResponse = yyGptUtility.RetrieveImageBytesAsync (xHttpClient, xImagesResponse.Urls [0]).Result;
+
+                        if (xImageRetrievalResponse.IsSuccess == false)
+                        {
+                            Console.WriteLine ($"Image retrieval failed: {xImagesResponse.Urls [0].GetVisibleString ()}");
+                            break;
+                        }
+
+                        xImageBytes = xImageRetrievalResponse.ImageBytes;
+                    }
+
+                    else xImageBytes = xImagesResponse.ImageBytes [0];
+
                     string xImagePartialFilePath = yyPath.Join (yySpecialDirectories.Desktop, "GptTest-" + yyConverter.DateTimeToRoundtripFileNameString (DateTime.UtcNow)),
                            xImageFilePath = xImagePartialFilePath + ".png",
                            xPromptsFilePath = xImagePartialFilePath + ".txt";
 
-                    File.WriteAllBytes (xImageFilePath, xImagesResponse.ImageBytes [0]);
+                    File.WriteAllBytes (xImageFilePath, xImageBytes);
 
                     // This code uses AppendLine, which appends a string followed by a newline character sequence.
                     // The newline sequence is determined by the current environment (Environment.NewLine),
