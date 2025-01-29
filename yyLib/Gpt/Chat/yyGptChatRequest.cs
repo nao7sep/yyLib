@@ -41,6 +41,11 @@ namespace yyLib
         [JsonPropertyName ("reasoning_effort")]
         public string? ReasoningEffort { get; set; }
 
+        // Official documentation says: Developer-defined tags and values used for filtering completions in the dashboard.
+        /// <summary>
+        /// Must be object or null.
+        /// No model class is provided for this property.
+        /// </summary>
         [JsonPropertyName ("metadata")]
         public object? Metadata { get; set; }
 
