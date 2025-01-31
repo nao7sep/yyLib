@@ -95,6 +95,7 @@ namespace yyLib
         /// Must be string or List <string> or null.
         /// </summary>
         [JsonPropertyName ("stop")]
+        [JsonConverter (typeof (yyGptChatStopJsonConverter))]
         public object? Stop { get; set; }
 
         [JsonPropertyName ("stream")]
@@ -116,6 +117,7 @@ namespace yyLib
         /// Must be string or yyGptChatTool or null.
         /// </summary>
         [JsonPropertyName ("tool_choice")]
+        [JsonConverter (typeof (yyGptChatToolJsonConverter))]
         public object? ToolChoice { get; set; }
 
         [JsonPropertyName ("parallel_tool_calls")]
@@ -132,6 +134,7 @@ namespace yyLib
         /// Must be string or yyGptChatFunction or null.
         /// </summary>
         [JsonPropertyName ("function_call")]
+        [JsonConverter (typeof (yyGptChatFunctionJsonConverter))]
         public object? FunctionCall { get; set; }
 
         [JsonPropertyName ("functions")]

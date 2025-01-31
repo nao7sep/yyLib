@@ -82,7 +82,7 @@ namespace yyLib
                         ContentDisposition = new (ContentDisposition.Attachment),
                         ContentTransferEncoding = ContentEncoding.Base64,
                         // The following code ensures that the file is read into memory and closed immediately, avoiding the need to keep the file open.
-                        Content = new MimeContent (new MemoryStream (File.ReadAllBytes (xAttachment.OriginalFilePath! /* Intentional */ )))
+                        Content = new MimeContent (new MemoryStream (File.ReadAllBytes (xAttachment.OriginalFilePath!))) // Should throw if null.
                     });
                 }
             }

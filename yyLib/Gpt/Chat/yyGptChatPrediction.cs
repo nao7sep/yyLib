@@ -16,6 +16,7 @@ namespace yyLib
         /// Must be string or List <yyGptChatContentPart> or null.
         /// </summary>
         [JsonPropertyName ("content")]
+        [JsonConverter (typeof (yyGptChatContentJsonConverter))]
         public object? Content { get; set; }
     }
 }

@@ -15,6 +15,7 @@ namespace yyLib
         /// Must be string or null when in response.
         /// </summary>
         [JsonPropertyName ("content")]
+        [JsonConverter (typeof (yyGptChatContentJsonConverter))]
         public object? Content { get; set; }
 
         // Having discovered that the default binder for IConfiguration ignores JSON-related attributes including JsonConverter,
