@@ -134,6 +134,9 @@ namespace yyLib
             else return (IsSuccess: false, xSendingResult.RequestJsonString, xJsonString, xResponse, [], [], []);
         }
 
+        /// <summary>
+        /// Use "using" to ensure that the HttpClient is disposed of properly.
+        /// </summary>
         public static HttpClient CreateImageRetrievalHttpClient (yyGptImagesConnectionInfo connectionInfo)
         {
             return new HttpClient
