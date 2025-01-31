@@ -44,6 +44,7 @@ namespace yyLib
             using StringContent xContent = new (xJsonString, Encoding.UTF8, "application/json"); // Must be UTF-8.
             using HttpRequestMessage xMessage = new (HttpMethod.Post, ConnectionInfo.Endpoint) { Content = xContent };
 
+            // Disposed later.
             var xResponse = await HttpClient.SendAsync (xMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait (false);
 
             // Commented out to receive error messages.
@@ -56,10 +57,11 @@ namespace yyLib
             if (ResponseStream != null)
                 await ResponseStream.DisposeAsync ().ConfigureAwait (false);
 
+            // Disposed later.
             ResponseStream = await xResponse.Content.ReadAsStreamAsync (cancellationToken).ConfigureAwait (false);
 
             ResponseStreamReader?.Dispose ();
-            ResponseStreamReader = new (ResponseStream);
+            ResponseStreamReader = new (ResponseStream); // Disposed later.
 
             return (xJsonString, xResponse, ResponseStream);
         }

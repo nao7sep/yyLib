@@ -151,7 +151,7 @@ namespace yyLib
         public static async Task <(bool IsSuccess, byte [] ImageBytes)> RetrieveImageBytesAsync (
             HttpClient httpClient, string url, CancellationToken cancellationToken = default)
         {
-            var xImageResponse = await httpClient.GetAsync (url, cancellationToken).ConfigureAwait (false);
+            using var xImageResponse = await httpClient.GetAsync (url, cancellationToken).ConfigureAwait (false);
 
             if (xImageResponse.IsSuccessStatusCode)
             {
