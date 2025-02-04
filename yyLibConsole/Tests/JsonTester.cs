@@ -5,6 +5,9 @@ namespace yyLibConsole
 {
     internal static class JsonTester
     {
+        /// <summary>
+        /// Tests the parsing and display of the file "json_edge_cases.json".
+        /// </summary>
         public static void Test1 ()
         {
             string xJsonFilePath = yyAppDirectory.MapPath ("json_edge_cases.json"),

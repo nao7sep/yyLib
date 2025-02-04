@@ -20,17 +20,33 @@ namespace yyLib
             });
         }
 
-        public void AddSystemMessage (string content, string? name = null) =>
-            AddMessage (content, yyGptChatRole.System, name);
-
         public void AddDeveloperMessage (string content, string? name = null) =>
             AddMessage (content, yyGptChatRole.Developer, name);
+
+        public void AddSystemMessage (string content, string? name = null) =>
+            AddMessage (content, yyGptChatRole.System, name);
 
         public void AddUserMessage (string content, string? name = null) =>
             AddMessage (content, yyGptChatRole.User, name);
 
+        public void AddUserMessage (IList <yyGptChatContentPart> content, string? name = null)
+        {
+            Messages.Add (new ()
+            {
+                Content = content,
+                Role = yyGptChatRole.User,
+                Name = name
+            });
+        }
+
         public void AddAssistantMessage (string content, string? name = null) =>
             AddMessage (content, yyGptChatRole.Assistant, name);
+
+        public void AddToolMessage (string content, string? name = null) =>
+            AddMessage (content, yyGptChatRole.Tool, name);
+
+        public void AddFunctionMessage (string content, string? name = null) =>
+            AddMessage (content, yyGptChatRole.Function, name);
 
         [JsonPropertyName ("model")]
         public required string Model { get; set; }
@@ -92,7 +108,7 @@ namespace yyLib
         public string? ServiceTier { get; set; }
 
         /// <summary>
-        /// Must be string or List <string> or null.
+        /// Must be string or IList <string> or null.
         /// </summary>
         [JsonPropertyName ("stop")]
         [JsonConverter (typeof (yyGptChatStopJsonConverter))]

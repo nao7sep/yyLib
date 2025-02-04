@@ -11,7 +11,7 @@ namespace yyLib
         // That's why the name is more generic.
 
         /// <summary>
-        /// Must be string or List <yyGptChatContentPart> or null when in request.
+        /// Must be string or IList <yyGptChatContentPart> or null when in request.
         /// Must be string or null when in response.
         /// </summary>
         [JsonPropertyName ("content")]

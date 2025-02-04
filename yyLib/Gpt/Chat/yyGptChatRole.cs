@@ -2,9 +2,11 @@
 {
     public enum yyGptChatRole
     {
-        System,
         Developer,
+        System,
         User,
-        Assistant
+        Assistant,
+        Tool,
+        Function
     }
 }
