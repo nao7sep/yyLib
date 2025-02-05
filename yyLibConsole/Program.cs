@@ -20,16 +20,16 @@ namespace yyLibConsole
             try
             {
                 // API key must be specified in user secrets or app settings.
-                // GptTester.Test1 (
+                // GptTester.TestInteractionsOfGptModelsAndGeneratingImages (
                 //     firstAssistantDeveloperMessage: "You always say a random word.",
                 //     secondAssistantDeveloperMessage: "You always make a random sentence using the provided word.",
                 //     interactionCount: 30);
 
-                // JsonTester.Test1 ();
+                // JsonTester.TestParsingAndDisplayingJsonFile ("json_edge_cases.json");
 
                 // Set "from" and "to" email addresses for testing.
                 // Default connection must be specified in user secrets or app settings.
-                // MailTester.Test1 (from: string.Empty, to: string.Empty);
+                // MailTester.TestSendingMessageAndSavingJsonAndMimeRepresentations (from: string.Empty, to: string.Empty);
             }
 
             catch (Exception xException)

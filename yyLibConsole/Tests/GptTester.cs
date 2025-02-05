@@ -6,12 +6,9 @@ namespace yyLibConsole
 {
     internal static class GptTester
     {
-        /// <summary>
-        /// Tests the interaction between two GPT models and generates an image every 5 interactions.
-        /// </summary>
         // Suppresses the warning about passing literals or constant strings as parameters for methods expecting localized resources (CA1303).
         [SuppressMessage ("Globalization", "CA1303")]
-        public static void Test1 (string firstAssistantDeveloperMessage, string secondAssistantDeveloperMessage, int interactionCount)
+        public static void TestInteractionsOfGptModelsAndGeneratingImages (string firstAssistantDeveloperMessage, string secondAssistantDeveloperMessage, int interactionCount)
         {
             yyGptChatConnectionInfo xConnectionInfo = yyGptChatConnectionInfo.Default;
             yyGptImagesConnectionInfo xImagesConnectionInfo = yyGptImagesConnectionInfo.Default;

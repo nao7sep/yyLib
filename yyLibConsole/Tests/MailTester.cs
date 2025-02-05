@@ -4,10 +4,7 @@ namespace yyLibConsole
 {
     internal static class MailTester
     {
-        /// <summary>
-        /// Sends a test message and saves the JSON and MIME representations of the message to the desktop.
-        /// </summary>
-        public static void Test1 (string from, string to)
+        public static void TestSendingMessageAndSavingJsonAndMimeRepresentations (string from, string to)
         {
             // One must be provided in user secrets or app settings.
             yyMailConnectionInfo xConnectionInfo = yyMailConnectionInfo.Default;
