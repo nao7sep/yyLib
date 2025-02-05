@@ -13,6 +13,10 @@ namespace yyLibConsole
             yyGptChatConnectionInfo xConnectionInfo = yyGptChatConnectionInfo.Default;
             yyGptImagesConnectionInfo xImagesConnectionInfo = yyGptImagesConnectionInfo.Default;
 
+            using var xFirstAssistantClient = new yyGptChatClient (xConnectionInfo);
+            using var xSecondAssistantClient = new yyGptChatClient (xConnectionInfo);
+            using var xImagesClient = new yyGptImagesClient (xImagesConnectionInfo);
+
             yyGptChatRequest xFirstAssistantRequest = new () { Model = yyGptChat.DefaultModel },
                              xSecondAssistantRequest = new () { Model = yyGptChat.DefaultModel };
 
@@ -28,7 +32,7 @@ namespace yyLibConsole
 
             for (int temp = 0; temp < interactionCount; temp ++)
             {
-                var xFirstAssistantResponse = yyGptUtility.GenerateMessagesAsync (xConnectionInfo, xFirstAssistantRequest).Result;
+                var xFirstAssistantResponse = yyGptUtility.GenerateMessagesAsync (xFirstAssistantClient, xFirstAssistantRequest).Result;
 
                 if (xFirstAssistantResponse.IsSuccess == false)
                 {
@@ -50,8 +54,10 @@ namespace yyLibConsole
 
                 Console.Write ("Second Assistant: ");
 
-                var xSecondAssistantResponse = yyGptUtility.GenerateMessagesChunksAsync (xConnectionInfo, xSecondAssistantRequest,
-                    (index, content, cancellationToken) => _OnChunkRetrievedAsync (index, content, cancellationToken)).Result;
+                // Refer to "async-lambdas-task-completedtask-csharp.md" for more information about the async lambda syntax.
+
+                var xSecondAssistantResponse = yyGptUtility.GenerateMessagesChunksAsync (xSecondAssistantClient, xSecondAssistantRequest,
+                    async (index, content, cancellationToken) => await _OnChunkRetrievedAsync (index, content, cancellationToken)).Result;
 
                 if (xSecondAssistantResponse.IsSuccess == false)
                 {
@@ -85,7 +91,7 @@ namespace yyLibConsole
 
                     Console.WriteLine ($"Generating image ({xImagesRequest.ResponseFormat})...");
 
-                    var xImagesResponse = yyGptUtility.GenerateImagesAsync (xImagesConnectionInfo, xImagesRequest).Result;
+                    var xImagesResponse = yyGptUtility.GenerateImagesAsync (xImagesClient, xImagesRequest).Result;
 
                     if (xImagesResponse.IsSuccess == false)
                     {

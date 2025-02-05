@@ -3,6 +3,17 @@ using System.Text.Json;
 
 namespace yyLib
 {
+    // This class is designed to simplify HTTP-related operations by handling the lifecycle
+    // of HttpClient, HttpResponseMessage, Stream, and StreamReader internally.
+    // While manually managing these instances provides greater flexibility, it also requires
+    // tracking their states and ensuring proper disposal, which can be unnecessary for
+    // single-threaded and straightforward scenarios.
+    //
+    // My design choice here is to abstract away that complexity, so users only need to work
+    // with yyGptImagesClient without worrying about individual resource management.
+    // This approach allows us to write less code while ensuring proper resource cleanup.
+    // After all tasks are completed, disposing of the client itself will release all resources.
+
     public class yyGptImagesClient: IDisposable
     {
         public yyGptImagesConnectionInfo ConnectionInfo { get; private set; }

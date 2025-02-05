@@ -5,12 +5,11 @@ namespace yyLib
     public static class yyGptUtility
     {
         public static async Task <(bool IsSuccess, string RequestJsonString, string ResponseJsonString, yyGptChatResponse Response, string [] Messages)> GenerateMessagesAsync (
-            yyGptChatConnectionInfo connectionInfo, yyGptChatRequest request, CancellationToken cancellationToken = default)
+            yyGptChatClient client, yyGptChatRequest request, CancellationToken cancellationToken = default)
         {
-            using yyGptChatClient xClient = new (connectionInfo);
-            var xSendingResult = await xClient.SendAsync (request, cancellationToken).ConfigureAwait (false);
+            var xSendingResult = await client.SendAsync (request, cancellationToken).ConfigureAwait (false);
 
-            string xJsonString = await xClient.ReadToEndAsync (cancellationToken).ConfigureAwait (false);
+            string xJsonString = await client.ReadToEndAsync (cancellationToken).ConfigureAwait (false);
             yyGptChatResponse xResponse = yyGptChatResponseParser.Parse (xJsonString);
 
 #pragma warning disable CS8602 // Disables warnings for dereferencing a possibly null reference.
@@ -25,14 +24,25 @@ namespace yyLib
             return (xSendingResult.ResponseMessage.IsSuccessStatusCode, xSendingResult.RequestJsonString, xJsonString, xResponse, xMessages);
         }
 
+        /// <summary>
+        /// Consider using the overload that accepts a yyGptChatClient instance for better performance.
+        /// </summary>
+        public static async Task <(bool IsSuccess, string RequestJsonString, string ResponseJsonString, yyGptChatResponse Response, string [] Messages)> GenerateMessagesAsync (
+            yyGptChatConnectionInfo connectionInfo, yyGptChatRequest request, CancellationToken cancellationToken = default)
+        {
+            using var xClient = new yyGptChatClient (connectionInfo);
+            return await GenerateMessagesAsync (xClient, request, cancellationToken).ConfigureAwait (false);
+        }
+
+        // Refer to "async-lambdas-task-completedtask-csharp.md" for more information, that may be relevant to onChunkRetrievedAsync.
+
         public static async Task <(bool IsSuccess, string RequestJsonString, string [] ResponseJsonStrings, yyGptChatResponse [] Responses, string [] Messages)> GenerateMessagesChunksAsync (
-            yyGptChatConnectionInfo connectionInfo, yyGptChatRequest request, Func <int, string?, CancellationToken, Task> onChunkRetrievedAsync, CancellationToken cancellationToken = default)
+            yyGptChatClient client, yyGptChatRequest request, Func <int, string?, CancellationToken, Task> onChunkRetrievedAsync, CancellationToken cancellationToken = default)
         {
             if (request.Stream is null or false)
                 throw new yyArgumentException ("The request must be streaming.");
 
-            using yyGptChatClient xClient = new (connectionInfo);
-            var xSendingResult = await xClient.SendAsync (request, cancellationToken).ConfigureAwait (false);
+            var xSendingResult = await client.SendAsync (request, cancellationToken).ConfigureAwait (false);
 
             if (xSendingResult.ResponseMessage.IsSuccessStatusCode)
             {
@@ -43,7 +53,7 @@ namespace yyLib
                 while (true)
                 {
                     // Each line should look like "data: { ..." or "data: [DONE]".
-                    string? xLine = await xClient.ReadLineAsync (cancellationToken).ConfigureAwait (false);
+                    string? xLine = await client.ReadLineAsync (cancellationToken).ConfigureAwait (false);
 
                     // If null is returned before "data: [DONE]", something is wrong.
                     // It is highly unlikely that all the data is received and only the last line is missing.
@@ -83,10 +93,20 @@ namespace yyLib
 
             else
             {
-                string? xJsonString = await xClient.ReadToEndAsync (cancellationToken).ConfigureAwait (false);
+                string? xJsonString = await client.ReadToEndAsync (cancellationToken).ConfigureAwait (false);
                 yyGptChatResponse xResponse = yyGptChatResponseParser.Parse (xJsonString);
                 return (IsSuccess: false, xSendingResult.RequestJsonString, [ xJsonString ], [ xResponse ], []);
             }
+        }
+
+        /// <summary>
+        /// Consider using the overload that accepts a yyGptChatClient instance for better performance.
+        /// </summary>
+        public static async Task <(bool IsSuccess, string RequestJsonString, string [] ResponseJsonStrings, yyGptChatResponse [] Responses, string [] Messages)> GenerateMessagesChunksAsync (
+            yyGptChatConnectionInfo connectionInfo, yyGptChatRequest request, Func <int, string?, CancellationToken, Task> onChunkRetrievedAsync, CancellationToken cancellationToken = default)
+        {
+            using var xClient = new yyGptChatClient (connectionInfo);
+            return await GenerateMessagesChunksAsync (xClient, request, onChunkRetrievedAsync, cancellationToken).ConfigureAwait (false);
         }
 
         /// <summary>
@@ -95,12 +115,11 @@ namespace yyLib
         /// </summary>
         public static async Task <(bool IsSuccess, string RequestJsonString, string ResponseJsonString,
             yyGptImagesResponse Response, string [] RevisedPrompts, string [] Urls, byte [][] ImageBytes)> GenerateImagesAsync (
-            yyGptImagesConnectionInfo connectionInfo, yyGptImagesRequest request, CancellationToken cancellationToken = default)
+            yyGptImagesClient client, yyGptImagesRequest request, CancellationToken cancellationToken = default)
         {
-            using yyGptImagesClient xClient = new (connectionInfo);
-            var xSendingResult = await xClient.SendAsync (request, cancellationToken).ConfigureAwait (false);
+            var xSendingResult = await client.SendAsync (request, cancellationToken).ConfigureAwait (false);
 
-            string xJsonString = await xClient.ReadToEndAsync (cancellationToken).ConfigureAwait (false);
+            string xJsonString = await client.ReadToEndAsync (cancellationToken).ConfigureAwait (false);
             yyGptImagesResponse xResponse = yyGptImagesResponseParser.Parse (xJsonString);
 
             if (xSendingResult.ResponseMessage.IsSuccessStatusCode)
@@ -135,6 +154,17 @@ namespace yyLib
         }
 
         /// <summary>
+        /// Consider using the overload that accepts a yyGptImagesClient instance for better performance.
+        /// </summary>
+        public static async Task <(bool IsSuccess, string RequestJsonString, string ResponseJsonString,
+            yyGptImagesResponse Response, string [] RevisedPrompts, string [] Urls, byte [][] ImageBytes)> GenerateImagesAsync (
+            yyGptImagesConnectionInfo connectionInfo, yyGptImagesRequest request, CancellationToken cancellationToken = default)
+        {
+            using var xClient = new yyGptImagesClient (connectionInfo);
+            return await GenerateImagesAsync (xClient, request, cancellationToken).ConfigureAwait (false);
+        }
+
+        /// <summary>
         /// Use "using" to ensure that the HttpClient is disposed of properly.
         /// </summary>
         public static HttpClient CreateImageRetrievalHttpClient (yyGptImagesConnectionInfo connectionInfo)
@@ -152,9 +182,9 @@ namespace yyLib
         /// Callers should catch HttpRequestException for network errors and TaskCanceledException if the request is canceled.
         /// </summary>
         public static async Task <(bool IsSuccess, byte [] ImageBytes)> RetrieveImageBytesAsync (
-            HttpClient httpClient, string url, CancellationToken cancellationToken = default)
+            HttpClient client, string url, CancellationToken cancellationToken = default)
         {
-            using var xImageResponse = await httpClient.GetAsync (url, cancellationToken).ConfigureAwait (false);
+            using var xImageResponse = await client.GetAsync (url, cancellationToken).ConfigureAwait (false);
 
             if (xImageResponse.IsSuccessStatusCode)
             {
@@ -163,6 +193,16 @@ namespace yyLib
             }
 
             else return (IsSuccess: false, []);
+        }
+
+        /// <summary>
+        /// Consider using the overload that accepts an HttpClient instance for better performance.
+        /// </summary>
+        public static async Task <(bool IsSuccess, byte [] ImageBytes)> RetrieveImageBytesAsync (
+            yyGptImagesConnectionInfo connectionInfo, string url, CancellationToken cancellationToken = default)
+        {
+            using var xClient = CreateImageRetrievalHttpClient (connectionInfo);
+            return await RetrieveImageBytesAsync (xClient, url, cancellationToken).ConfigureAwait (false);
         }
     }
 }
