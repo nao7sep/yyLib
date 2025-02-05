@@ -34,7 +34,7 @@ namespace yyLib
             return await GenerateMessagesAsync (xClient, request, cancellationToken).ConfigureAwait (false);
         }
 
-        // Refer to "async-lambdas-task-completedtask-csharp.md" for more information, that may be relevant to onChunkRetrievedAsync.
+        // Refer to "async-lambdas-task-completedtask-csharp.md" for more information relevant to onChunkRetrievedAsync.
 
         public static async Task <(bool IsSuccess, string RequestJsonString, string [] ResponseJsonStrings, yyGptChatResponse [] Responses, string [] Messages)> GenerateMessagesChunksAsync (
             yyGptChatClient client, yyGptChatRequest request, Func <int, string?, CancellationToken, Task> onChunkRetrievedAsync, CancellationToken cancellationToken = default)
@@ -112,6 +112,7 @@ namespace yyLib
         /// <summary>
         /// Only one of Urls or ImageBytes will contain data, while the other will be an empty array.
         /// This method does not catch exceptions internally, so the caller must handle potential errors.
+        /// RevisedPrompts will be an empty array when using the DALL-E 2 model, which doesnt return revised prompts.
         /// </summary>
         public static async Task <(bool IsSuccess, string RequestJsonString, string ResponseJsonString,
             yyGptImagesResponse Response, string [] RevisedPrompts, string [] Urls, byte [][] ImageBytes)> GenerateImagesAsync (
@@ -128,9 +129,10 @@ namespace yyLib
                 // It is guaranteed that 'Data' is not null, and either 'x.Url' or 'x.B64Json' will be non-null (one will always have a value).
                 // These properties are validated beforehand.
 #pragma warning disable CS8619 // Suppresses warnings for conversion of nullability in type annotations.
-                // The API documentation indicates that 'RevisedPrompt' will not be null.
+                // The API documentation indicates that 'RevisedPrompt' will not be null when DALL-E 3 model is used.
+                // When DALL-E 2 model is used, 'RevisedPrompt' will be null, leaving us no choice but to return an empty array.
 
-                string [] xRevisedPrompts = xResponse.Data.Select (x => x.RevisedPrompt).ToArray ();
+                string [] xRevisedPrompts = xResponse.Data.All (x => x.RevisedPrompt != null) ? xResponse.Data.Select (x => x.RevisedPrompt).ToArray () : [];
 
                 if (request.ResponseFormat == null || request.ResponseFormat.Equals ("url", StringComparison.OrdinalIgnoreCase))
                 {

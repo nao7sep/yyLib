@@ -25,8 +25,9 @@ namespace yyLib
                 if (x.B64Json == null && x.Url == null)
                     return true;
 
-                if (string.IsNullOrWhiteSpace (x.RevisedPrompt))
-                    return true;
+                // DALL-E 2 model doesnt return revised prompts.
+                // if (string.IsNullOrWhiteSpace (x.RevisedPrompt))
+                //     return true;
 
                 return false;
             }))

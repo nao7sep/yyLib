@@ -17,6 +17,9 @@ namespace yyLib
         [SuppressMessage ("Design", "CA1056")]
         public string? Url { get; set; }
 
+        /// <summary>
+        /// DALL-E 2 model doesnt return revised prompts.
+        /// </summary>
         [JsonPropertyName ("revised_prompt")]
         public string? RevisedPrompt { get; set; }
     }

@@ -19,11 +19,14 @@ namespace yyLibConsole
         {
             try
             {
-                // API key must be specified in user secrets or app settings.
+                // API key must be specified in user secrets or app settings:
+
                 // GptTester.TestInteractionsOfGptModelsAndGeneratingImages (
                 //     firstAssistantDeveloperMessage: "You always say a random word.",
                 //     secondAssistantDeveloperMessage: "You always make a random sentence using the provided word.",
                 //     interactionCount: 30);
+
+                // GptTester.TestGeneratingMultipleMessagesAndImages (messageCount: 3, imageCount: 3);
 
                 // JsonTester.TestParsingAndDisplayingJsonFile ("json_edge_cases.json");
 
