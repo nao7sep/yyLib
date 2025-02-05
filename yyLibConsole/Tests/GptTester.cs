@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Text;
 using yyLib;
 
@@ -164,13 +165,13 @@ namespace yyLibConsole
             }
 
             for (int temp = 0; temp < messageCount; temp ++)
-                Console.WriteLine ($"Message {temp + 1}: {xFirstResponse.Messages [temp]}");
+                Console.WriteLine ($"Message {(temp + 1).ToString (CultureInfo.InvariantCulture)}: {xFirstResponse.Messages [temp]}");
 
             xRequest.Stream = true;
 
             static Task _OnChunkRetrievedAsync (int index, string? content, CancellationToken cancellationToken)
             {
-                Console.WriteLine ($"Message {index + 1}: {content}");
+                Console.WriteLine ($"Message {(index + 1).ToString (CultureInfo.InvariantCulture)}: {content}");
                 return Task.CompletedTask;
             }
 
@@ -187,7 +188,7 @@ namespace yyLibConsole
             }
 
             for (int temp = 0; temp < messageCount; temp ++)
-                Console.WriteLine ($"Message {temp + 1}: {xSecondResponse.Messages [temp]}");
+                Console.WriteLine ($"Message {(temp + 1).ToString (CultureInfo.InvariantCulture)}: {xSecondResponse.Messages [temp]}");
 
             yyGptImagesConnectionInfo xImagesConnectionInfo = yyGptImagesConnectionInfo.Default;
             using var xImagesClient = new yyGptImagesClient (xImagesConnectionInfo);
@@ -229,7 +230,10 @@ namespace yyLibConsole
                 }
 
                 byte [] xImageBytes = xImageRetrievalResponse.ImageBytes;
-                string xImageFilePath = yyPath.Join (yySpecialDirectories.Desktop, $"{xPartialFileName}-{temp + 1}.png");
+
+                string xImageFilePath = yyPath.Join (yySpecialDirectories.Desktop,
+                    $"{xPartialFileName}-{(temp + 1).ToString (CultureInfo.InvariantCulture)}.png");
+
                 File.WriteAllBytes (xImageFilePath, xImageBytes);
 
                 Console.WriteLine ($"Image saved: {xImageFilePath}");
