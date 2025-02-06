@@ -6,6 +6,10 @@ namespace yyLibConsole
     {
         public static void TestSendingMessageAndSavingJsonAndMimeRepresentations (string from, string to)
         {
+            // -----------------------------------------------------------------------------
+            // Send message
+            // -----------------------------------------------------------------------------
+
             // One must be provided in user secrets or app settings.
             yyMailConnectionInfo xConnectionInfo = yyMailConnectionInfo.Default;
 
@@ -16,6 +20,10 @@ namespace yyLibConsole
             xMessage.TextBody = "This is a test message.";
 
             var xResult = yyMailUtility.SendAsync (xConnectionInfo, xMessage).Result;
+
+            // -----------------------------------------------------------------------------
+            // Save JSON and MIME representations
+            // -----------------------------------------------------------------------------
 
             string xPartialFilePath = yyPath.Join (yySpecialDirectories.Desktop,
                 "MailTest-" + yyConverter.DateTimeToRoundtripFileNameString (DateTime.UtcNow));

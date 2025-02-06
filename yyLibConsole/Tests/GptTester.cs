@@ -11,6 +11,10 @@ namespace yyLibConsole
         [SuppressMessage ("Globalization", "CA1303")]
         public static void TestInteractionsOfGptModelsAndGeneratingImages (string firstAssistantDeveloperMessage, string secondAssistantDeveloperMessage, int interactionCount)
         {
+            // -----------------------------------------------------------------------------
+            // Preparation
+            // -----------------------------------------------------------------------------
+
             yyGptChatConnectionInfo xConnectionInfo = yyGptChatConnectionInfo.Default;
             yyGptImagesConnectionInfo xImagesConnectionInfo = yyGptImagesConnectionInfo.Default;
 
@@ -33,6 +37,10 @@ namespace yyLibConsole
 
             for (int temp = 0; temp < interactionCount; temp ++)
             {
+                // -----------------------------------------------------------------------------
+                // All-at-once message generation
+                // -----------------------------------------------------------------------------
+
                 var xFirstAssistantResponse = yyGptUtility.GenerateMessagesAsync (xFirstAssistantClient, xFirstAssistantRequest).Result;
 
                 if (xFirstAssistantResponse.IsSuccess == false)
@@ -46,6 +54,10 @@ namespace yyLibConsole
 
                 xFirstAssistantRequest.AddAssistantMessage (xMessage);
                 xSecondAssistantRequest.AddUserMessage (xMessage);
+
+                // -----------------------------------------------------------------------------
+                // Chunked message generation
+                // -----------------------------------------------------------------------------
 
                 static Task _OnChunkRetrievedAsync (int index, string? content, CancellationToken cancellationToken)
                 {
@@ -75,6 +87,10 @@ namespace yyLibConsole
 
                 if ((temp + 1) % 5 == 0) // 4, 9, 14...
                 {
+                    // -----------------------------------------------------------------------------
+                    // Image generation
+                    // -----------------------------------------------------------------------------
+
                     yyGptImagesRequest xImagesRequest = new ()
                     {
                         // https://platform.openai.com/docs/guides/images
@@ -100,6 +116,10 @@ namespace yyLibConsole
                         break;
                     }
 
+                    // -----------------------------------------------------------------------------
+                    // Image retrieval
+                    // -----------------------------------------------------------------------------
+
                     byte [] xImageBytes = [];
 
                     if (xImagesRequest.ResponseFormat.Equals ("url", StringComparison.OrdinalIgnoreCase))
@@ -123,6 +143,11 @@ namespace yyLibConsole
                            xPromptsFilePath = xImagePartialFilePath + ".txt";
 
                     File.WriteAllBytes (xImageFilePath, xImageBytes);
+                    Console.WriteLine ($"Image saved: {xImageFilePath}");
+
+                    // -----------------------------------------------------------------------------
+                    // Save image prompts
+                    // -----------------------------------------------------------------------------
 
                     // This code uses AppendLine, which appends a string followed by a newline character sequence.
                     // The newline sequence is determined by the current environment (Environment.NewLine),
@@ -136,8 +161,6 @@ namespace yyLibConsole
                     xPrompts.AppendLine (xImagesResponse.RevisedPrompts [0]); // Unsafe when DALL-E 2 is used.
 
                     File.WriteAllText (xPromptsFilePath, xPrompts.ToString (), yyEncoding.DefaultEncoding);
-
-                    Console.WriteLine ($"Image saved: {xImageFilePath}");
                     Console.WriteLine ($"Prompts saved: {xPromptsFilePath}");
                 }
             }
@@ -145,6 +168,10 @@ namespace yyLibConsole
 
         public static void TestGeneratingMultipleMessagesAndImages (int messageCount, int imageCount)
         {
+            // -----------------------------------------------------------------------------
+            // Multiple and all-at-once message generation
+            // -----------------------------------------------------------------------------
+
             yyGptChatConnectionInfo xConnectionInfo = yyGptChatConnectionInfo.Default;
             using var xClient = new yyGptChatClient (xConnectionInfo);
 
@@ -166,6 +193,10 @@ namespace yyLibConsole
 
             for (int temp = 0; temp < messageCount; temp ++)
                 Console.WriteLine ($"Message {(temp + 1).ToString (CultureInfo.InvariantCulture)}: {xFirstResponse.Messages [temp]}");
+
+            // -----------------------------------------------------------------------------
+            // Multiple and chunked message generation
+            // -----------------------------------------------------------------------------
 
             xRequest.Stream = true;
 
@@ -189,6 +220,10 @@ namespace yyLibConsole
 
             for (int temp = 0; temp < messageCount; temp ++)
                 Console.WriteLine ($"Message {(temp + 1).ToString (CultureInfo.InvariantCulture)}: {xSecondResponse.Messages [temp]}");
+
+            // -----------------------------------------------------------------------------
+            // Multiple image generation
+            // -----------------------------------------------------------------------------
 
             yyGptImagesConnectionInfo xImagesConnectionInfo = yyGptImagesConnectionInfo.Default;
             using var xImagesClient = new yyGptImagesClient (xImagesConnectionInfo);
@@ -214,6 +249,10 @@ namespace yyLibConsole
                 Console.WriteLine ($"Image generation failed: {(xImagesResponse.Response.Error?.Message).GetVisibleString ()}");
                 return;
             }
+
+            // -----------------------------------------------------------------------------
+            // Multiple image retrieval
+            // -----------------------------------------------------------------------------
 
             // Time when images generation is completed.
             DateTime xUtcNow = DateTime.UtcNow;
