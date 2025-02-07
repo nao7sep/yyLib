@@ -8,8 +8,13 @@
             if (response.Error != null)
                 return;
 
+            // https://platform.openai.com/docs/api-reference/chat/object
+
             if (response.Choices == null)
                 throw new yyFormatException ($"The 'choices' property is missing: {responseJsonString.GetVisibleString ()}");
+
+            if (response.Choices.Any () == false)
+                throw new yyFormatException ($"The 'choices' property is empty: {responseJsonString.GetVisibleString ()}");
 
             if (response.Choices.Any (x =>
             {
@@ -29,6 +34,8 @@
         {
             if (response.Error != null)
                 return;
+
+            // https://platform.openai.com/docs/api-reference/chat/streaming
 
             if (response.Choices == null)
                 throw new yyFormatException ($"The 'choices' property is missing: {responseJsonString.GetVisibleString ()}");

@@ -8,8 +8,13 @@
             if (response.Error != null)
                 return;
 
+            // https://platform.openai.com/docs/api-reference/images/object
+
             if (response.Data == null)
                 throw new yyFormatException ($"The 'data' property is missing: {responseJsonString.GetVisibleString ()}");
+
+            if (response.Data.Any () == false)
+                throw new yyFormatException ($"The 'data' property is empty: {responseJsonString.GetVisibleString ()}");
 
             if (response.Data.Any (x =>
             {
