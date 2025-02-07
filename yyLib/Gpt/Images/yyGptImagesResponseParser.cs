@@ -14,9 +14,6 @@ namespace yyLib
             if (xResponse == null)
                 throw new yyFormatException ($"Failed to deserialize JSON: {str.GetVisibleString ()}");
 
-            // Validation is not a parser's responsibility.
-            // Use yyGptImagesValidator.
-
             return xResponse;
         }
     }
