@@ -11,6 +11,7 @@ namespace yyLib
 
             string xJsonString = await client.ReadToEndAsync (cancellationToken).ConfigureAwait (false);
             yyGptChatResponse xResponse = yyGptChatResponseParser.Parse (xJsonString);
+            yyGptChatValidator.ValidateMessagesResponse (xResponse, xJsonString);
 
 #pragma warning disable CS8602 // Disables warnings for dereferencing a possibly null reference.
 #pragma warning disable CS8604 // Disables warnings for passing a possibly null reference as an argument.
@@ -67,6 +68,7 @@ namespace yyLib
                     xJsonStrings.Add (xLine);
 
                     var xResponse = yyGptChatResponseParser.ParseChunk (xLine);
+                    yyGptChatValidator.ValidateMessageChunkResponse (xResponse, xLine);
 
                     if (xResponse == yyGptChatResponse.Empty)
                         break; // "data: [DONE]" is detected.
@@ -95,6 +97,7 @@ namespace yyLib
             {
                 string? xJsonString = await client.ReadToEndAsync (cancellationToken).ConfigureAwait (false);
                 yyGptChatResponse xResponse = yyGptChatResponseParser.Parse (xJsonString);
+                yyGptChatValidator.ValidateMessagesResponse (xResponse, xJsonString);
                 return (IsSuccess: false, xSendingResult.RequestJsonString, [ xJsonString ], [ xResponse ], []);
             }
         }
@@ -122,6 +125,7 @@ namespace yyLib
 
             string xJsonString = await client.ReadToEndAsync (cancellationToken).ConfigureAwait (false);
             yyGptImagesResponse xResponse = yyGptImagesResponseParser.Parse (xJsonString);
+            yyGptImagesValidator.ValidateImagesResponse (xResponse, xJsonString);
 
             if (xSendingResult.ResponseMessage.IsSuccessStatusCode)
             {
