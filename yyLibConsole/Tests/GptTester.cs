@@ -49,8 +49,8 @@ namespace yyLibConsole
                     break;
                 }
 
-                string xMessage = xFirstAssistantResponse.Messages [0];
-                Console.WriteLine ($"First Assistant: {xMessage}");
+                string xMessage = xFirstAssistantResponse.Messages?.FirstOrDefault () ?? throw new yyUnexpectedNullException ($"First Assistant's Message is null.");
+                Console.WriteLine ($"First Assistant: {xMessage.GetVisibleString ()}");
 
                 xFirstAssistantRequest.AddAssistantMessage (xMessage);
                 xSecondAssistantRequest.AddUserMessage (xMessage);
@@ -74,13 +74,13 @@ namespace yyLibConsole
 
                 if (xSecondAssistantResponse.IsSuccess == false)
                 {
-                    Console.WriteLine ((xSecondAssistantResponse.Responses [0].Error?.Message).GetVisibleString ());
+                    Console.WriteLine ((xSecondAssistantResponse.Responses.FirstOrDefault ()?.Error?.Message).GetVisibleString ());
                     break;
                 }
 
                 Console.WriteLine ();
 
-                xMessage = xSecondAssistantResponse.Messages [0];
+                xMessage = xSecondAssistantResponse.Messages?.FirstOrDefault () ?? throw new yyUnexpectedNullException ($"Second Assistant's Message is null.");
 
                 xFirstAssistantRequest.AddUserMessage (xMessage);
                 xSecondAssistantRequest.AddAssistantMessage (xMessage);
@@ -120,25 +120,25 @@ namespace yyLibConsole
                     // Image retrieval
                     // -----------------------------------------------------------------------------
 
-                    byte [] xImageBytes = [];
+                    byte [] xImageBytes = []; // Single image.
 
                     if (xImagesRequest.ResponseFormat.Equals ("url", StringComparison.OrdinalIgnoreCase))
                     {
-                        var xImageRetrievalResponse = yyGptUtility.RetrieveImageBytesAsync (xHttpClient, xImagesResponse.Urls [0]).Result;
+                        string xUrl = xImagesResponse.Urls?.FirstOrDefault () ?? throw new yyUnexpectedNullException ($"Image URL is null.");
+                        var xImageRetrievalResponse = yyGptUtility.RetrieveImageBytesAsync (xHttpClient, xUrl).Result;
 
                         if (xImageRetrievalResponse.IsSuccess == false)
                         {
-                            Console.WriteLine ($"Image retrieval failed: {xImagesResponse.Urls [0].GetVisibleString ()}");
+                            Console.WriteLine ($"Image retrieval failed: {xUrl.GetVisibleString ()}");
                             break;
                         }
 
-                        xImageBytes = xImageRetrievalResponse.ImageBytes;
+                        xImageBytes = xImageRetrievalResponse.ImagesBytes ?? throw new yyUnexpectedNullException ($"Image Bytes is null.");
                     }
 
-                    else xImageBytes = xImagesResponse.ImageBytes [0];
+                    else xImageBytes = xImagesResponse.ImagesBytes?.FirstOrDefault () ?? throw new yyUnexpectedNullException ($"Image Bytes is null.");
 
-                    string xImagePartialFilePath = yyPath.Join (yySpecialDirectories.Desktop,
-                               "GptTest-" + yyConverter.DateTimeToRoundtripFileNameString (DateTime.UtcNow)),
+                    string xImagePartialFilePath = yyPath.Join (yySpecialDirectories.Desktop, "GptTest-" + yyConverter.DateTimeToRoundtripFileNameString (DateTime.UtcNow)),
                            xImageFilePath = xImagePartialFilePath + ".png",
                            xPromptsFilePath = xImagePartialFilePath + ".txt";
 
@@ -158,7 +158,7 @@ namespace yyLibConsole
                     xPrompts.AppendLine (xImagesRequest.Prompt);
                     xPrompts.AppendLine ();
                     xPrompts.AppendLine ("[Revised Prompt]");
-                    xPrompts.AppendLine (xImagesResponse.RevisedPrompts [0]); // Unsafe when DALL-E 2 is used.
+                    xPrompts.AppendLine (xImagesResponse.RevisedPrompts?.FirstOrDefault ().GetVisibleString ());
 
                     File.WriteAllText (xPromptsFilePath, xPrompts.ToString (), yyEncoding.DefaultEncoding);
                     Console.WriteLine ($"Prompts saved: {xPromptsFilePath}");
@@ -192,7 +192,7 @@ namespace yyLibConsole
             }
 
             for (int temp = 0; temp < messageCount; temp ++)
-                Console.WriteLine ($"Message {(temp + 1).ToString (CultureInfo.InvariantCulture)}: {xFirstResponse.Messages [temp]}");
+                Console.WriteLine ($"Message {(temp + 1).ToString (CultureInfo.InvariantCulture)}: {xFirstResponse.Messages?.ElementAtOrDefault (temp).GetVisibleString ()}");
 
             // -----------------------------------------------------------------------------
             // Multiple and chunked message generation
@@ -202,7 +202,8 @@ namespace yyLibConsole
 
             static Task _OnChunkRetrievedAsync (int index, string? content, CancellationToken cancellationToken)
             {
-                Console.WriteLine ($"Message {(index + 1).ToString (CultureInfo.InvariantCulture)}: {content}");
+                // Demonstrates how whitespace characters appear in the message chunks.
+                Console.WriteLine ($"Message {(index + 1).ToString (CultureInfo.InvariantCulture)}: {content}⏎"); // U+23CE: Return Symbol.
                 return Task.CompletedTask;
             }
 
@@ -214,12 +215,12 @@ namespace yyLibConsole
 
             if (xSecondResponse.IsSuccess == false)
             {
-                Console.WriteLine ((xSecondResponse.Responses [0].Error?.Message).GetVisibleString ());
+                Console.WriteLine ((xSecondResponse.Responses?.FirstOrDefault ()?.Error?.Message).GetVisibleString ());
                 return;
             }
 
             for (int temp = 0; temp < messageCount; temp ++)
-                Console.WriteLine ($"Message {(temp + 1).ToString (CultureInfo.InvariantCulture)}: {xSecondResponse.Messages [temp]}");
+                Console.WriteLine ($"Message {(temp + 1).ToString (CultureInfo.InvariantCulture)}: {xSecondResponse.Messages?.ElementAtOrDefault (temp).GetVisibleString ()}");
 
             // -----------------------------------------------------------------------------
             // Multiple image generation
@@ -231,7 +232,7 @@ namespace yyLibConsole
 
             yyGptImagesRequest xImagesRequest = new ()
             {
-                // Quality and Style are not supported by DALL-E 2.
+                // Quality and Style are not supported by DALL-E 2 model.
                 // https://platform.openai.com/docs/guides/images
                 // https://platform.openai.com/docs/api-reference/images/create
 
@@ -260,21 +261,18 @@ namespace yyLibConsole
 
             for (int temp = 0; temp < imageCount; temp ++)
             {
-                var xImageRetrievalResponse = yyGptUtility.RetrieveImageBytesAsync (xHttpClient, xImagesResponse.Urls [temp]).Result;
+                string xUrl = xImagesResponse.Urls?.ElementAtOrDefault (temp) ?? throw new yyUnexpectedNullException ($"Image URL is null.");
+                var xImageRetrievalResponse = yyGptUtility.RetrieveImageBytesAsync (xHttpClient, xUrl).Result;
 
                 if (xImageRetrievalResponse.IsSuccess == false)
                 {
-                    Console.WriteLine ($"Image retrieval failed: {xImagesResponse.Urls [temp].GetVisibleString ()}");
+                    Console.WriteLine ($"Image retrieval failed: {xUrl.GetVisibleString ()}");
                     return;
                 }
 
-                byte [] xImageBytes = xImageRetrievalResponse.ImageBytes;
-
-                string xImageFilePath = yyPath.Join (yySpecialDirectories.Desktop,
-                    $"{xPartialFileName}-{(temp + 1).ToString (CultureInfo.InvariantCulture)}.png");
-
+                byte [] xImageBytes = xImageRetrievalResponse.ImagesBytes ?? throw new yyUnexpectedNullException ($"Image Bytes is null.");
+                string xImageFilePath = yyPath.Join (yySpecialDirectories.Desktop, $"{xPartialFileName}-{(temp + 1).ToString (CultureInfo.InvariantCulture)}.png");
                 File.WriteAllBytes (xImageFilePath, xImageBytes);
-
                 Console.WriteLine ($"Image saved: {xImageFilePath}");
             }
         }
