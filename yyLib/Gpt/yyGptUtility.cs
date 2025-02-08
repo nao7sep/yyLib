@@ -29,8 +29,9 @@ namespace yyLib
 
         /// <summary>
         /// Numbers of responses and messages may be different.
+        /// Messages may be null, but each message is guaranteed to be a string.
         /// </summary>
-        public static async Task <(bool IsSuccess, string RequestJsonString, string [] ResponseJsonStrings, yyGptChatResponse [] Responses, string? []? Messages)> GenerateMessagesChunksAsync (
+        public static async Task <(bool IsSuccess, string RequestJsonString, string [] ResponseJsonStrings, yyGptChatResponse [] Responses, string []? Messages)> GenerateMessagesChunksAsync (
             yyGptChatClient client, yyGptChatRequest request, Func <int, string?, CancellationToken, Task> onChunkRetrievedAsync, CancellationToken cancellationToken = default)
         {
             if (request.Stream is null or false)
@@ -78,7 +79,8 @@ namespace yyLib
                     }
                 }
 
-                return (IsSuccess: true, xSendingResult.RequestJsonString, xJsonStrings.ToArray (), xResponses.ToArray (), xBuilders.Select (x => x.ToString ()).ToArray ());
+                string [] xMessages = xBuilders.Select (x => x.ToString ()).ToArray ();
+                return (IsSuccess: true, xSendingResult.RequestJsonString, xJsonStrings.ToArray (), xResponses.ToArray (), xMessages);
             }
 
             else
@@ -91,8 +93,9 @@ namespace yyLib
 
         /// <summary>
         /// Consider using the overload that accepts a yyGptChatClient instance for better performance.
+        /// Messages may be null, but each message is guaranteed to be a string.
         /// </summary>
-        public static async Task <(bool IsSuccess, string RequestJsonString, string [] ResponseJsonStrings, yyGptChatResponse [] Responses, string? []? Messages)> GenerateMessagesChunksAsync (
+        public static async Task <(bool IsSuccess, string RequestJsonString, string [] ResponseJsonStrings, yyGptChatResponse [] Responses, string []? Messages)> GenerateMessagesChunksAsync (
             yyGptChatConnectionInfo connectionInfo, yyGptChatRequest request, Func <int, string?, CancellationToken, Task> onChunkRetrievedAsync, CancellationToken cancellationToken = default)
         {
             using var xClient = new yyGptChatClient (connectionInfo);
@@ -100,7 +103,7 @@ namespace yyLib
         }
 
         /// <summary>
-        /// Only one of Urls or ImagesBytes will contain data, while the other will be null.
+        /// Only one of Urls or ImagesBytes will contain data while the other will be null.
         /// This method does not catch exceptions internally, so the caller must handle potential errors.
         /// RevisedPrompts will be null when using DALL-E 2, which doesnt return revised prompts.
         /// </summary>
@@ -164,7 +167,7 @@ namespace yyLib
         /// This method does not handle exceptions internally.
         /// Callers should catch HttpRequestException for network errors and TaskCanceledException if the request is canceled.
         /// </summary>
-        public static async Task <(bool IsSuccess, byte []? ImagesBytes)> RetrieveImageBytesAsync (
+        public static async Task <(bool IsSuccess, byte []? ImageBytes)> RetrieveImageBytesAsync (
             HttpClient client, string url, CancellationToken cancellationToken = default)
         {
             using var xImageResponse = await client.GetAsync (url, cancellationToken).ConfigureAwait (false);
@@ -175,13 +178,13 @@ namespace yyLib
                 return (IsSuccess: true, xImageBytes);
             }
 
-            else return (IsSuccess: false, ImagesBytes: null);
+            else return (IsSuccess: false, ImageBytes: null);
         }
 
         /// <summary>
         /// Consider using the overload that accepts an HttpClient instance for better performance.
         /// </summary>
-        public static async Task <(bool IsSuccess, byte []? ImagesBytes)> RetrieveImageBytesAsync (
+        public static async Task <(bool IsSuccess, byte []? ImageBytes)> RetrieveImageBytesAsync (
             yyGptImagesConnectionInfo connectionInfo, string url, CancellationToken cancellationToken = default)
         {
             using var xClient = CreateImageRetrievalHttpClient (connectionInfo);

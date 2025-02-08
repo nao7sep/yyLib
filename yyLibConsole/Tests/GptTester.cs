@@ -133,7 +133,7 @@ namespace yyLibConsole
                             break;
                         }
 
-                        xImageBytes = xImageRetrievalResponse.ImagesBytes ?? throw new yyUnexpectedNullException ($"Image Bytes is null.");
+                        xImageBytes = xImageRetrievalResponse.ImageBytes ?? throw new yyUnexpectedNullException ($"Image Bytes is null.");
                     }
 
                     else xImageBytes = xImagesResponse.ImagesBytes?.FirstOrDefault () ?? throw new yyUnexpectedNullException ($"Image Bytes is null.");
@@ -270,7 +270,7 @@ namespace yyLibConsole
                     return;
                 }
 
-                byte [] xImageBytes = xImageRetrievalResponse.ImagesBytes ?? throw new yyUnexpectedNullException ($"Image Bytes is null.");
+                byte [] xImageBytes = xImageRetrievalResponse.ImageBytes ?? throw new yyUnexpectedNullException ($"Image Bytes is null.");
                 string xImageFilePath = yyPath.Join (yySpecialDirectories.Desktop, $"{xPartialFileName}-{(temp + 1).ToString (CultureInfo.InvariantCulture)}.png");
                 File.WriteAllBytes (xImageFilePath, xImageBytes);
                 Console.WriteLine ($"Image saved: {xImageFilePath}");
