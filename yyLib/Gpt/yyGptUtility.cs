@@ -27,11 +27,16 @@ namespace yyLib
 
         // Refer to "async-lambdas-task-completedtask-csharp.md" for more information relevant to onChunkRetrievedAsync.
 
+        // Design choice:
+        // Messages could be a nullable list of non-nullable strings, but then it would be inconsistent with GenerateMessagesAsync.
+        // Within the while loop, if a specific index never appears, the corresponding message should be null.
+        // It is highly unlikely that an empty message or null is returned for a valid index,
+        // making it safe to convert built and still empty messages to null.
+
         /// <summary>
-        /// Numbers of responses and messages may be different.
-        /// Messages may be null, but each message is guaranteed to be a string.
+        /// Numbers of responses and messages may differ.
         /// </summary>
-        public static async Task <(bool IsSuccess, string RequestJsonString, string [] ResponseJsonStrings, yyGptChatResponse [] Responses, string []? Messages)> GenerateMessagesChunksAsync (
+        public static async Task <(bool IsSuccess, string RequestJsonString, string [] ResponseJsonStrings, yyGptChatResponse [] Responses, string? []? Messages)> GenerateMessagesChunksAsync (
             yyGptChatClient client, yyGptChatRequest request, Func <int, string?, CancellationToken, Task> onChunkRetrievedAsync, CancellationToken cancellationToken = default)
         {
             if (request.Stream is null or false)
@@ -79,7 +84,7 @@ namespace yyLib
                     }
                 }
 
-                string [] xMessages = xBuilders.Select (x => x.ToString ()).ToArray ();
+                string? [] xMessages = xBuilders.Select (x => x.ToString ().EmptyToNull ()).ToArray (); // Empty messages are converted to null.
                 return (IsSuccess: true, xSendingResult.RequestJsonString, xJsonStrings.ToArray (), xResponses.ToArray (), xMessages);
             }
 
@@ -93,9 +98,9 @@ namespace yyLib
 
         /// <summary>
         /// Consider using the overload that accepts a yyGptChatClient instance for better performance.
-        /// Messages may be null, but each message is guaranteed to be a string.
+        /// Numbers of responses and messages may differ.
         /// </summary>
-        public static async Task <(bool IsSuccess, string RequestJsonString, string [] ResponseJsonStrings, yyGptChatResponse [] Responses, string []? Messages)> GenerateMessagesChunksAsync (
+        public static async Task <(bool IsSuccess, string RequestJsonString, string [] ResponseJsonStrings, yyGptChatResponse [] Responses, string? []? Messages)> GenerateMessagesChunksAsync (
             yyGptChatConnectionInfo connectionInfo, yyGptChatRequest request, Func <int, string?, CancellationToken, Task> onChunkRetrievedAsync, CancellationToken cancellationToken = default)
         {
             using var xClient = new yyGptChatClient (connectionInfo);
