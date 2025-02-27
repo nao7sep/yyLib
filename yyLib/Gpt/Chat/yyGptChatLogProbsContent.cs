@@ -2,15 +2,20 @@
 
 namespace yyLib
 {
-    /// <summary>
-    /// Represents an entry in the "choices/logprobs/content" array.
-    /// </summary>
+    // Supports:
+    //     response/choice/logprobs/content
+    //     response/choice/logprobs/refusal
+    //     chunk response/choice/logprobs/content
+    //     chunk response/choice/logprobs/refusal
+
+    // https://platform.openai.com/docs/api-reference/chat/object#chat/object-choices
+    // https://platform.openai.com/docs/api-reference/chat/streaming#chat/streaming-choices
+
+    // Probably, yyGptChatLogProbsContent and yyGptChatTopLogProb should not be merged
+    // because that could cause circular references.
+
     public class yyGptChatLogProbsContent
     {
-        // Deserializes "choices/logprobs/content":
-        // https://platform.openai.com/docs/api-reference/chat/object#chat/object-choices
-        // https://platform.openai.com/docs/api-reference/chat/streaming#chat/streaming-choices
-
         [JsonPropertyName ("token")]
         public string? Token { get; set; }
 

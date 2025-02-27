@@ -142,10 +142,6 @@ namespace yyLib
         [JsonPropertyName ("user")]
         public string? User { get; set; }
 
-        // Both yyGptChatFunctionCall and yyGptChatFunction contain "Name".
-        // However, the next property "Functions" is apparently a list of yyGptChatFunction.
-        // It's safe to use the same model for "function_call" too.
-
         /// <summary>
         /// Must be string or yyGptChatFunction or null.
         /// </summary>
