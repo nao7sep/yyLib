@@ -351,5 +351,54 @@ namespace yyLibConsole
             File.WriteAllText (xUsageFilePath, xUsageJsonString, yyEncoding.DefaultEncoding);
             Console.WriteLine ($"Usage saved: {xUsageFilePath}");
         }
+
+        // Suppresses the warning about passing literals or constant strings as parameters for methods expecting localized resources (CA1303).
+        [SuppressMessage ("Globalization", "CA1303")]
+        public static void TestGeneratingMessagesUsingO1AndO3MiniModels (string prompt)
+        {
+            yyGptChatConnectionInfo xConnectionInfo = yyGptChatConnectionInfo.Default;
+            using var xClient = new yyGptChatClient (xConnectionInfo);
+
+            DateTime xUtcNow = DateTime.UtcNow;
+            string xPartialFileName = "GptTest-" + yyConverter.DateTimeToRoundtripFileNameString (xUtcNow);
+
+            void _GenerateAndSaveMessage (string model, string reasoningEffort)
+            {
+                yyGptChatRequest xRequest = new ()
+                {
+                    Model = model,
+                    ReasoningEffort = reasoningEffort
+                };
+
+                xRequest.AddUserMessage (prompt);
+
+                Console.Write ($"Generating message ({model}, {reasoningEffort})...");
+
+                var xResponse = yyGptUtility.GenerateMessagesAsync (xClient, xRequest).Result;
+
+                Console.WriteLine ();
+
+                if (xResponse.IsSuccess == false)
+                {
+                    Console.WriteLine ($"Message generation failed: {(xResponse.Response.Error?.Message).GetVisibleString ()}");
+                    return;
+                }
+
+                string xJsonFileName = $"{xPartialFileName}-{model}-{reasoningEffort}.json",
+                       xJsonFilePath = yyPath.Join (yySpecialDirectories.Desktop, xJsonFileName),
+                       xJsonString = JsonSerializer.Serialize (xResponse.Response, yyJson.DefaultSerializationOptions); // Parsed and formatted.
+
+                File.WriteAllText (xJsonFilePath, xJsonString, yyEncoding.DefaultEncoding);
+                Console.WriteLine ($"Response saved: {xJsonFilePath}");
+            }
+
+            _GenerateAndSaveMessage ("o1", "low");
+            _GenerateAndSaveMessage ("o1", "medium");
+            _GenerateAndSaveMessage ("o1", "high");
+
+            _GenerateAndSaveMessage ("o3-mini", "low");
+            _GenerateAndSaveMessage ("o3-mini", "medium");
+            _GenerateAndSaveMessage ("o3-mini", "high");
+        }
     }
 }

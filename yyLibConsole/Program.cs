@@ -30,6 +30,8 @@ namespace yyLibConsole
 
                 // GptTester.TestGeneratingChunkedMessageWithUsage ("Generate a short story.");
 
+                // GptTester.TestGeneratingMessagesUsingO1AndO3MiniModels ("Generate a question you cannot answer and try answering it.");
+
                 // JsonTester.TestParsingAndDisplayingJsonFile ("JSON-Edge-Cases.json");
 
                 // Set "from" and "to" email addresses for testing.
