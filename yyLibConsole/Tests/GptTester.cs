@@ -400,5 +400,147 @@ namespace yyLibConsole
             _GenerateAndSaveMessage ("o3-mini", "medium");
             _GenerateAndSaveMessage ("o3-mini", "high");
         }
+
+        // Suppresses the warning about passing literals or constant strings as parameters for methods expecting localized resources (CA1303).
+        [SuppressMessage ("Globalization", "CA1303")]
+        public static void TestUnderstandingImagesUsingVision (string imagesGenerationPrompt)
+        {
+            // -----------------------------------------------------------------------------
+            // Generate images to understand
+            // -----------------------------------------------------------------------------
+
+            yyGptImagesConnectionInfo xImagesConnectionInfo = yyGptImagesConnectionInfo.Default;
+            using var xImagesClient = new yyGptImagesClient (xImagesConnectionInfo);
+            using var xHttpClient = yyGptUtility.CreateImageRetrievalHttpClient (xImagesConnectionInfo);
+
+            yyGptImagesRequest xImagesRequest = new ()
+            {
+                Prompt = imagesGenerationPrompt,
+                Model = yyGptImages.DefaultModel,
+                Quality = yyGptImages.DefaultQuality,
+                Size = yyGptImages.DefaultSize,
+                Style = yyGptImages.DefaultStyle,
+                ResponseFormat = default // For the compiler NOT to merge the following code.
+            };
+
+            DateTime xUtcNow = DateTime.UtcNow;
+
+            string xPartialFileName = "GptTest-" + yyConverter.DateTimeToRoundtripFileNameString (xUtcNow),
+                   xFirstImageFilePath = yyPath.Join (yySpecialDirectories.Desktop, xPartialFileName + "-First.png"),
+                   xSecondImageFilePath = yyPath.Join (yySpecialDirectories.Desktop, xPartialFileName + "-Second.png");
+
+            xImagesRequest.ResponseFormat = "url";
+
+            Console.Write ("Generating first image...");
+
+            var xImagesResponse = yyGptUtility.GenerateImagesAsync (xImagesClient, xImagesRequest).Result;
+
+            Console.WriteLine ();
+
+            if (xImagesResponse.IsSuccess == false)
+            {
+                Console.WriteLine ($"Image generation failed: {(xImagesResponse.Response.Error?.Message).GetVisibleString ()}");
+                return;
+            }
+
+            string xImageUrl = xImagesResponse.Urls?.FirstOrDefault () ?? throw new yyUnexpectedNullException ($"Image URL is null.");
+
+            var xImageRetrievalResponse = yyGptUtility.RetrieveImageBytesAsync (xHttpClient, xImageUrl).Result;
+
+            if (xImageRetrievalResponse.IsSuccess == false)
+            {
+                Console.WriteLine ($"Image retrieval failed: {xImageUrl.GetVisibleString ()}");
+                return;
+            }
+
+            byte [] xFirstImageBytes = xImageRetrievalResponse.ImageBytes ?? throw new yyUnexpectedNullException ($"Image Bytes is null.");
+
+            File.WriteAllBytes (xFirstImageFilePath, xFirstImageBytes);
+            Console.WriteLine ($"First image saved: {xFirstImageFilePath}");
+
+            xImagesRequest.ResponseFormat = "b64_json";
+
+            Console.Write ("Generating second image...");
+
+            xImagesResponse = yyGptUtility.GenerateImagesAsync (xImagesClient, xImagesRequest).Result;
+
+            Console.WriteLine ();
+
+            if (xImagesResponse.IsSuccess == false)
+            {
+                Console.WriteLine ($"Image generation failed: {(xImagesResponse.Response.Error?.Message).GetVisibleString ()}");
+                return;
+            }
+
+            byte [] xImageBytes = xImagesResponse.ImagesBytes?.FirstOrDefault () ?? throw new yyUnexpectedNullException ($"Image Bytes is null.");
+
+            File.WriteAllBytes (xSecondImageFilePath, xImageBytes);
+            Console.WriteLine ($"Second image saved: {xSecondImageFilePath}");
+
+            // -----------------------------------------------------------------------------
+            // Understand images
+            // -----------------------------------------------------------------------------
+
+            yyGptChatConnectionInfo xConnectionInfo = yyGptChatConnectionInfo.Default;
+            using var xClient = new yyGptChatClient (xConnectionInfo);
+
+            yyGptChatRequest xRequest = new ()
+            {
+                // 2025-02-28: Currently, models that can take images as input include o1, gpt-4o, gpt-4o-mini, and gpt-4-turbo.
+                // https://platform.openai.com/docs/guides/vision/vision
+                Model = "gpt-4o"
+            };
+
+            xRequest.AddUserMessage (
+            [
+                new yyGptChatContentPart
+                {
+                    Type = "text",
+                    Text = "What do you see in these images?"
+                },
+
+                new yyGptChatContentPart
+                {
+                    Type = "image_url",
+
+                    ImageUrl = new yyGptChatImage
+                    {
+                        Url = xImageUrl
+                    }
+                },
+
+                new yyGptChatContentPart
+                {
+                    Type = "image_url",
+
+                    ImageUrl = new yyGptChatImage
+                    {
+                        Url = yyGptUtility.BytesToUrl ("image/png", xImageBytes)
+                    }
+                }
+            ]);
+
+            Console.Write ("Understanding images...");
+
+            var xResponse = yyGptUtility.GenerateMessagesAsync (xClient, xRequest).Result;
+
+            Console.WriteLine ();
+
+            if (xResponse.IsSuccess == false)
+            {
+                Console.WriteLine ($"Images understanding failed: {(xResponse.Response.Error?.Message).GetVisibleString ()}");
+                return;
+            }
+
+            string xRequestFilePath = yyPath.Join (yySpecialDirectories.Desktop, xPartialFileName + "-Request.json"),
+                   xResponseFilePath = yyPath.Join (yySpecialDirectories.Desktop, xPartialFileName + "-Response.json");
+
+            File.WriteAllText (xRequestFilePath, xResponse.RequestJsonString, yyEncoding.DefaultEncoding);
+            Console.WriteLine ($"Request saved: {xRequestFilePath}");
+
+            string xResponseJsonString = JsonSerializer.Serialize (xResponse.Response, yyJson.DefaultSerializationOptions);
+            File.WriteAllText (xResponseFilePath, xResponseJsonString, yyEncoding.DefaultEncoding);
+            Console.WriteLine ($"Response saved: {xResponseFilePath}");
+        }
     }
 }

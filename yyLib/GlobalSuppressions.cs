@@ -11,6 +11,10 @@ using System.Diagnostics.CodeAnalysis;
 // This allows the codebase to accept or manipulate string URIs for flexibility.
 [assembly: SuppressMessage ("Design", "CA1054")]
 
+// Disables the warning for incorrectly formatted URI return types (CA1055).
+// This allows methods to return strings instead of Uri objects, which may be preferable in certain design contexts.
+[assembly: SuppressMessage ("Design", "CA1055")]
+
 // Suppresses the warning for using strings in URIs (CA1056).
 // This might be intentional for flexibility, rather than strictly using System.Uri.
 [assembly: SuppressMessage ("Design", "CA1056")]

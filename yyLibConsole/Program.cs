@@ -32,6 +32,8 @@ namespace yyLibConsole
 
                 // GptTester.TestGeneratingMessagesUsingO1AndO3MiniModels ("Generate a question you cannot answer and try answering it.");
 
+                // GptTester.TestUnderstandingImagesUsingVision ("Please generate an image of something beautiful.");
+
                 // JsonTester.TestParsingAndDisplayingJsonFile ("JSON-Edge-Cases.json");
 
                 // Set "from" and "to" email addresses for testing.

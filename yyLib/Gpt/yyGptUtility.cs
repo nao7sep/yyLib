@@ -195,5 +195,8 @@ namespace yyLib
             using var xClient = CreateImageRetrievalHttpClient (connectionInfo);
             return await RetrieveImageBytesAsync (xClient, url, cancellationToken).ConfigureAwait (false);
         }
+
+        public static string BytesToUrl (string mimeType, byte [] bytes) =>
+            $"data:{mimeType};base64,{Convert.ToBase64String (bytes)}";
     }
 }
