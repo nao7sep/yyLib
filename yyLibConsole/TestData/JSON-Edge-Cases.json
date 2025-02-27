@@ -1,0 +1,92 @@
+﻿{
+    "string": "A simple string",
+    "emptyString": "",
+    "number": 42,
+    "negativeNumber": -42,
+    "float": 3.14,
+    "negativeFloat": -3.14,
+    "zero": 0,
+    "booleanTrue": true,
+    "booleanFalse": false,
+    "nullValue": null,
+    "emptyObject": {},
+    "emptyArray": [],
+    "nestedObjects": {
+        "level1": {
+            "level2": {
+                "level3": {
+                    "key": "deep value"
+                }
+            }
+        }
+    },
+    "nestedArrays": [
+        [
+            [
+                "deep array value"
+            ]
+        ]
+    ],
+    "arrayWithMixedTypes": [
+        123,
+        "string",
+        true,
+        null,
+        {
+            "key": "value"
+        },
+        [
+            "nested array",
+            []
+        ]
+    ],
+    "arrayWithEmptyArrays": [
+        [],
+        [
+            []
+        ],
+        [
+            [
+                []
+            ]
+        ]
+    ],
+    "objectWithEmptyValues": {
+        "emptyString": "",
+        "emptyArray": [],
+        "emptyObject": {}
+    },
+    "specialCharacters": {
+        "quotes": "\"double quotes\"",
+        "backslash": "\\",
+        "newLine": "line1\nline2",
+        "tab": "column1\tcolumn2",
+        "unicode": "\u2022"
+    },
+    "largeNumber": 123456789012345678901234567890,
+    "scientificNotation": 1.23e-10,
+    "keyWithColon": {
+        "key:with:colons": "value"
+    },
+    "keysWithSpaces": {
+        "key with space": "value"
+    },
+    "duplicateKeys": {
+        "_comment": [
+            "This object demonstrates intentional duplicate keys for testing purposes.",
+            "The second key has been temporarily renamed to '_key' to avoid IDE warnings.",
+            "To perform the test as intended, change '_key' back to 'key'."
+        ],
+        "key": "value1",
+        "_key": "value2"
+    },
+    "unicodeKeys": {
+        "\u4f60\u597d": "hello in Chinese"
+    },
+    "extremeValues": {
+        "maxInt": 9223372036854775807,
+        "minInt": -9223372036854775808,
+        "maxFloat": 1.7976931348623157e+308,
+        "minFloat": 2.2250738585072014e-308
+    }
+}
