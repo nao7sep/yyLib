@@ -5,11 +5,11 @@ using System.Diagnostics.CodeAnalysis;
 
 // Disables the warning regarding local variable type usage (e.g., var vs. explicit type).
 // This allows the project to define its own convention for local variable declarations.
-[assembly: SuppressMessage("Style", "IDE0008")]
+[assembly: SuppressMessage ("Style", "IDE0008")]
 
 // Disables the warning requiring braces for single-line statements.
 // This allows the existing code style (with or without braces) to remain unchanged.
-[assembly: SuppressMessage("Style", "IDE0011")]
+[assembly: SuppressMessage ("Style", "IDE0011")]
 
 // Disables the warning for simplifying deconstruction.
 // This allows explicit deconstruction syntax to remain as-is.
@@ -21,15 +21,15 @@ using System.Diagnostics.CodeAnalysis;
 
 // Disables the warning related to code formatting and indentation.
 // This allows the existing formatting preferences to remain in place.
-[assembly: SuppressMessage("Style", "IDE0055")]
+[assembly: SuppressMessage ("Style", "IDE0055")]
 
 // Disables the warning for ignoring the return value of method calls.
 // This allows method calls used solely for side effects to remain explicit.
-[assembly: SuppressMessage("Style", "IDE0058")]
+[assembly: SuppressMessage ("Style", "IDE0058")]
 
 // Disables the warning for removing unnecessary usage of 'this' or other member qualifiers.
 // This allows retaining explicit qualifiers to maintain clarity or consistency.
-[assembly: SuppressMessage("Style", "IDE0100")]
+[assembly: SuppressMessage ("Style", "IDE0100")]
 
 // Disables the warning for mismatched namespace and file path.
 // This allows namespaces to differ from the file path structure.
@@ -37,4 +37,4 @@ using System.Diagnostics.CodeAnalysis;
 
 // Disables the warning concerning newer C# feature suggestions (e.g., expression-bodied members).
 // This allows the codebase to maintain a more traditional or explicit style.
-[assembly: SuppressMessage("Style", "IDE0200")]
+[assembly: SuppressMessage ("Style", "IDE0200")]
