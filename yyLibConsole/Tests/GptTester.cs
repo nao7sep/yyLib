@@ -343,6 +343,10 @@ namespace yyLibConsole
             File.WriteAllText (xResponsesFilePath, xResponsesJsonString, yyEncoding.DefaultEncoding);
             Console.WriteLine ($"Responses saved: {xResponsesFilePath}");
 
+            // May seem redundant.
+            // Just offering a little easier way to refer to the usage object.
+            // Expected to clarify that the whole point of this test method is the usage object.
+
             string xUsageJsonString = JsonSerializer.Serialize (xResponse.Responses.Last ().Usage, yyJson.DefaultSerializationOptions);
             File.WriteAllText (xUsageFilePath, xUsageJsonString, yyEncoding.DefaultEncoding);
             Console.WriteLine ($"Usage saved: {xUsageFilePath}");
