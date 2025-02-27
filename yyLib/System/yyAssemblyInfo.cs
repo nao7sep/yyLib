@@ -128,7 +128,7 @@ namespace yyLib
         // accessed, ensuring efficient operation when these properties are not needed.
         //
         // For more details about the class design and reasoning, refer to the file:
-        // yyAssemblyInfo-design-and-usage-guide.md.
+        // https://github.com/nao7sep/Resources/blob/main/Documents/AI-Generated%20Notes/Design%20and%20Purpose%20of%20the%20yyAssemblyInfo%20Class.md
 
         public yyAssemblyInfo (Assembly assembly)
         {

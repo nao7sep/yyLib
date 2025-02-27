@@ -25,7 +25,7 @@ namespace yyLib
             return await GenerateMessagesAsync (xClient, request, cancellationToken).ConfigureAwait (false);
         }
 
-        // Refer to "async-lambdas-task-completedtask-csharp.md" for more information relevant to onChunkRetrievedAsync.
+        // https://github.com/nao7sep/Resources/blob/main/Documents/AI-Generated%20Notes/Understanding%20Async%20Lambdas%20and%20Task.CompletedTask%20in%20C%23.md
 
         // Design choice:
         // Messages could be a nullable list of non-nullable strings, but then it would be inconsistent with GenerateMessagesAsync.

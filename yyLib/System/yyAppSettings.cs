@@ -7,7 +7,7 @@ namespace yyLib
         // Configuration in ASP.NET Core | Microsoft Learn
         // https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration/
 
-        // configuration-in-aspnet-core-detecting-and-updating.md
+        // https://github.com/nao7sep/Resources/blob/main/Documents/AI-Generated%20Notes/Configuration%20in%20ASP.NET%20Core%20-%20Managing%20and%20Detecting%20Changes.md
 
         private static readonly Lazy <IConfiguration> _config = new (() =>
         {

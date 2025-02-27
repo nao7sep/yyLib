@@ -124,7 +124,7 @@ namespace yyLib
         // Default
         // -----------------------------------------------------------------------------
 
-        // const-vs-static-readonly-in-csharp.md
+        // https://github.com/nao7sep/Resources/blob/main/Documents/AI-Generated%20Notes/Understanding%20const%20vs.%20static%20readonly%20in%20C%23.md
 
         // Disables the warning for explicitly initializing a default value (CA1805).
         [SuppressMessage ("Performance", "CA1805")]

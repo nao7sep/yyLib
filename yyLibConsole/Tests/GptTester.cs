@@ -67,7 +67,8 @@ namespace yyLibConsole
 
                 Console.Write ("Second Assistant: ");
 
-                // Refer to "async-lambdas-task-completedtask-csharp.md" for more information about the async lambda syntax.
+                // Refer to: https://github.com/nao7sep/Resources/blob/main/Documents/AI-Generated%20Notes/Understanding%20Async%20Lambdas%20and%20Task.CompletedTask%20in%20C%23.md
+                // for more information about the async lambda syntax.
 
                 var xSecondAssistantResponse = yyGptUtility.GenerateMessagesChunksAsync (xSecondAssistantClient, xSecondAssistantRequest,
                     async (index, content, cancellationToken) => await _OnChunkRetrievedAsync (index, content, cancellationToken)).Result;
@@ -208,7 +209,8 @@ namespace yyLibConsole
             }
 
             // The following redundant lambda is for demonstration purposes.
-            // Refer to "async-lambdas-task-completedtask-csharp.md" for more information about the async lambda syntax.
+            // Refer to: https://github.com/nao7sep/Resources/blob/main/Documents/AI-Generated%20Notes/Understanding%20Async%20Lambdas%20and%20Task.CompletedTask%20in%20C%23.md
+            // for more information about the async lambda syntax.
 
             var xSecondResponse = yyGptUtility.GenerateMessagesChunksAsync (xClient, xRequest,
                 async (index, content, cancellationToken) => await _OnChunkRetrievedAsync (index, content, cancellationToken)).Result;
