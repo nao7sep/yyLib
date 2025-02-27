@@ -27,11 +27,8 @@ namespace yyLibConsole
                 //     interactionCount: 30);
 
                 // GptTester.TestGeneratingMultipleMessagesAndImages (messageCount: 3, imageCount: 3);
-
                 // GptTester.TestGeneratingChunkedMessageWithUsage ("Generate a short story.");
-
                 // GptTester.TestGeneratingMessagesUsingO1AndO3MiniModels ("Generate a question you cannot answer and try answering it.");
-
                 // GptTester.TestUnderstandingImagesUsingVision ("Please generate an image of something beautiful.");
 
                 // JsonTester.TestParsingAndDisplayingJsonFile ("JSON-Edge-Cases.json");
