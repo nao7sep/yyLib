@@ -71,7 +71,7 @@ namespace yyLibConsole
                 // for more information about the async lambda syntax.
 
                 var xSecondAssistantResponse = yyGptUtility.GenerateMessagesChunksAsync (xSecondAssistantClient, xSecondAssistantRequest,
-                    async (index, content, cancellationToken) => await _OnChunkRetrievedAsync (index, content, cancellationToken)).Result;
+                    async (index, content, cancellationToken) => await _OnChunkRetrievedAsync (index, content, cancellationToken).ConfigureAwait (false)).Result;
 
                 if (xSecondAssistantResponse.IsSuccess == false)
                 {
@@ -213,7 +213,7 @@ namespace yyLibConsole
             // for more information about the async lambda syntax.
 
             var xSecondResponse = yyGptUtility.GenerateMessagesChunksAsync (xClient, xRequest,
-                async (index, content, cancellationToken) => await _OnChunkRetrievedAsync (index, content, cancellationToken)).Result;
+                async (index, content, cancellationToken) => await _OnChunkRetrievedAsync (index, content, cancellationToken).ConfigureAwait (false)).Result;
 
             if (xSecondResponse.IsSuccess == false)
             {

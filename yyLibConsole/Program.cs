@@ -15,7 +15,7 @@ namespace yyLibConsole
         [SuppressMessage ("Globalization", "CA1303")]
         // Suppresses the warning for unused method parameters.
         [SuppressMessage ("Style", "IDE0060")]
-        static void Main (string [] args)
+        private static void Main (string [] args)
         {
             try
             {

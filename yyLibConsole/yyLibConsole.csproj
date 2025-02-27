@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
@@ -22,7 +22,7 @@
         <InformationalVersion></InformationalVersion>
 
         <EnableNETAnalyzers>true</EnableNETAnalyzers>
-        <AnalysisMode>Recommended</AnalysisMode>
+        <AnalysisMode>All</AnalysisMode>
     </PropertyGroup>
 
     <ItemGroup>
