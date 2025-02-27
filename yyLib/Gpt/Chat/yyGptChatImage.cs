@@ -2,7 +2,7 @@
 
 namespace yyLib
 {
-    public class yyGptChatImageUrl
+    public class yyGptChatImage
     {
         [JsonPropertyName ("url")]
         public string? Url { get; set; }

@@ -14,7 +14,7 @@ namespace yyLib
         public string? Text { get; set; }
 
         [JsonPropertyName ("image_url")]
-        public yyGptChatImageUrl? ImageUrl { get; set; }
+        public yyGptChatImage? ImageUrl { get; set; }
 
         [JsonPropertyName ("input_audio")]
         public yyGptChatAudio? InputAudio { get; set; }
