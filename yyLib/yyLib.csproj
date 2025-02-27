@@ -22,7 +22,7 @@
 
         <!-- Analyzers are enabled by default.
              The <EnableNETAnalyzers> property is explicitly set to "true" here to clarify the analysis mode being configured.
-             "Default" is the default value for <AnalysisMode>, but setting it to "Recommended" enables additional rules for stricter analysis.
+             "Default" is the default value for <AnalysisMode>, but setting it to "Recommended" (or "All") enables additional rules for stricter analysis.
              The <AnalysisLevel> property can configure both the .NET version and analysis mode together.
              However, I believe the analysis rules should match the version of the framework the project uses.
              Thus, only the mode is configured explicitly in this project.

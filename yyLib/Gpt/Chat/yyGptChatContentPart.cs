@@ -2,7 +2,7 @@
 
 namespace yyLib
 {
-    // Supports assistant messages' content's text content parts and refusal content parts.
+    // Supports assistant messages' content's text/image/audio content parts and refusal content parts.
     // I'd prefer not to make an IEnumerable of objects and determine the type of each object.
 
     public class yyGptChatContentPart
@@ -17,7 +17,7 @@ namespace yyLib
         public yyGptChatImageUrl? ImageUrl { get; set; }
 
         [JsonPropertyName ("input_audio")]
-        public yyGptChatInputAudio? InputAudio { get; set; }
+        public yyGptChatAudio? InputAudio { get; set; }
 
         [JsonPropertyName ("refusal")]
         public string? Refusal { get; set; }

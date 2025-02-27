@@ -93,7 +93,7 @@ namespace yyLib
         public yyGptChatPrediction? Prediction { get; set; }
 
         [JsonPropertyName ("audio")]
-        public yyGptChatOutputAudio? Audio { get; set; }
+        public yyGptChatAudio? Audio { get; set; }
 
         [JsonPropertyName ("presence_penalty")]
         public double? PresencePenalty { get; set; }
