@@ -58,12 +58,11 @@ namespace yyLib
         public string? ReasoningEffort { get; set; }
 
         // Official documentation says: Developer-defined tags and values used for filtering completions in the dashboard.
-        /// <summary>
-        /// Must be object or null.
-        /// No model class is provided for this property.
-        /// </summary>
+        // Based on official code including OpenAIModelFactory.cs, it is defined as IDictionary <string, string>.
+        // https://github.com/openai/openai-dotnet/blob/main/src/Generated/OpenAIModelFactory.cs
+
         [JsonPropertyName ("metadata")]
-        public object? Metadata { get; set; }
+        public IDictionary <string, string>? Metadata { get; set; }
 
         [JsonPropertyName ("frequency_penalty")]
         public double? FrequencyPenalty { get; set; }
