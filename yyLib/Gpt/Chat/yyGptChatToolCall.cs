@@ -15,6 +15,6 @@ namespace yyLib
         public string? Type { get; set; }
 
         [JsonPropertyName ("function")]
-        public yyGptChatFunctionCall? Function { get; set; }
+        public yyGptChatFunction? Function { get; set; }
     }
 }

@@ -2,15 +2,22 @@
 
 namespace yyLib
 {
-    // Supports "request/tools/function".
+    // Supports:
+    //     assistant message/tool_call/function
+    //     assistant message/function_call
+    //     request/tool/function
+    //     request/function_call
 
     public class yyGptChatFunction
     {
-        [JsonPropertyName ("description")]
-        public string? Description { get; set; }
-
         [JsonPropertyName ("name")]
         public string? Name { get; set; }
+
+        [JsonPropertyName ("arguments")]
+        public string? Arguments { get; set; }
+
+        [JsonPropertyName ("description")]
+        public string? Description { get; set; }
 
         // Official documentation says: The parameters the functions accepts, described as a JSON Schema object.
         // See the guide (https://platform.openai.com/docs/guides/function-calling) for examples,

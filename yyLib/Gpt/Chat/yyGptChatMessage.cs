@@ -41,7 +41,7 @@ namespace yyLib
         public IList <yyGptChatToolCall>? ToolCalls { get; set; }
 
         [JsonPropertyName ("function_call")]
-        public yyGptChatFunctionCall? FunctionCall { get; set; }
+        public yyGptChatFunction? FunctionCall { get; set; }
 
         [JsonPropertyName ("tool_call_id")]
         public string? ToolCallId { get; set; }
