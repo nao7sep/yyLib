@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
+using System.Text.Json;
 using yyLib;
 
 namespace yyLibConsole
@@ -291,6 +292,60 @@ namespace yyLibConsole
                 File.WriteAllBytes (xImageFilePath, xImageBytes);
                 Console.WriteLine ($"Image saved: {xImageFilePath}");
             }
+        }
+
+        // Suppresses the warning about passing literals or constant strings as parameters for methods expecting localized resources (CA1303).
+        [SuppressMessage ("Globalization", "CA1303")]
+        public static void TestGeneratingChunkedMessageWithUsage (string prompt)
+        {
+            yyGptChatConnectionInfo xConnectionInfo = yyGptChatConnectionInfo.Default;
+            using var xClient = new yyGptChatClient (xConnectionInfo);
+
+            yyGptChatRequest xRequest = new ()
+            {
+                Model = yyGptChat.DefaultModel,
+                Stream = true,
+
+                StreamOptions = new ()
+                {
+                    IncludeUsage = true
+                }
+            };
+
+            xRequest.AddUserMessage (prompt);
+
+            Console.Write ("Generating message...");
+
+            static Task _OnChunkRetrievedAsync (int index, string? content, CancellationToken cancellationToken) => Task.CompletedTask;
+
+            var xResponse = yyGptUtility.GenerateMessagesChunksAsync (xClient, xRequest,
+                async (index, content, cancellationToken) => await _OnChunkRetrievedAsync (index, content, cancellationToken).ConfigureAwait (false)).Result;
+
+            Console.WriteLine ();
+
+            if (xResponse.IsSuccess == false)
+            {
+                Console.WriteLine ($"Message generation failed: {(xResponse.Responses?.FirstOrDefault ()?.Error?.Message).GetVisibleString ()}");
+                return;
+            }
+
+            DateTime xUtcNow = DateTime.UtcNow;
+
+            string xPartialFileName = "GptTest-" + yyConverter.DateTimeToRoundtripFileNameString (xUtcNow),
+                   xRequestFilePath = yyPath.Join (yySpecialDirectories.Desktop, xPartialFileName + "-Request.json"),
+                   xResponsesFilePath = yyPath.Join (yySpecialDirectories.Desktop, xPartialFileName + "-Responses.json"),
+                   xUsageFilePath = yyPath.Join (yySpecialDirectories.Desktop, xPartialFileName + "-Usage.json");
+
+            File.WriteAllText (xRequestFilePath, xResponse.RequestJsonString, yyEncoding.DefaultEncoding);
+            Console.WriteLine ($"Request saved: {xRequestFilePath}");
+
+            string xResponsesJsonString = JsonSerializer.Serialize (xResponse.Responses, yyJson.DefaultSerializationOptions);
+            File.WriteAllText (xResponsesFilePath, xResponsesJsonString, yyEncoding.DefaultEncoding);
+            Console.WriteLine ($"Responses saved: {xResponsesFilePath}");
+
+            string xUsageJsonString = JsonSerializer.Serialize (xResponse.Responses.Last ().Usage, yyJson.DefaultSerializationOptions);
+            File.WriteAllText (xUsageFilePath, xUsageJsonString, yyEncoding.DefaultEncoding);
+            Console.WriteLine ($"Usage saved: {xUsageFilePath}");
         }
     }
 }

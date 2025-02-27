@@ -28,6 +28,8 @@ namespace yyLibConsole
 
                 // GptTester.TestGeneratingMultipleMessagesAndImages (messageCount: 3, imageCount: 3);
 
+                // GptTester.TestGeneratingChunkedMessageWithUsage ("Generate a short story.");
+
                 // JsonTester.TestParsingAndDisplayingJsonFile ("JSON-Edge-Cases.json");
 
                 // Set "from" and "to" email addresses for testing.

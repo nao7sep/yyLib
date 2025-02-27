@@ -27,6 +27,10 @@ using System.Diagnostics.CodeAnalysis;
 // This allows method calls used solely for side effects to remain explicit.
 [assembly: SuppressMessage ("Style", "IDE0058")]
 
+// Disables the warning related to explicit property accessor bodies (IDE0061).
+// This allows the use of traditional getter/setter implementations instead of expression-bodied members.
+[assembly: SuppressMessage ("Style", "IDE0061")]
+
 // Disables the warning for removing unnecessary usage of 'this' or other member qualifiers.
 // This allows retaining explicit qualifiers to maintain clarity or consistency.
 [assembly: SuppressMessage ("Style", "IDE0100")]
