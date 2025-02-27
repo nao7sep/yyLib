@@ -6,7 +6,7 @@ namespace yyLib
 {
     public static class yyConfigurationInterfaceHelper
     {
-        // 2025-01-17: Tested with json_edge_cases.json.
+        // 2025-01-17: Tested with JSON-Edge-Cases.json.
         // Duplicate keys caused the parser to throw an exception.
         // Empty arrays were recognized as objects.
         // Key with colons was recognized as a nested object.

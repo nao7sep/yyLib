@@ -15,26 +15,26 @@ namespace yyLib
 
             xBuilder.SetBasePath (yyAppDirectory.Path);
 
-            // appsettings.json: The default configuration file used by the app.
+            // AppSettings.json: The default configuration file used by the app.
             // Contains settings that are common across all environments.
 
-            xBuilder.AddJsonFile ("appsettings.json", optional: true, reloadOnChange: true);
+            xBuilder.AddJsonFile ("AppSettings.json", optional: true, reloadOnChange: true);
 #if DEBUG
-            // appsettings.Development.json: Used when the app is running in a development environment.
-            // This file contains development-specific settings (like detailed logging settings, local database connection strings, etc.) that override or supplement the base appsettings.json.
+            // AppSettings.Development.json: Used when the app is running in a development environment.
+            // This file contains development-specific settings (like detailed logging settings, local database connection strings, etc.) that override or supplement the base AppSettings.json.
 
-            xBuilder.AddJsonFile ("appsettings.Development.json", optional: true, reloadOnChange: true);
+            xBuilder.AddJsonFile ("AppSettings.Development.json", optional: true, reloadOnChange: true);
 
-            // appsettings.Staging.json: Used in a staging environment, which is often a pre-production environment used for final testing before deployment to production.
+            // AppSettings.Staging.json: Used in a staging environment, which is often a pre-production environment used for final testing before deployment to production.
             // This file can include settings closer to what is used in production, such as higher-level logging, staging database connections, etc.
 
-            xBuilder.AddJsonFile ("appsettings.Staging.json", optional: true, reloadOnChange: true);
+            xBuilder.AddJsonFile ("AppSettings.Staging.json", optional: true, reloadOnChange: true);
 #endif
-            // appsettings.Production.json: Contains configurations specific to the production environment.
-            // These settings override the base appsettings.json when the app is running in production.
+            // AppSettings.Production.json: Contains configurations specific to the production environment.
+            // These settings override the base AppSettings.json when the app is running in production.
             // This may include production-level settings such as database connection strings, API keys, logging levels, and other settings optimized for performance and security.
 
-            xBuilder.AddJsonFile ("appsettings.Production.json", optional: true, reloadOnChange: true);
+            xBuilder.AddJsonFile ("AppSettings.Production.json", optional: true, reloadOnChange: true);
 
             return xBuilder.Build ();
         });

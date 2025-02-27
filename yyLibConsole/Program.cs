@@ -28,7 +28,7 @@ namespace yyLibConsole
 
                 // GptTester.TestGeneratingMultipleMessagesAndImages (messageCount: 3, imageCount: 3);
 
-                // JsonTester.TestParsingAndDisplayingJsonFile ("json_edge_cases.json");
+                // JsonTester.TestParsingAndDisplayingJsonFile ("JSON-Edge-Cases.json");
 
                 // Set "from" and "to" email addresses for testing.
                 // Default connection must be specified in user secrets or app settings.
