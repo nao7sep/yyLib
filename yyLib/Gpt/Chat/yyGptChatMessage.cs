@@ -38,7 +38,7 @@ namespace yyLib
         public yyGptChatAudio? Audio { get; set; }
 
         [JsonPropertyName ("tool_calls")]
-        public IList <yyGptChatToolCall>? ToolCalls { get; set; }
+        public IList <yyGptChatTool>? ToolCalls { get; set; }
 
         [JsonPropertyName ("function_call")]
         public yyGptChatFunction? FunctionCall { get; set; }

@@ -7,6 +7,7 @@ namespace yyLib
     //     assistant message/function_call
     //     request/tool/function
     //     request/function_call
+    //     chunk response/choice/delta/function_call
 
     public class yyGptChatFunction
     {
