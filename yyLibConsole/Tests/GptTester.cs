@@ -7,6 +7,20 @@ namespace yyLibConsole
 {
     internal static class GptTester
     {
+        // TestInteractionsOfGptModelsAndGeneratingImages
+        //    - Simulates interactions between two GPT assistants by exchanging messages.
+        //    - Uses both all-at-once and chunked message generation for varied response handling.
+        //    - Periodically triggers image generation based on exchanged messages.
+        //    - Retrieves images either as URLs or base64-encoded data and saves them locally.
+        //    - Saves the original and revised prompts used for generating images.
+        //
+        // TestGeneratingMultipleMessagesAndImages
+        //    - Generates multiple messages and multiple images, which is its main purpose.
+        //    - Uses GPT to generate messages in both batch and chunked modes.
+        //    - Demonstrates message retrieval handling with streaming output.
+        //    - Requests multiple images based on predefined prompts.
+        //    - Downloads and saves multiple generated images using retrieved URLs.
+
         // Suppresses the warning about passing literals or constant strings as parameters for methods expecting localized resources (CA1303).
         [SuppressMessage ("Globalization", "CA1303")]
         public static void TestInteractionsOfGptModelsAndGeneratingImages (string firstAssistantDeveloperMessage, string secondAssistantDeveloperMessage, int interactionCount)
