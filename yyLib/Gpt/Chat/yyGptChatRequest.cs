@@ -29,16 +29,6 @@ namespace yyLib
         public void AddUserMessage (string content, string? name = null) =>
             AddMessage (content, yyGptChatRole.User, name);
 
-        public void AddUserMessage (IList <yyGptChatContentPart> content, string? name = null)
-        {
-            Messages.Add (new ()
-            {
-                Content = content,
-                Role = yyGptChatRole.User,
-                Name = name
-            });
-        }
-
         public void AddAssistantMessage (string content, string? name = null) =>
             AddMessage (content, yyGptChatRole.Assistant, name);
 
@@ -47,6 +37,44 @@ namespace yyLib
 
         public void AddFunctionMessage (string content, string? name = null) =>
             AddMessage (content, yyGptChatRole.Function, name);
+
+        public void AddMessage (IList <string> content, yyGptChatRole role, string? name = null)
+        {
+            Messages.Add (new ()
+            {
+                Content = content,
+                Role = role,
+                Name = name
+            });
+        }
+
+        public void AddDeveloperMessage (IList <string> content, string? name = null) =>
+            AddMessage (content, yyGptChatRole.Developer, name);
+
+        public void AddSystemMessage (IList <string> content, string? name = null) =>
+            AddMessage (content, yyGptChatRole.System, name);
+
+        public void AddToolMessage (IList <string> content, string? name = null) =>
+            AddMessage (content, yyGptChatRole.Tool, name);
+
+        public void AddFunctionMessage (IList <string> content, string? name = null) =>
+            AddMessage (content, yyGptChatRole.Function, name);
+
+        public void AddMessage (IList <yyGptChatContentPart> content, yyGptChatRole role, string? name = null)
+        {
+            Messages.Add (new ()
+            {
+                Content = content,
+                Role = role,
+                Name = name
+            });
+        }
+
+        public void AddUserMessage (IList <yyGptChatContentPart> content, string? name = null) =>
+            AddMessage (content, yyGptChatRole.User, name);
+
+        public void AddAssistantMessage (IList <yyGptChatContentPart> content, string? name = null) =>
+            AddMessage (content, yyGptChatRole.Assistant, name);
 
         [JsonPropertyName ("model")]
         public required string Model { get; set; }

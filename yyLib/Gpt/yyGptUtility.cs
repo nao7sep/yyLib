@@ -196,7 +196,16 @@ namespace yyLib
             return await RetrieveImageBytesAsync (xClient, url, cancellationToken).ConfigureAwait (false);
         }
 
-        public static string BytesToUrl (string mimeType, byte [] bytes) =>
+        public static string BytesToUrlProperty (string mimeType, byte [] bytes) =>
             $"data:{mimeType};base64,{Convert.ToBase64String (bytes)}";
+
+        public static byte [] DataPropertyToBytes (string value) =>
+            Convert.FromBase64String (value);
+
+        public static DateTimeOffset ExpiresAtPropertyToUtcOffset (int value) =>
+            DateTimeOffset.FromUnixTimeSeconds (value);
+
+        public static DateTime ExpiresAtPropertyToUtc (int value) =>
+            ExpiresAtPropertyToUtcOffset (value).UtcDateTime;
     }
 }

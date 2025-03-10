@@ -30,6 +30,7 @@ namespace yyLibConsole
                 // GptTester.TestGeneratingChunkedMessageWithUsage ("Generate a short story.");
                 // GptTester.TestGeneratingMessagesUsingO1AndO3MiniModels ("Generate a question you cannot answer and try answering it.");
                 // GptTester.TestUnderstandingImagesUsingVision ("Please generate an image of something beautiful.");
+                // GptTester.TestGeneratingAndUnderstandingAudio ("gpt-4o-audio-preview", "Generate a message that would receive a short response.", "Summarize this conversation.");
 
                 // JsonTester.TestParsingAndDisplayingJsonFile ("JSON-Edge-Cases.json");
 

@@ -32,7 +32,7 @@
              https://learn.microsoft.com/en-us/dotnet/core/project-sdk/msbuild-props#analysislevel -->
 
         <EnableNETAnalyzers>true</EnableNETAnalyzers>
-        <AnalysisMode>All</AnalysisMode>
+        <AnalysisMode>Recommended</AnalysisMode>
 
         <!-- Suppresses IDE0079: Unnecessary suppression warning.
              This allows keeping suppression attributes or pragma directives in the code,

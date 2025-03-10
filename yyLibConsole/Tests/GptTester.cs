@@ -21,6 +21,34 @@ namespace yyLibConsole
         //    - Demonstrates message retrieval handling with streaming output.
         //    - Requests multiple images based on predefined prompts.
         //    - Downloads and saves multiple generated images using retrieved URLs.
+        //
+        // TestGeneratingChunkedMessageWithUsage
+        //    - Generates a message using a GPT model while streaming the output in chunks.
+        //    - Includes usage metadata in the streamed response to track token consumption.
+        //    - Handles chunked message retrieval asynchronously, though currently, the retrieval function is a no-op.
+        //    - Saves the original request, responses, and usage details as JSON files for further analysis.
+        //    - Reports any errors encountered during message generation.
+        //
+        // TestGeneratingMessagesUsingO1AndO3MiniModels
+        //    - Generates messages using different GPT models ("o1" and "o3-mini") at varying levels of reasoning effort (low, medium, high).
+        //    - Saves each generated response as a separate JSON file, categorized by model and reasoning effort.
+        //    - Demonstrates the impact of different models and reasoning efforts on message generation.
+        //    - Reports any errors encountered during message generation.
+        //
+        // TestUnderstandingImagesUsingVision
+        //    - Generates two images based on a given prompt using a GPT-based image model.
+        //    - Retrieves the first image via a URL and the second image as a base64-encoded JSON response.
+        //    - Saves both images locally for further processing or inspection.
+        //    - Uses GPT-4o to analyze the generated images and provide a textual description of their contents.
+        //    - Saves the request and response JSONs for reference and debugging purposes.
+        //
+        // TestGeneratingAndUnderstandingAudio
+        //    - Generates an initial audio response from GPT based on a user-provided text prompt.
+        //    - Uses the first generated audio as an input to generate a second audio response.
+        //    - The second audio response is used as a reference in a third round of message generation, incorporating an additional user prompt.
+        //    - Saves all generated audio files as MP3s for further review.
+        //    - Extracts and logs expiration details for the second generated audio to track token expiration timelines.
+        //    - Saves the final request and response JSONs for debugging and analysis.
 
         // Suppresses the warning about passing literals or constant strings as parameters for methods expecting localized resources (CA1303).
         [SuppressMessage ("Globalization", "CA1303")]
@@ -515,7 +543,7 @@ namespace yyLibConsole
 
                     ImageUrl = new yyGptChatImage
                     {
-                        Url = yyGptUtility.BytesToUrl ("image/png", xImageBytes)
+                        Url = yyGptUtility.BytesToUrlProperty ("image/png", xImageBytes)
                     }
                 }
             ]);
@@ -541,6 +569,158 @@ namespace yyLibConsole
             string xResponseJsonString = JsonSerializer.Serialize (xResponse.Response, yyJson.DefaultSerializationOptions);
             File.WriteAllText (xResponseFilePath, xResponseJsonString, yyEncoding.DefaultEncoding);
             Console.WriteLine ($"Response saved: {xResponseFilePath}");
+        }
+
+        // Suppresses the warning about passing literals or constant strings as parameters for methods expecting localized resources (CA1303).
+        [SuppressMessage ("Globalization", "CA1303")]
+        public static void TestGeneratingAndUnderstandingAudio (string modelName, string firstPrompt, string secondPrompt)
+        {
+            // -----------------------------------------------------------------------------
+            // Preparation
+            // -----------------------------------------------------------------------------
+
+            yyGptChatConnectionInfo xConnectionInfo = yyGptChatConnectionInfo.Default;
+            using var xClient = new yyGptChatClient (xConnectionInfo);
+
+            yyGptChatRequest xRequest = new ()
+            {
+                Model = modelName,
+
+                Modalities =
+                [
+                    "text",
+                    "audio"
+                ],
+
+                Audio = new ()
+                {
+                    Voice = "sage",
+                    Format = "mp3"
+                }
+            };
+
+            xRequest.AddUserMessage (firstPrompt);
+
+            DateTime xUtcNow = DateTime.UtcNow;
+
+            string xPartialFileName = "GptTest-" + yyConverter.DateTimeToRoundtripFileNameString (xUtcNow),
+                   xFirstAudioFilePath = yyPath.Join (yySpecialDirectories.Desktop, xPartialFileName + "-FirstAudio.mp3"),
+                   xSecondAudioFilePath = yyPath.Join (yySpecialDirectories.Desktop, xPartialFileName + "-SecondAudio.mp3"),
+                   xThirdAudioFilePath = yyPath.Join (yySpecialDirectories.Desktop, xPartialFileName + "-ThirdAudio.mp3"),
+                   xLastRequestFilePath = yyPath.Join (yySpecialDirectories.Desktop, xPartialFileName + "-LastRequest.json"),
+                   xLastResponseFilePath = yyPath.Join (yySpecialDirectories.Desktop, xPartialFileName + "-LastResponse.json");
+
+            // -----------------------------------------------------------------------------
+            // Generate first audio
+            // -----------------------------------------------------------------------------
+
+            Console.Write ("Generating first audio...");
+
+            var xFirstResponse = yyGptUtility.GenerateMessagesAsync (xClient, xRequest).Result;
+
+            Console.WriteLine ();
+
+            if (xFirstResponse.IsSuccess == false)
+            {
+                Console.WriteLine ($"First audio generation failed: {(xFirstResponse.Response.Error?.Message).GetVisibleString ()}");
+                return;
+            }
+
+            string xFirstAudioData = xFirstResponse.Response.Choices?.FirstOrDefault ()?.Message?.Audio?.Data ?? throw new yyUnexpectedNullException ("First Audio Data is null.");
+            byte [] xFirstAudioBytes = yyGptUtility.DataPropertyToBytes (xFirstAudioData);
+            File.WriteAllBytes (xFirstAudioFilePath, xFirstAudioBytes);
+            Console.WriteLine ($"First audio saved: {xFirstAudioFilePath}");
+
+            // -----------------------------------------------------------------------------
+            // Generate second audio
+            // -----------------------------------------------------------------------------
+
+            // Resetting the request with the generated audio as the first user message.
+
+            xRequest.Messages.Clear ();
+
+            xRequest.AddUserMessage (
+            [
+                new yyGptChatContentPart
+                {
+                    Type = "input_audio",
+
+                    InputAudio = new yyGptChatAudio
+                    {
+                        Data = xFirstAudioData,
+                        Format = "mp3"
+                    }
+                }
+            ]);
+
+            Console.Write ("Generating second audio...");
+
+            var xSecondResponse = yyGptUtility.GenerateMessagesAsync (xClient, xRequest).Result;
+
+            Console.WriteLine ();
+
+            if (xSecondResponse.IsSuccess == false)
+            {
+                Console.WriteLine ($"Second audio generation failed: {(xSecondResponse.Response.Error?.Message).GetVisibleString ()}");
+                return;
+            }
+
+            yyGptChatAudio xSecondAudio = xSecondResponse.Response.Choices?.FirstOrDefault ()?.Message?.Audio ?? throw new yyUnexpectedNullException ($"Second Audio is null.");
+
+            string xSecondAudioId = xSecondAudio.Id ?? throw new yyUnexpectedNullException ($"Second Audio ID is null."),
+                   xSecondAudioData = xSecondAudio.Data ?? throw new yyUnexpectedNullException ($"Second Audio Data is null.");
+
+            byte [] xSecondAudioBytes = yyGptUtility.DataPropertyToBytes (xSecondAudioData);
+            File.WriteAllBytes (xSecondAudioFilePath, xSecondAudioBytes);
+            Console.WriteLine ($"Second audio saved: {xSecondAudioFilePath}");
+
+            int xExpiresAtValue = xSecondAudio.ExpiresAt ?? throw new yyUnexpectedNullException ($"Second Audio ExpiresAt is null.");
+            DateTime xExpiresAtUtc = yyGptUtility.ExpiresAtPropertyToUtc (xExpiresAtValue);
+            Console.WriteLine ($"Second audio expires at: {yyConverter.DateTimeToRoundtripString (xExpiresAtUtc)} ({(xExpiresAtUtc - DateTime.UtcNow).TotalSeconds} seconds from now)");
+
+            // -----------------------------------------------------------------------------
+            // Generate third audio
+            // -----------------------------------------------------------------------------
+
+            xRequest.Messages.Add (new ()
+            {
+                Role = yyGptChatRole.Assistant,
+
+                Audio = new ()
+                {
+                    Id = xSecondAudioId
+                }
+            });
+
+            xRequest.AddUserMessage (secondPrompt);
+
+            Console.Write ("Generating third audio...");
+
+            var xThirdResponse = yyGptUtility.GenerateMessagesAsync (xClient, xRequest).Result;
+
+            Console.WriteLine ();
+
+            if (xThirdResponse.IsSuccess == false)
+            {
+                Console.WriteLine ($"Third audio generation failed: {(xThirdResponse.Response.Error?.Message).GetVisibleString ()}");
+                return;
+            }
+
+            string xThirdAudioData = xThirdResponse.Response.Choices?.FirstOrDefault ()?.Message?.Audio?.Data ?? throw new yyUnexpectedNullException ($"Third Audio Data is null.");
+            byte [] xThirdAudioBytes = yyGptUtility.DataPropertyToBytes (xThirdAudioData);
+            File.WriteAllBytes (xThirdAudioFilePath, xThirdAudioBytes);
+            Console.WriteLine ($"Third audio saved: {xThirdAudioFilePath}");
+
+            // -----------------------------------------------------------------------------
+            // Save last request and response
+            // -----------------------------------------------------------------------------
+
+            File.WriteAllText (xLastRequestFilePath, xThirdResponse.RequestJsonString, yyEncoding.DefaultEncoding);
+            Console.WriteLine ($"Last request saved: {xLastRequestFilePath}");
+
+            string xLastResponseJsonString = JsonSerializer.Serialize (xThirdResponse.Response, yyJson.DefaultSerializationOptions);
+            File.WriteAllText (xLastResponseFilePath, xLastResponseJsonString, yyEncoding.DefaultEncoding);
+            Console.WriteLine ($"Last response saved: {xLastResponseFilePath}");
         }
     }
 }
