@@ -94,7 +94,7 @@ public static class Gaimen
             return xTimestamp.ToString (CultureInfo.InvariantCulture);
         }
 
-        void _SaveTranscription (string directoryPath, IList <string> fileNames, IEnumerable <string> inconclusivePageFileNames)
+        void _SaveTranscription (string directoryPath, IList <string> fileNames, IEnumerable <string>? inconclusivePageFileNames)
         {
             List <string> xInputFileNames = [];
             List <(string FileNameWithoutExtension, string Transcription)> xOutput = [];
@@ -105,12 +105,14 @@ public static class Gaimen
                 string xInputFileName = fileNames [temp];
                 xInputFileNames.Add (xInputFileName);
 
-                if (inconclusivePageFileNames.Contains (xInputFileName, StringComparer.OrdinalIgnoreCase) && temp < fileNames.Count - 1)
-                    continue;
+                if (inconclusivePageFileNames != null &&
+                    inconclusivePageFileNames.Contains (xInputFileName, StringComparer.OrdinalIgnoreCase) &&
+                    temp < fileNames.Count - 1)
+                        continue;
 
                 string xOutputFileNameWithoutExtension = _GetSimplifiedFileNameWithoutExtension (xInputFileName),
-                       xJsonFilePath = yyPath.Join (directoryPath, xOutputFileNameWithoutExtension + ".json"),
-                       xMarkdownFilePath = yyPath.Join (directoryPath, xOutputFileNameWithoutExtension + ".md");
+                       xJsonFilePath = yyPath.Join (directoryPath, "Transcribed", xOutputFileNameWithoutExtension + ".json"),
+                       xMarkdownFilePath = yyPath.Join (directoryPath, "Transcribed", xOutputFileNameWithoutExtension + ".md");
 
                 if (File.Exists (xJsonFilePath) && File.Exists (xMarkdownFilePath))
                 {
@@ -125,6 +127,7 @@ public static class Gaimen
                 try
                 {
                     var xResult = _TranscribeImages (directoryPath, xInputFileNames, xPrompt);
+                    Directory.CreateDirectory (yyPath.Join (directoryPath, "Transcribed"));
                     File.WriteAllText (xJsonFilePath, xResult.ResponseJsonString, yyEncoding.Default);
                     File.WriteAllText (xMarkdownFilePath, xResult.Transcription, yyEncoding.Default);
                     xOutput.Add ((xOutputFileNameWithoutExtension, xResult.Transcription));
@@ -156,15 +159,15 @@ public static class Gaimen
 
         string xDirectoryPath = @"C:\Repositories\Shared\Scans\2025\エカの免許";
 
-        void _Go (IList <string> fileNames, IEnumerable <string> inconclusivePageFileNames) =>
+        void _Go (IList <string> fileNames, IEnumerable <string>? inconclusivePageFileNames = null) =>
             _SaveTranscription (xDirectoryPath, fileNames, inconclusivePageFileNames);
 
-        _Go ([ "20250312125048.jpg", "20250312125048_001.jpg", "20250312125048_002.jpg", "20250312125048_003.jpg" ], []);
-        _Go ([ "20250312125404.jpg", "20250312125404_001.jpg" ], []);
-        _Go ([ "20250312125404_002.jpg" ], []);
-        _Go ([ "20250312125404_003.jpg" ], []);
-        _Go ([ "20250312125404_004.jpg" ], []);
-        _Go ([ "20250312125528.jpg" ], []);
+        _Go ([ "20250312125048.jpg", "20250312125048_001.jpg", "20250312125048_002.jpg", "20250312125048_003.jpg" ]);
+        _Go ([ "20250312125404.jpg", "20250312125404_001.jpg" ]);
+        _Go ([ "20250312125404_002.jpg" ]);
+        _Go ([ "20250312125404_003.jpg" ]);
+        _Go ([ "20250312125404_004.jpg" ]);
+        _Go ([ "20250312125528.jpg" ]);
 
         xDirectoryPath = yyPath.Join (xDirectoryPath, "技能試験受験のしおり");
 
