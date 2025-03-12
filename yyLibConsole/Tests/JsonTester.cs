@@ -8,7 +8,7 @@ namespace yyLibConsole
         public static void TestParsingAndDisplayingJsonFile (string relativeFilePath)
         {
             string xJsonFilePath = yyAppDirectory.MapPath (relativeFilePath),
-                   xJsonString = File.ReadAllText (xJsonFilePath, yyEncoding.DefaultEncoding);
+                   xJsonString = File.ReadAllText (xJsonFilePath, yyEncoding.Default);
 
             using JsonDocument xDocument = JsonDocument.Parse (xJsonString);
 

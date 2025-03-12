@@ -4,6 +4,6 @@ namespace yyLib
 {
     public static class yyEncoding
     {
-        public static readonly Encoding DefaultEncoding = Encoding.UTF8;
+        public static readonly Encoding Default = Encoding.UTF8;
     }
 }

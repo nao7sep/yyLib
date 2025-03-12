@@ -27,6 +27,9 @@ namespace yyLib
         [JsonPropertyName ("endpoint")]
         public string? Endpoint { get; set; }
 
+        /// <summary>
+        /// In seconds.
+        /// </summary>
         [JsonPropertyName ("timeout")]
         public int? Timeout { get; set; }
 

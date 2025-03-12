@@ -32,7 +32,7 @@ namespace yyLibConsole
             // the JSON string representation of the message may contain CJK characters.
 
             string xJsonFilePath = xPartialFilePath + ".json";
-            File.WriteAllText (xJsonFilePath, xResult.JsonString, yyEncoding.DefaultEncoding);
+            File.WriteAllText (xJsonFilePath, xResult.JsonString, yyEncoding.Default);
             Console.WriteLine ("JSON: " + xJsonFilePath);
 
             // As the MIME binary representation of the message is generated directly from the message,

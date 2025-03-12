@@ -204,7 +204,7 @@ namespace yyLibConsole
                     xPrompts.AppendLine ("[Revised Prompt]");
                     xPrompts.AppendLine (xImagesResponse.RevisedPrompts?.FirstOrDefault ().GetVisibleString ());
 
-                    File.WriteAllText (xPromptsFilePath, xPrompts.ToString (), yyEncoding.DefaultEncoding);
+                    File.WriteAllText (xPromptsFilePath, xPrompts.ToString (), yyEncoding.Default);
                     Console.WriteLine ($"Prompts saved: {xPromptsFilePath}");
                 }
             }
@@ -364,11 +364,11 @@ namespace yyLibConsole
                    xResponsesFilePath = yyPath.Join (yySpecialDirectories.Desktop, xPartialFileName + "-Responses.json"),
                    xUsageFilePath = yyPath.Join (yySpecialDirectories.Desktop, xPartialFileName + "-Usage.json");
 
-            File.WriteAllText (xRequestFilePath, xResponse.RequestJsonString, yyEncoding.DefaultEncoding);
+            File.WriteAllText (xRequestFilePath, xResponse.RequestJsonString, yyEncoding.Default);
             Console.WriteLine ($"Request saved: {xRequestFilePath}");
 
             string xResponsesJsonString = JsonSerializer.Serialize (xResponse.Responses, yyJson.DefaultSerializationOptions);
-            File.WriteAllText (xResponsesFilePath, xResponsesJsonString, yyEncoding.DefaultEncoding);
+            File.WriteAllText (xResponsesFilePath, xResponsesJsonString, yyEncoding.Default);
             Console.WriteLine ($"Responses saved: {xResponsesFilePath}");
 
             // May seem redundant.
@@ -376,7 +376,7 @@ namespace yyLibConsole
             // Expected to clarify that the whole point of this test method is the usage object.
 
             string xUsageJsonString = JsonSerializer.Serialize (xResponse.Responses.Last ().Usage, yyJson.DefaultSerializationOptions);
-            File.WriteAllText (xUsageFilePath, xUsageJsonString, yyEncoding.DefaultEncoding);
+            File.WriteAllText (xUsageFilePath, xUsageJsonString, yyEncoding.Default);
             Console.WriteLine ($"Usage saved: {xUsageFilePath}");
         }
 
@@ -416,7 +416,7 @@ namespace yyLibConsole
                        xJsonFilePath = yyPath.Join (yySpecialDirectories.Desktop, xJsonFileName),
                        xJsonString = JsonSerializer.Serialize (xResponse.Response, yyJson.DefaultSerializationOptions); // Parsed and formatted.
 
-                File.WriteAllText (xJsonFilePath, xJsonString, yyEncoding.DefaultEncoding);
+                File.WriteAllText (xJsonFilePath, xJsonString, yyEncoding.Default);
                 Console.WriteLine ($"Response saved: {xJsonFilePath}");
             }
 
@@ -563,11 +563,11 @@ namespace yyLibConsole
             string xRequestFilePath = yyPath.Join (yySpecialDirectories.Desktop, xPartialFileName + "-Request.json"),
                    xResponseFilePath = yyPath.Join (yySpecialDirectories.Desktop, xPartialFileName + "-Response.json");
 
-            File.WriteAllText (xRequestFilePath, xResponse.RequestJsonString, yyEncoding.DefaultEncoding);
+            File.WriteAllText (xRequestFilePath, xResponse.RequestJsonString, yyEncoding.Default);
             Console.WriteLine ($"Request saved: {xRequestFilePath}");
 
             string xResponseJsonString = JsonSerializer.Serialize (xResponse.Response, yyJson.DefaultSerializationOptions);
-            File.WriteAllText (xResponseFilePath, xResponseJsonString, yyEncoding.DefaultEncoding);
+            File.WriteAllText (xResponseFilePath, xResponseJsonString, yyEncoding.Default);
             Console.WriteLine ($"Response saved: {xResponseFilePath}");
         }
 
@@ -715,11 +715,11 @@ namespace yyLibConsole
             // Save last request and response
             // -----------------------------------------------------------------------------
 
-            File.WriteAllText (xLastRequestFilePath, xThirdResponse.RequestJsonString, yyEncoding.DefaultEncoding);
+            File.WriteAllText (xLastRequestFilePath, xThirdResponse.RequestJsonString, yyEncoding.Default);
             Console.WriteLine ($"Last request saved: {xLastRequestFilePath}");
 
             string xLastResponseJsonString = JsonSerializer.Serialize (xThirdResponse.Response, yyJson.DefaultSerializationOptions);
-            File.WriteAllText (xLastResponseFilePath, xLastResponseJsonString, yyEncoding.DefaultEncoding);
+            File.WriteAllText (xLastResponseFilePath, xLastResponseJsonString, yyEncoding.Default);
             Console.WriteLine ($"Last response saved: {xLastResponseFilePath}");
         }
     }

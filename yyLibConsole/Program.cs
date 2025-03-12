@@ -37,6 +37,8 @@ namespace yyLibConsole
                 // Set "from" and "to" email addresses for testing.
                 // Default connection must be specified in user secrets or app settings.
                 // MailTester.TestSendingMessageAndSavingJsonAndMimeRepresentations (from: string.Empty, to: string.Empty);
+
+                Gaimen.Run ();
             }
 
             catch (Exception xException)
