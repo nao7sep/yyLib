@@ -208,9 +208,27 @@ public static class Gaimen
                 return;
 
             string xMergedMarkdownFilePath = yyPath.Join (directoryPath, "Transcribed", xOutput.First ().FileNameWithoutExtension + "-Merged.md"),
-            xMergedMarkdownString = string.Join (Environment.NewLine + Environment.NewLine, xOutput.Select (x => x.Transcription.Optimize ()));
+                   xMergedMarkdownString = string.Join (Environment.NewLine + Environment.NewLine, xOutput.Select (x => x.Transcription.Optimize ()));
+
             File.WriteAllText (xMergedMarkdownFilePath, xMergedMarkdownString, yyEncoding.Default);
             Console.WriteLine ($"Merged: {Path.GetFileName (xMergedMarkdownFilePath)}");
+
+            if (translationLanguages != null)
+            {
+                foreach (string xTranslationLanguage in translationLanguages)
+                {
+                    string xMergedTranslationFilePath = yyPath.Join (directoryPath, "Transcribed", "Translated", $"{xOutput.First ().FileNameWithoutExtension}-Merged-{xTranslationLanguage}.md"),
+                           xMergedTranslation = string.Join (Environment.NewLine + Environment.NewLine, xOutput.Select (x =>
+                           {
+                               string xTranslatedMarkdownFilePath = yyPath.Join (directoryPath, "Transcribed", "Translated", $"{x.FileNameWithoutExtension}-{xTranslationLanguage}.md");
+                               return File.ReadAllText (xTranslatedMarkdownFilePath, yyEncoding.Default).Optimize (); // Assuming the file exists.
+                           }));
+
+                    Directory.CreateDirectory (yyPath.Join (directoryPath, "Transcribed", "Translated"));
+                    File.WriteAllText (xMergedTranslationFilePath, xMergedTranslation, yyEncoding.Default);
+                    Console.WriteLine ($"Merged: {Path.GetFileName (xMergedTranslationFilePath)}");
+                }
+            }
         }
 
         string xDirectoryPath = @"C:\Repositories\Shared\Scans\2025\エカの免許";
