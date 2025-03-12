@@ -94,7 +94,61 @@ public static class Gaimen
             return xTimestamp.ToString (CultureInfo.InvariantCulture);
         }
 
-        void _SaveTranscription (string directoryPath, IList <string> fileNames, IEnumerable <string>? inconclusivePageFileNames)
+        string _Translate (string str, string language)
+        {
+            yyGptChatRequest xTranslationRequest = new ()
+            {
+                Model = "gpt-4o"
+            };
+
+            xTranslationRequest.AddDeveloperMessage ($"Translate provided text to {language} and return only the translated text.");
+            xTranslationRequest.AddUserMessage (str);
+
+            var xTranslationResponse = yyGptUtility.GenerateMessagesAsync (xClient, xTranslationRequest).Result;
+
+            if (xTranslationResponse.IsSuccess == false)
+                throw new yyException ((xTranslationResponse.Response.Error?.Message).GetVisibleString ());
+
+            return xTranslationResponse.Messages?.FirstOrDefault () ?? throw new yyUnexpectedNullException ("Translation is missing.");
+        }
+
+        int _TranslateIfNecessary (string markdownFilePath, IEnumerable <string>? translationLanguages)
+        {
+            try
+            {
+                if (translationLanguages == null)
+                    return 0;
+
+                string xTranslatedDirectoryPath = yyPath.Join (Path.GetDirectoryName (markdownFilePath) ?? throw new yyUnexpectedNullException ("Directory path is missing."), "Translated");
+
+                foreach (string xTranslationLanguage in translationLanguages)
+                {
+                    string xTranslationFileName = $"{Path.GetFileNameWithoutExtension (markdownFilePath)}-{xTranslationLanguage}{Path.GetExtension (markdownFilePath)}",
+                           xTranslationFilePath = yyPath.Join (xTranslatedDirectoryPath, xTranslationFileName);
+
+                    if (File.Exists (xTranslationFilePath))
+                        continue; // Skipped silently.
+
+                    string xMarkdownString = File.ReadAllText (markdownFilePath, yyEncoding.Default),
+                           xTranslation = _Translate (xMarkdownString, xTranslationLanguage);
+
+                    Directory.CreateDirectory (xTranslatedDirectoryPath);
+                    File.WriteAllText (xTranslationFilePath, xTranslation, yyEncoding.Default);
+                    Console.WriteLine ($"Translated: {Path.GetFileName (xTranslationFilePath)}"); // Not silent.
+                }
+
+                return 0;
+            }
+
+            catch (Exception xException)
+            {
+                Console.WriteLine ($"Translation failed: {Path.GetFileName (markdownFilePath)}");
+                Console.WriteLine (xException.ToString ());
+                return 1;
+            }
+        }
+
+        void _SaveTranscription (string directoryPath, IList <string> fileNames, IEnumerable <string>? inconclusivePageFileNames, IEnumerable <string>? translationLanguages)
         {
             List <string> xInputFileNames = [];
             List <(string FileNameWithoutExtension, string Transcription)> xOutput = [];
@@ -119,6 +173,7 @@ public static class Gaimen
                     string xTranscription = File.ReadAllText (xMarkdownFilePath, yyEncoding.Default);
                     xOutput.Add ((xOutputFileNameWithoutExtension, xTranscription));
                     Console.WriteLine ($"Skipped: {Path.GetFileName (xMarkdownFilePath)}");
+                    xErrorCount += _TranslateIfNecessary (xMarkdownFilePath, translationLanguages);
                     continue;
                 }
 
@@ -132,6 +187,7 @@ public static class Gaimen
                     File.WriteAllText (xMarkdownFilePath, xResult.Transcription, yyEncoding.Default);
                     xOutput.Add ((xOutputFileNameWithoutExtension, xResult.Transcription));
                     Console.WriteLine ($"Saved: {Path.GetFileName (xMarkdownFilePath)}");
+                    xErrorCount += _TranslateIfNecessary (xMarkdownFilePath, translationLanguages);
                 }
 
                 catch (Exception xException)
@@ -151,7 +207,7 @@ public static class Gaimen
             if (xErrorCount > 0 || xOutput.Count <= 1)
                 return;
 
-            string xMergedMarkdownFilePath = yyPath.Join (directoryPath, xOutput.First ().FileNameWithoutExtension + "-Merged.md"),
+            string xMergedMarkdownFilePath = yyPath.Join (directoryPath, "Transcribed", xOutput.First ().FileNameWithoutExtension + "-Merged.md"),
             xMergedMarkdownString = string.Join (Environment.NewLine + Environment.NewLine, xOutput.Select (x => x.Transcription.Optimize ()));
             File.WriteAllText (xMergedMarkdownFilePath, xMergedMarkdownString, yyEncoding.Default);
             Console.WriteLine ($"Merged: {Path.GetFileName (xMergedMarkdownFilePath)}");
@@ -160,7 +216,7 @@ public static class Gaimen
         string xDirectoryPath = @"C:\Repositories\Shared\Scans\2025\エカの免許";
 
         void _Go (IList <string> fileNames, IEnumerable <string>? inconclusivePageFileNames = null) =>
-            _SaveTranscription (xDirectoryPath, fileNames, inconclusivePageFileNames);
+            _SaveTranscription (xDirectoryPath, fileNames, inconclusivePageFileNames, [ "English", "Russian" ]);
 
         _Go ([ "20250312125048.jpg", "20250312125048_001.jpg", "20250312125048_002.jpg", "20250312125048_003.jpg" ]);
         _Go ([ "20250312125404.jpg", "20250312125404_001.jpg" ]);
