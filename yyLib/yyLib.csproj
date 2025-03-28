@@ -20,32 +20,16 @@
         <FileVersion></FileVersion>
         <InformationalVersion></InformationalVersion>
 
-        <!-- Analyzers are enabled by default.
-             The <EnableNETAnalyzers> property is explicitly set to "true" here to clarify the analysis mode being configured.
-             "Default" is the default value for <AnalysisMode>, but setting it to "Recommended" (or "All") enables additional rules for stricter analysis.
-             The <AnalysisLevel> property can configure both the .NET version and analysis mode together.
-             However, I believe the analysis rules should match the version of the framework the project uses.
-             Thus, only the mode is configured explicitly in this project.
-
-             https://learn.microsoft.com/en-us/dotnet/core/project-sdk/msbuild-props#enablenetanalyzers
-             https://learn.microsoft.com/en-us/dotnet/core/project-sdk/msbuild-props#analysismode
-             https://learn.microsoft.com/en-us/dotnet/core/project-sdk/msbuild-props#analysislevel -->
-
         <EnableNETAnalyzers>true</EnableNETAnalyzers>
         <AnalysisMode>Recommended</AnalysisMode>
-
-        <!-- Suppresses IDE0079: Unnecessary suppression warning.
-             This allows keeping suppression attributes or pragma directives in the code,
-             even if the compiler considers them unnecessary. -->
-        <NoWarn>IDE0079</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="MailKit" Version="4.11.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.3" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.3" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.3" />
         <PackageReference Include="MimeKit" Version="4.11.0" />
+        <PackageReference Include="OpenAI" Version="2.1.0" />
         <PackageReference Include="System.Data.SQLite" Version="1.0.119" />
     </ItemGroup>
 
