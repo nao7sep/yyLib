@@ -1,184 +1,133 @@
-﻿using System.Reflection;
+using System.Reflection;
 
 namespace yyLib
 {
-    // GetEntryAssembly returns RuntimeAssembly, that is an internal, derived class of Assembly.
-    // We cant convert RuntimeAssembly to yyAssembly: Assembly.
-    // The class doesnt inherit from Assembly and, instead, contains a corresponding property.
-    // The name contains "Info" because the class is more like a information extractor (like FileInfo).
-    // https://source.dot.net/#System.Private.CoreLib/src/libraries/System.Private.CoreLib/src/System/Reflection/Assembly.cs
-    // https://source.dot.net/#System.Private.CoreLib/src/System/Reflection/RuntimeAssembly.cs
-
     public class yyAssemblyInfo
     {
         public Assembly Assembly { get; private set; }
 
-        // -----------------------------------------------------------------------------
-        // Used Frequently
-        // -----------------------------------------------------------------------------
-
         public string Location => Assembly.Location;
 
         /// <summary>
-        /// Returns something like: yyLibConsole, Version=0.1.0.0, Culture=neutral, PublicKeyToken=null
+        /// Provides a string representation of the assembly's full identity,
+        /// including its name, version, culture, and public key token.
         /// </summary>
         public string? FullName => Assembly.FullName;
 
-        // -----------------------------------------------------------------------------
-        // From Metadata
-        // -----------------------------------------------------------------------------
+        // Lazy properties are initialized in the constructor because they rely on the Assembly property,
+        // which is not available at the time of class instantiation.
 
-        // The initialization of some of the following Lazy properties occur in the constructor
-        // because they depend on the Assembly property, that is unavailable upon the class's instantiation.
-
-        private readonly Lazy <string?> _assemblyName;
+        private readonly Lazy<string?> _assemblyName;
 
         /// <summary>
-        /// Used as the output file name.
-        /// Refer to AssemblyTitle for the assembly's display name.
+        /// Represents the name of the assembly used for the output file.
+        /// For the display name, refer to AssemblyTitle.
         /// </summary>
         public string? AssemblyName => _assemblyName.Value;
 
-        private readonly Lazy <string?> _assemblyTitle;
+        private readonly Lazy<string?> _assemblyTitle;
 
         /// <summary>
-        /// The assembly's display name.
-        /// Refer to this rather than AssemblyName, that is the output file name.
+        /// Represents the display name of the assembly.
+        /// Use this instead of AssemblyName, which is for the output file.
         /// </summary>
-        public string? AssemblyTitle => _assemblyTitle.Value ?? AssemblyName; // Intuitive fallback.
+        public string? AssemblyTitle => _assemblyTitle.Value ?? AssemblyName;
 
-        private readonly Lazy <string?> _company;
+        private readonly Lazy<string?> _company;
 
         public string? Company => _company.Value;
 
-        private readonly Lazy <string?> _product;
+        private readonly Lazy<string?> _product;
 
         public string? Product => _product.Value;
 
-        private readonly Lazy <string?> _description;
+        private readonly Lazy<string?> _description;
 
         public string? Description => _description.Value;
 
-        private readonly Lazy <string?> _copyright;
+        private readonly Lazy<string?> _copyright;
 
         public string? Copyright => _copyright.Value;
 
-        private readonly Lazy <string?> _configuration;
+        private readonly Lazy<string?> _configuration;
 
         /// <summary>
-        /// You may not get what you expect from the .csproj file because the compiler may override it.
+        /// The value may differ from the .csproj file due to compiler overrides.
         /// </summary>
         public string? Configuration => _configuration.Value;
 
-        // Versions are confusing.
+        // Handling versions can be complex.
 
-        // "Version" was originally for NuGet.
-        // Some developers incorrectly assumed it's a newly-introduced general-purpose attribute.
-        // The right attribute for the assembly's version is and has been "AssemblyVersion".
-        // For the developers' convenience, the .NET team made "Version" and "AssemblyVersion" interchangeable.
+        // "Version" was initially intended for NuGet packages.
+        // Some developers mistakenly thought it was a new general-purpose attribute.
+        // The correct attribute for the assembly's version is "AssemblyVersion".
+        // For convenience, .NET allows "Version" and "AssemblyVersion" to be used interchangeably.
 
-        // For some reason, AssemblyVersionAttribute doesnt seem to work.
-        // Assembly.GetName ().Version?.ToString () seems to be the only straight-forward way to get "Version" and "AssemblyVersion".
-        // If both the attributes are specified, this method returns "AssemblyVersion".
-        // In this situation, if you still want "Version", you'll probably have to parse the .csproj file.
+        // AssemblyVersionAttribute may not function as expected.
+        // Using Assembly.GetName().Version?.ToString() is a straightforward way to retrieve "Version" and "AssemblyVersion".
+        // If both attributes are specified, this method returns "AssemblyVersion".
+        // To obtain "Version" in this case, parsing the .csproj file might be necessary.
 
         // "Version" is more intuitive than "AssemblyVersion".
-        // It may also be useful when the assembly is released as a NuGet package because we wont be needing to update 2 version strings.
-        // The best practice should be: Specifying "Version" and programmatically referring to the AssemblyVersion property.
+        // It is beneficial when releasing the assembly as a NuGet package, as it avoids updating two version strings.
+        // Best practice: Specify "Version" and refer to the AssemblyVersion property programmatically.
 
-        private readonly Lazy <Version?> _version;
+        private readonly Lazy<Version?> _version;
 
         /// <summary>
-        /// The NuGet package version.
-        /// Refer to AssemblyVersion for the assembly's version.
+        /// Represents the version of the NuGet package.
+        /// For the assembly's version, refer to AssemblyVersion.
         /// </summary>
         public Version? Version => _version.Value;
 
-        private readonly Lazy <Version?> _assemblyVersion;
+        private readonly Lazy<Version?> _assemblyVersion;
 
         /// <summary>
-        /// The assembly's version.
-        /// Refer to this rather than Version, that is the NuGet package version.
+        /// Represents the version of the assembly.
+        /// Use this instead of Version, which is for the NuGet package.
         /// </summary>
         public Version? AssemblyVersion => _assemblyVersion.Value;
 
-        private readonly Lazy <string?> _fileVersion;
+        private readonly Lazy<string?> _fileVersion;
 
         public string? FileVersion => _fileVersion.Value;
 
-        private readonly Lazy <string?> _informationalVersion;
+        private readonly Lazy<string?> _informationalVersion;
 
         /// <summary>
-        /// Returns something like: 0.1+03073b01cc6d77db9dfaab1b7411d7a940e54eb2
+        /// Provides a detailed version string, including commit hash.
+        /// Example: 0.1+03073b01cc6d77db9dfaab1b7411d7a940e54eb2
         /// </summary>
         public string? InformationalVersion => _informationalVersion.Value;
 
-        // The constructor initializes the yyAssemblyInfo class with a specific Assembly instance,
-        // rather than using a setter method for the Assembly property. This design ensures that
-        // the Assembly property remains immutable after initialization, preserving the consistency
-        // and integrity of the metadata extracted from it.
+        // The constructor sets up the yyAssemblyInfo class with a specific Assembly instance,
+        // ensuring the Assembly property is immutable after initialization.
+        // This design choice maintains the consistency and integrity of the metadata extracted from the assembly.
         //
-        // This approach differs from classes designed with self-updating properties via setters,
-        // which are often better suited for scenarios like JSON serialization. Since yyAssemblyInfo
-        // is a utility class and not a model class, immutability is prioritized to avoid confusion
-        // and misuse.
+        // Unlike classes with self-updating properties via setters, which are suitable for scenarios like JSON serialization,
+        // yyAssemblyInfo prioritizes immutability to prevent confusion and misuse.
         //
-        // Lazy initialization is used for non-essential properties to optimize performance and
-        // resource usage. Properties like Configuration or Description are only computed when
-        // accessed, ensuring efficient operation when these properties are not needed.
-        //
-        // For more details about the class design and reasoning, refer to the file:
-        // https://github.com/nao7sep/Resources/blob/main/Documents/AI-Generated%20Notes/Design%20and%20Purpose%20of%20the%20yyAssemblyInfo%20Class.md
+        // Lazy initialization is employed for non-essential properties to enhance performance and resource efficiency.
+        // Properties such as Configuration or Description are computed only when accessed, ensuring optimal operation when these properties are not required.
 
         public yyAssemblyInfo (Assembly assembly)
         {
             Assembly = assembly;
 
             _assemblyName = new (() => Assembly.GetName ().Name);
-            _assemblyTitle = new (() => Assembly.GetCustomAttribute <AssemblyTitleAttribute> ()?.Title);
-            _company = new (() => Assembly.GetCustomAttribute <AssemblyCompanyAttribute> ()?.Company);
-            _product = new (() => Assembly.GetCustomAttribute <AssemblyProductAttribute> ()?.Product);
-            _description = new (() => Assembly.GetCustomAttribute <AssemblyDescriptionAttribute> ()?.Description);
-            _copyright = new (() => Assembly.GetCustomAttribute <AssemblyCopyrightAttribute> ()?.Copyright);
-            _configuration = new (() => Assembly.GetCustomAttribute <AssemblyConfigurationAttribute> ()?.Configuration);
+            _assemblyTitle = new (() => Assembly.GetCustomAttribute<AssemblyTitleAttribute> ()?.Title);
+            _company = new (() => Assembly.GetCustomAttribute<AssemblyCompanyAttribute> ()?.Company);
+            _product = new (() => Assembly.GetCustomAttribute<AssemblyProductAttribute> ()?.Product);
+            _description = new (() => Assembly.GetCustomAttribute<AssemblyDescriptionAttribute> ()?.Description);
+            _copyright = new (() => Assembly.GetCustomAttribute<AssemblyCopyrightAttribute> ()?.Copyright);
+            _configuration = new (() => Assembly.GetCustomAttribute<AssemblyConfigurationAttribute> ()?.Configuration);
             _version = new (() => Assembly.GetName ().Version);
             _assemblyVersion = new (() => Assembly.GetName ().Version);
-            _fileVersion = new (() => Assembly.GetCustomAttribute <AssemblyFileVersionAttribute> ()?.Version);
-            _informationalVersion = new (() => Assembly.GetCustomAttribute <AssemblyInformationalVersionAttribute> ()?.InformationalVersion);
+            _fileVersion = new (() => Assembly.GetCustomAttribute<AssemblyFileVersionAttribute> ()?.Version);
+            _informationalVersion = new (() => Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute> ()?.InformationalVersion);
         }
 
-        /// <summary>
-        /// For debugging purposes.
-        /// </summary>
-        public string? GetVisibleStrings (string? newLine = null) // Plural.
-        {
-            List <string> xLines = [];
-
-            // Version.ToString refers to DefaultFormatFieldCount and generates a 2-3 field string if the trailing fields are not specified.
-            // https://source.dot.net/#System.Private.CoreLib/src/libraries/System.Private.CoreLib/src/System/Version.cs
-
-            xLines.Add ($"Location: {Location.GetVisibleString ()}");
-            xLines.Add ($"FullName: {FullName.GetVisibleString ()}");
-            xLines.Add ($"AssemblyName: {AssemblyName.GetVisibleString ()}");
-            xLines.Add ($"AssemblyTitle: {AssemblyTitle.GetVisibleString ()}");
-            xLines.Add ($"Company: {Company.GetVisibleString ()}");
-            xLines.Add ($"Product: {Product.GetVisibleString ()}");
-            xLines.Add ($"Description: {Description.GetVisibleString ()}");
-            xLines.Add ($"Copyright: {Copyright.GetVisibleString ()}");
-            xLines.Add ($"Configuration: {Configuration.GetVisibleString ()}");
-            xLines.Add ($"Version: {(Version?.ToString ()).GetVisibleString ()}");
-            xLines.Add ($"AssemblyVersion: {(AssemblyVersion?.ToString ()).GetVisibleString ()}");
-            xLines.Add ($"FileVersion: {FileVersion.GetVisibleString ()}");
-            xLines.Add ($"InformationalVersion: {InformationalVersion.GetVisibleString ()}");
-
-            return string.Join (newLine.OrDefaultNewLine (), xLines);
-        }
-
-        // -----------------------------------------------------------------------------
-        // Static Properties
-        // -----------------------------------------------------------------------------
-
-        private static readonly Lazy <yyAssemblyInfo?> _appAssembly = new (() =>
+        private static readonly Lazy<yyAssemblyInfo?> _appAssembly = new (() =>
         {
             Assembly? xAssembly = Assembly.GetEntryAssembly ();
 
@@ -190,12 +139,12 @@ namespace yyLib
 
         public static yyAssemblyInfo? AppAssembly => _appAssembly.Value;
 
-        private static readonly Lazy <yyAssemblyInfo> _libraryAssembly = new (() =>
+        private static readonly Lazy<yyAssemblyInfo> _libAssembly = new (() =>
         {
-            Assembly xAssembly = Assembly.GetExecutingAssembly (); // Not nullable.
+            Assembly xAssembly = Assembly.GetExecutingAssembly ();
             return new (xAssembly);
         });
 
-        public static yyAssemblyInfo LibraryAssembly => _libraryAssembly.Value;
+        public static yyAssemblyInfo LibAssembly => _libAssembly.Value;
     }
 }
