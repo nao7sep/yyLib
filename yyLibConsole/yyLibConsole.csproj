@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
@@ -16,7 +16,7 @@
 
         <Configuration></Configuration>
 
-        <Version>0.16</Version>
+        <Version>0.15</Version>
         <AssemblyVersion></AssemblyVersion>
         <FileVersion></FileVersion>
         <InformationalVersion></InformationalVersion>
@@ -30,14 +30,22 @@
     </ItemGroup>
 
     <ItemGroup>
+        <None Update="AppSettings.Development.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <!-- https://learn.microsoft.com/en-us/dotnet/core/project-sdk/msbuild-props -->
+            <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+        </None>
+
         <None Update="AppSettings.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
 
-        <None Update="AppSettings.Development.json">
+        <None Update="TestData\JSON-Edge-Cases.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <!-- Development-specific settings should not be published to avoid exposing sensitive information or misconfigurations in production. -->
             <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+            <!-- Output to the same directory as the executable file.
+                 https://github.com/dotnet/msbuild/issues/2795 -->
+            <Link>JSON-Edge-Cases.json</Link>
         </None>
     </ItemGroup>
 
